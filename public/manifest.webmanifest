@@ -1,7 +1,7 @@
 {
   "name": "Marosim",
   "short_name": "Marosim",
-  "description": "Каталог и заявки на услуги для мероприятий в Узбекистане",
+  "description": "Услуги, товары, техника и заявки для мероприятий в Узбекистане",
   "id": "/mobile_app",
   "start_url": "/",
   "scope": "/",

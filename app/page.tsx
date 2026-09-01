@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { categories } from "@/lib/demo-data";
+import { catalogSections } from "@/lib/demo-data";
 
 export default function HomePage() {
   return (
@@ -28,7 +28,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="hero-proof" aria-label="Принципы Marosim">
-          <div><strong>Понятные цены</strong><span>Сразу видно, от какой суммы начинается услуга</span></div>
+          <div><strong>Понятные цены</strong><span>Сразу видно, от какой суммы начинается предложение</span></div>
           <div><strong>Актуальные предложения</strong><span>Видно, когда поставщик обновил информацию</span></div>
           <div><strong>Заявки в одном месте</strong><span>Следите за ответами без долгих переписок</span></div>
         </div>
@@ -40,7 +40,7 @@ export default function HomePage() {
             <p className="eyebrow">Как работает Marosim</p>
             <h2>Каждому — свой следующий шаг</h2>
           </div>
-          <p>Найдите услугу, составьте план события или принимайте заявки от клиентов.</p>
+          <p>Найдите всё нужное, составьте план события или принимайте заявки от клиентов.</p>
         </div>
         <div className="grid grid-3">
           <article className="card story-card story-card-yellow">
@@ -51,8 +51,8 @@ export default function HomePage() {
           </article>
           <article className="card story-card story-card-black">
             <div className="category-icon">↗</div>
-            <h3>Поставщик услуг</h3>
-            <p>Добавляйте услуги, загружайте цены из Excel и отвечайте на заявки.</p>
+            <h3>Поставщик</h3>
+            <p>Добавляйте услуги, товары и аренду, загружайте цены из Excel и отвечайте на заявки.</p>
             <Link className="text-link" href="/login?role=supplier">Войти как поставщик <span aria-hidden="true">→</span></Link>
           </article>
           <article className="card story-card story-card-lilac">
@@ -67,16 +67,16 @@ export default function HomePage() {
       <section className="section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">Категории</p>
-            <h2>От свадьбы до делового события</h2>
+            <p className="eyebrow">Каталог</p>
+            <h2>Услуги, покупки и техника</h2>
           </div>
-          <Link className="button button-secondary" href="/catalog">Все услуги</Link>
+          <Link className="button button-secondary" href="/catalog">Весь каталог</Link>
         </div>
         <div className="grid grid-3">
-          {categories.slice(0, 6).map((category) => (
-            <Link className="card card-muted category-card" href={`/catalog?category=${category.id}`} key={category.id}>
-              <span className="category-icon">{category.icon}</span>
-              <span><strong>{category.name}</strong><br /><small className="muted">Смотреть предложения</small></span>
+          {catalogSections.map((section) => (
+            <Link className="card card-muted category-card" href={`/catalog?section=${section.id}`} key={section.id}>
+              <span className="category-icon">{section.icon}</span>
+              <span><strong>{section.name}</strong><br /><small className="muted">{section.description}</small></span>
             </Link>
           ))}
         </div>

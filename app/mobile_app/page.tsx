@@ -23,9 +23,9 @@ export default function MobileAppPage() {
         <div className="phone-screen">
           <span className="phone-pill">Marosim</span>
           <h2>Событие начинается с выбора</h2>
-          <div className="phone-card">Площадки <span>→</span></div>
-          <div className="phone-card">Фото и видео <span>→</span></div>
-          <div className="phone-card">Декор <span>→</span></div>
+          <div className="phone-card">Услуги <span>→</span></div>
+          <div className="phone-card">Маркет <span>→</span></div>
+          <div className="phone-card">Техника <span>→</span></div>
         </div>
       </div>
     </section>

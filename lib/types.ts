@@ -5,13 +5,25 @@ export type DemoRole =
   | "supplier_planner"
   | "admin";
 
-export type PriceUnit = "за услугу" | "за час" | "за гостя" | "за день";
+export type CatalogSection = "services" | "market" | "equipment";
+
+export type OfferKind = "service" | "sale" | "rental";
+
+export type PriceUnit =
+  | "за услугу"
+  | "за час"
+  | "за гостя"
+  | "за день"
+  | "за штуку"
+  | "за набор"
+  | "за комплект";
 
 export type ServiceCategory = {
   id: string;
   slug: string;
   name: string;
   icon: string;
+  section: CatalogSection;
   requiredForWedding: boolean;
 };
 
@@ -38,6 +50,7 @@ export type Service = {
   city: string;
   priceFrom: number;
   priceUnit: PriceUnit;
+  offerKind: OfferKind;
   active: boolean;
   published: boolean;
   updatedAt: string;
@@ -118,6 +131,7 @@ export type ImportServiceRow = {
   description: string;
   priceFrom: number | null;
   priceUnit: string;
+  offerKind: string;
   availability: string;
   errors: string[];
 };

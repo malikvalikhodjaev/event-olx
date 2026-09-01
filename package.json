@@ -1,9 +1,9 @@
 {
   "name": "marosim",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "private": true,
   "type": "module",
-  "description": "Mobile-first Marosim catalog and request platform for event services.",
+  "description": "Mobile-first Marosim catalog and request platform for event services, goods, and equipment.",
   "packageManager": "pnpm@11.19.0",
   "engines": {
     "node": ">=20.9.0"

@@ -26,6 +26,18 @@ test("клиент фильтрует каталог и добавляет ус�
   await expect(photoCard.getByRole("button", { name: "Убрать из подборки" })).toHaveAttribute("aria-pressed", "true");
 });
 
+test("клиент открывает Маркет и видит товары отдельно от услуг", async ({ page }) => {
+  await page.goto("/catalog");
+  await page.getByRole("button", { name: /^Маркет/ }).click();
+  await page.getByLabel("Как получить").selectOption("sale");
+  await expect(page.getByText("Свадебный букет из сезонных цветов")).toBeVisible();
+  await expect(page.getByText("Фото + видео полного свадебного дня")).toBeHidden();
+
+  await page.getByRole("button", { name: /^Техника/ }).click();
+  await expect(page.getByText("Гирлянда тёплого света, 20 метров")).toBeVisible();
+  await expect(page.getByText("Свадебный букет из сезонных цветов")).toBeHidden();
+});
+
 test("планировщик закрывает категорию и видит прогресс", async ({ page }) => {
   await page.goto("/planner");
   await page.locator("#service-cat-venue").selectOption("service-silk-hall");
@@ -56,15 +68,24 @@ test("администратор фиксирует модерацию и бло
 });
 
 test("поставщик загружает Excel и создает непубличный черновик", async ({ page }) => {
+  const templateResponse = await page.request.get("/api/templates/services");
+  expect(templateResponse.ok()).toBe(true);
+  const templateWorkbook = new ExcelJS.Workbook();
+  await templateWorkbook.xlsx.load(await templateResponse.body());
+  const templateSheet = templateWorkbook.getWorksheet("Предложения");
+  expect(templateSheet?.getCell("D1").value).toBe("offer_kind");
+  expect(templateSheet?.getCell("D3").value).toBe("sale");
+  expect(templateWorkbook.getWorksheet("Справочники")?.getColumn(1).values).toContain("flowers");
+
   const workbook = new ExcelJS.Workbook();
-  const sheet = workbook.addWorksheet("Услуги");
-  sheet.addRow(["external_id", "title", "category", "city", "description", "price_from", "price_unit", "availability"]);
-  sheet.addRow(["TEST-001", "Новый банкетный пакет", "catering", "Ташкент", "Меню, обслуживание и базовая сервировка для гостей.", 300000, "за гостя", "доступно"]);
+  const sheet = workbook.addWorksheet("Предложения");
+  sheet.addRow(["external_id", "title", "category", "offer_kind", "city", "description", "price_from", "price_unit", "availability"]);
+  sheet.addRow(["TEST-001", "Новый банкетный пакет", "catering", "service", "Ташкент", "Меню, обслуживание и базовая сервировка для гостей.", 300000, "за гостя", "доступно"]);
   const buffer = await workbook.xlsx.writeBuffer();
   await page.goto("/supplier/import");
   await page.locator("#price-file").setInputFiles({ name: "services.xlsx", mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", buffer: Buffer.from(buffer) });
   await expect(page.getByText("Готово: 1")).toBeVisible();
-  const createDrafts = page.getByRole("button", { name: "Добавить услуги: 1" });
+  const createDrafts = page.getByRole("button", { name: "Добавить предложения: 1" });
   await createDrafts.scrollIntoViewIfNeeded();
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
   await createDrafts.click();

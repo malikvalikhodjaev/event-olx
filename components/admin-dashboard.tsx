@@ -36,14 +36,14 @@ export function AdminDashboard() {
 
   function targetName(target: string) {
     const moderationItem = state.moderation.find((item) => item.id === target);
-    if (moderationItem) return getServiceById(moderationItem.serviceId)?.title ?? "Карточка услуги";
+    if (moderationItem) return getServiceById(moderationItem.serviceId)?.title ?? "Карточка предложения";
     return getSupplierById(target)?.name ?? "Поставщик";
   }
 
   return (
     <div className="grid" style={{ gap: 20 }}>
       <section className="panel">
-        <div className="toolbar"><div><p className="eyebrow">Новые карточки</p><h2>Проверка услуг</h2></div><StatusBadge tone="warning">{state.moderation.filter((item) => item.status === "pending").length} ожидает</StatusBadge></div>
+        <div className="toolbar"><div><p className="eyebrow">Новые карточки</p><h2>Проверка предложений</h2></div><StatusBadge tone="warning">{state.moderation.filter((item) => item.status === "pending").length} ожидает</StatusBadge></div>
         {state.moderation.map((item) => {
           const service = getServiceById(item.serviceId);
           const supplier = getSupplierById(item.supplierId);

@@ -19,7 +19,7 @@ export function SiteHeader() {
           <Link href="/catalog">Каталог</Link>
           {(!state.signedIn || isClient) ? <Link href="/planner">План события</Link> : null}
           {state.signedIn && isClient ? <Link href="/requests">Мои заявки</Link> : null}
-          {state.signedIn && isSupplier ? <Link href="/supplier">Мои услуги</Link> : null}
+          {state.signedIn && isSupplier ? <Link href="/supplier">Мои предложения</Link> : null}
           {state.signedIn && state.role === "admin" ? <Link href="/admin">Управление</Link> : null}
           <Link href="/mobile_app">На телефон</Link>
         </nav>

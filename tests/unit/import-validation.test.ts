@@ -6,7 +6,14 @@ describe("Excel import validation", () => {
     const row = validateImportRecord({ external_id: "SR-101", title: "Зал для свадьбы", category: "venue", city: "Ташкент", description: "Зал с мебелью и парковкой на один день.", price_from: 18000000, price_unit: "за день", availability: "доступно" }, 2);
     expect(row.errors).toEqual([]);
     const [service] = importRowsToDraftServices([row], "supplier-silk-road");
-    expect(service).toMatchObject({ published: false, active: true, categoryId: "cat-venue" });
+    expect(service).toMatchObject({ published: false, active: true, categoryId: "cat-venue", offerKind: "service" });
+  });
+
+  it("распознаёт товар из раздела Маркет", () => {
+    const row = validateImportRecord({ external_id: "GM-101", title: "Набор свечей", category: "event-details", offer_kind: "sale", city: "Ташкент", description: "Свечи и подсвечники для пяти гостевых столов.", price_from: 480000, price_unit: "за набор", availability: "доступно" }, 2);
+    expect(row.errors).toEqual([]);
+    const [service] = importRowsToDraftServices([row], "supplier-gulzor");
+    expect(service).toMatchObject({ categoryId: "cat-event-details", offerKind: "sale", priceUnit: "за набор" });
   });
 
   it("возвращает все ошибки строки до записи", () => {

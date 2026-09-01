@@ -5,8 +5,9 @@ import ExcelJS from "exceljs";
 import { useDemoSession } from "@/components/demo-session";
 import { StatusBadge } from "@/components/status-badge";
 import { addImportedServices } from "@/lib/demo-store";
-import { importRowsToDraftServices, templateHeaders, validateImportRecord } from "@/lib/import-validation";
-import type { ImportServiceRow } from "@/lib/types";
+import { offerKindLabels } from "@/lib/demo-data";
+import { importRowsToDraftServices, requiredTemplateHeaders, validateImportRecord } from "@/lib/import-validation";
+import type { ImportServiceRow, OfferKind } from "@/lib/types";
 
 export function ImportWizard() {
   const { refresh } = useDemoSession();
@@ -29,7 +30,7 @@ export function ImportWizard() {
         const name = String(value ?? "").trim().toLowerCase();
         if (name) headerMap.set(index, name);
       });
-      const missing = templateHeaders.filter((header) => !Array.from(headerMap.values()).includes(header));
+      const missing = requiredTemplateHeaders.filter((header) => !Array.from(headerMap.values()).includes(header));
       if (missing.length) throw new Error(`Не найдены колонки: ${missing.join(", ")}`);
       const parsed: ImportServiceRow[] = [];
       sheet.eachRow((row, rowNumber) => {
@@ -40,7 +41,7 @@ export function ImportWizard() {
         parsed.push(validateImportRecord(record, rowNumber));
       });
       setRows(parsed);
-      if (!parsed.length) setMessage("В файле нет строк услуг.");
+      if (!parsed.length) setMessage("В файле нет предложений.");
     } catch (error) {
       setRows([]);
       setMessage(error instanceof Error ? error.message : "Не удалось прочитать Excel-файл");
@@ -51,7 +52,7 @@ export function ImportWizard() {
     const drafts = importRowsToDraftServices(validRows, "supplier-silk-road");
     addImportedServices(drafts);
     refresh();
-    setMessage(`Добавлено услуг: ${drafts.length}. Пока их видите только вы.`);
+    setMessage(`Добавлено предложений: ${drafts.length}. Пока их видите только вы.`);
     setRows([]);
     setFileName("");
   }
@@ -60,7 +61,7 @@ export function ImportWizard() {
     <div className="grid" style={{ gap: 20 }}>
       <section className="panel">
         <div className="toolbar"><div><p className="eyebrow">Шаг 1</p><h2>Скачайте шаблон</h2></div><a className="button button-secondary" href="/api/templates/services">Скачать шаблон Excel</a></div>
-        <p className="muted">В шаблоне уже есть нужные столбцы и две строки для примера. Замените их своими услугами.</p>
+        <p className="muted">В шаблоне есть подсказки, списки значений и примеры услуги, товара и аренды. Замените примеры своими предложениями.</p>
       </section>
       <section className="panel">
         <p className="eyebrow">Шаг 2</p><h2>Загрузите и проверьте файл</h2>
@@ -69,10 +70,10 @@ export function ImportWizard() {
         {message ? <div className="callout" style={{ marginTop: 14 }}>{message}</div> : null}
       </section>
       {rows.length ? <section className="panel">
-        <div className="toolbar"><div><p className="eyebrow">Шаг 3</p><h2>Проверьте услуги</h2></div><div className="badge-row"><StatusBadge tone="success">Готово: {validRows.length}</StatusBadge><StatusBadge tone={rows.length === validRows.length ? "success" : "danger"}>Нужно исправить: {rows.length - validRows.length}</StatusBadge></div></div>
-        <div className="table-wrap"><table><thead><tr><th>Строка</th><th>Услуга</th><th>Категория</th><th>Город</th><th>Цена</th><th>Результат</th></tr></thead><tbody>{rows.map((row) => <tr key={`${row.rowNumber}-${row.externalId}`}><td>{row.rowNumber}</td><td>{row.title || "—"}</td><td>{row.category || "—"}</td><td>{row.city || "—"}</td><td>{row.priceFrom ?? "—"} · {row.priceUnit}</td><td>{row.errors.length ? <span className="error-text">{row.errors.join("; ")}</span> : <StatusBadge tone="success">Готово</StatusBadge>}</td></tr>)}</tbody></table></div>
-        <div className="callout callout-warning" style={{ marginTop: 16 }}>Строки с ошибками не будут добавлены. Остальные услуги сохранятся как неопубликованные.</div>
-        <button className="button button-primary" style={{ marginTop: 16 }} disabled={!validRows.length} onClick={importDrafts}>Добавить услуги: {validRows.length}</button>
+        <div className="toolbar"><div><p className="eyebrow">Шаг 3</p><h2>Проверьте предложения</h2></div><div className="badge-row"><StatusBadge tone="success">Готово: {validRows.length}</StatusBadge><StatusBadge tone={rows.length === validRows.length ? "success" : "danger"}>Нужно исправить: {rows.length - validRows.length}</StatusBadge></div></div>
+        <div className="table-wrap"><table><thead><tr><th>Строка</th><th>Предложение</th><th>Категория</th><th>Формат</th><th>Город</th><th>Цена</th><th>Результат</th></tr></thead><tbody>{rows.map((row) => <tr key={`${row.rowNumber}-${row.externalId}`}><td>{row.rowNumber}</td><td>{row.title || "—"}</td><td>{row.category || "—"}</td><td>{offerKindLabels[row.offerKind as OfferKind] ?? row.offerKind}</td><td>{row.city || "—"}</td><td>{row.priceFrom ?? "—"} · {row.priceUnit}</td><td>{row.errors.length ? <span className="error-text">{row.errors.join("; ")}</span> : <StatusBadge tone="success">Готово</StatusBadge>}</td></tr>)}</tbody></table></div>
+        <div className="callout callout-warning" style={{ marginTop: 16 }}>Строки с ошибками не будут добавлены. Остальные предложения сохранятся как неопубликованные.</div>
+        <button className="button button-primary" style={{ marginTop: 16 }} disabled={!validRows.length} onClick={importDrafts}>Добавить предложения: {validRows.length}</button>
       </section> : null}
     </div>
   );

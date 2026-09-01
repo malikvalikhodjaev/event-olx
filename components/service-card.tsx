@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useDemoSession } from "@/components/demo-session";
 import { StatusBadge } from "@/components/status-badge";
 import { addToShortlist } from "@/lib/demo-store";
-import { getCategoryById, getSupplierById } from "@/lib/demo-data";
+import { getCategoryById, getSupplierById, offerKindLabels } from "@/lib/demo-data";
 import { formatMoney, freshnessState, responseLabel } from "@/lib/format";
 import type { Service } from "@/lib/types";
 
@@ -21,6 +21,7 @@ export function ServiceCard({ service }: { service: Service }) {
     <article className="card service-card" data-testid="service-card">
       <div className="badge-row">
         <StatusBadge>{category.name}</StatusBadge>
+        <StatusBadge tone={service.offerKind === "sale" ? "success" : service.offerKind === "rental" ? "warning" : "neutral"}>{offerKindLabels[service.offerKind]}</StatusBadge>
         <StatusBadge tone={freshness.tone}>{freshness.label}</StatusBadge>
         {supplier.verified ? <StatusBadge tone="success">Поставщик проверен</StatusBadge> : null}
       </div>

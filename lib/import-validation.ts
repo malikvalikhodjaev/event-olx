@@ -1,10 +1,11 @@
 import { categories } from "@/lib/demo-data";
-import type { ImportServiceRow, PriceUnit, Service } from "@/lib/types";
+import type { ImportServiceRow, OfferKind, PriceUnit, Service } from "@/lib/types";
 
 export const templateHeaders = [
   "external_id",
   "title",
   "category",
+  "offer_kind",
   "city",
   "description",
   "price_from",
@@ -12,7 +13,10 @@ export const templateHeaders = [
   "availability",
 ] as const;
 
-const priceUnits: PriceUnit[] = ["за услугу", "за час", "за гостя", "за день"];
+export const requiredTemplateHeaders = templateHeaders.filter((header) => header !== "offer_kind");
+
+const priceUnits: PriceUnit[] = ["за услугу", "за час", "за гостя", "за день", "за штуку", "за набор", "за комплект"];
+const offerKinds: OfferKind[] = ["service", "sale", "rental"];
 
 function cellText(value: unknown) {
   if (value === null || value === undefined) return "";
@@ -25,6 +29,7 @@ export function validateImportRecord(record: Record<string, unknown>, rowNumber:
   const externalId = cellText(record.external_id);
   const title = cellText(record.title);
   const category = cellText(record.category);
+  const offerKind = cellText(record.offer_kind).toLowerCase() || "service";
   const city = cellText(record.city);
   const description = cellText(record.description);
   const rawPrice = cellText(record.price_from).replace(/\s/g, "").replace(",", ".");
@@ -42,9 +47,10 @@ export function validateImportRecord(record: Record<string, unknown>, rowNumber:
   if (description.length < 10) errors.push("description: минимум 10 символов");
   if (priceFrom === null || !Number.isFinite(priceFrom) || priceFrom < 0) errors.push("price_from должен быть числом ≥ 0");
   if (!priceUnits.includes(priceUnit as PriceUnit)) errors.push(`price_unit: ${priceUnits.join(", ")}`);
+  if (!offerKinds.includes(offerKind as OfferKind)) errors.push("offer_kind: service, sale или rental");
   if (!["доступно", "по запросу", "недоступно"].includes(availability)) errors.push("availability: доступно, по запросу или недоступно");
 
-  return { rowNumber, externalId, title, category, city, description, priceFrom, priceUnit, availability, errors };
+  return { rowNumber, externalId, title, category, city, description, priceFrom, priceUnit, offerKind, availability, errors };
 }
 
 export function importRowsToDraftServices(rows: ImportServiceRow[], supplierId: string): Service[] {
@@ -60,6 +66,7 @@ export function importRowsToDraftServices(rows: ImportServiceRow[], supplierId: 
       city: row.city,
       priceFrom: row.priceFrom ?? 0,
       priceUnit: row.priceUnit as PriceUnit,
+      offerKind: row.offerKind as OfferKind,
       active: row.availability !== "недоступно",
       published: false,
       updatedAt: now,

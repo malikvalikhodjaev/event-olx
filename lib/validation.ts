@@ -3,7 +3,7 @@ import { z } from "zod";
 export const requestSchema = z.object({
   clientName: z.string().trim().min(2, "Укажите имя"),
   clientPhone: z.string().trim().regex(/^\+?[0-9 ()-]{9,20}$/, "Проверьте номер телефона"),
-  serviceId: z.string().min(1, "Выберите услугу"),
+  serviceId: z.string().min(1, "Выберите предложение"),
   eventType: z.string().trim().min(2, "Укажите тип мероприятия"),
   eventDate: z.string().min(1, "Укажите дату"),
   city: z.string().trim().min(2, "Укажите город"),

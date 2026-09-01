@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useDemoSession } from "@/components/demo-session";
 import { StatusBadge } from "@/components/status-badge";
-import { services, getServiceById } from "@/lib/demo-data";
+import { services, getServiceById, offerKindLabels } from "@/lib/demo-data";
 import { formatDateTime, formatMoney } from "@/lib/format";
 import { updateDemoRequest } from "@/lib/demo-store";
 import type { RequestStatus } from "@/lib/types";
@@ -36,8 +36,8 @@ export function SupplierDashboard() {
     <div className="grid" style={{ gap: 20 }}>
       <section className="grid grid-3">
         <article className="card"><p className="eyebrow">Новые заявки</p><h2>{supplierRequests.filter((item) => item.status === "submitted").length}</h2><span className="muted small">Нужно открыть и дать ясный ответ</span></article>
-        <article className="card"><p className="eyebrow">Услуги</p><h2>{ownServices.length}</h2><span className="muted small">{ownServices.filter((item) => item.published).length} опубликовано</span></article>
-        <article className="card"><p className="eyebrow">Неопубликованные услуги</p><h2>{state.importedServices.length}</h2><span className="muted small">Станут видны клиентам после проверки</span></article>
+        <article className="card"><p className="eyebrow">Предложения</p><h2>{ownServices.length}</h2><span className="muted small">{ownServices.filter((item) => item.published).length} опубликовано</span></article>
+        <article className="card"><p className="eyebrow">Не опубликованы</p><h2>{state.importedServices.length}</h2><span className="muted small">Станут видны клиентам после проверки</span></article>
       </section>
 
       <section className="panel">
@@ -45,7 +45,7 @@ export function SupplierDashboard() {
         {supplierRequests.length ? supplierRequests.map((request) => (
           <article className="request-row" key={request.id}>
             <div>
-              <strong>{getServiceById(request.serviceId)?.title ?? "Услуга"}</strong><br />
+              <strong>{getServiceById(request.serviceId)?.title ?? "Предложение"}</strong><br />
               <span className="small muted">{request.clientName} · {request.eventType} · {request.eventDate} · {request.guestCount} гостей</span><br />
               <span className="small">{request.message}</span>
             </div>
@@ -59,9 +59,9 @@ export function SupplierDashboard() {
       </section>
 
       <section className="panel">
-        <div className="toolbar"><div><p className="eyebrow">Ваши предложения</p><h2>Мои услуги</h2></div><Link className="button button-primary" href="/supplier/import">Загрузить цены из Excel</Link></div>
-        <div className="table-wrap"><table><thead><tr><th>Услуга</th><th>Цена от</th><th>Статус</th><th>Обновлено</th></tr></thead><tbody>{ownServices.map((service) => (
-          <tr key={service.id}><td><strong>{service.title}</strong><br /><span className="muted">{service.city}</span></td><td>{formatMoney(service.priceFrom)} · {service.priceUnit}</td><td><StatusBadge tone={service.published ? "success" : "warning"}>{service.published ? "Опубликована" : "Черновик"}</StatusBadge></td><td>{formatDateTime(service.updatedAt)}</td></tr>
+        <div className="toolbar"><div><p className="eyebrow">Ваш каталог</p><h2>Мои предложения</h2></div><Link className="button button-primary" href="/supplier/import">Загрузить цены из Excel</Link></div>
+        <div className="table-wrap"><table><thead><tr><th>Предложение</th><th>Формат</th><th>Цена от</th><th>Статус</th><th>Обновлено</th></tr></thead><tbody>{ownServices.map((service) => (
+          <tr key={service.id}><td><strong>{service.title}</strong><br /><span className="muted">{service.city}</span></td><td>{offerKindLabels[service.offerKind]}</td><td>{formatMoney(service.priceFrom)} · {service.priceUnit}</td><td><StatusBadge tone={service.published ? "success" : "warning"}>{service.published ? "Опубликовано" : "Черновик"}</StatusBadge></td><td>{formatDateTime(service.updatedAt)}</td></tr>
         ))}</tbody></table></div>
       </section>
 

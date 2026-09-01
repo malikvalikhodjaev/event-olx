@@ -20,7 +20,7 @@ export function MobileNavigation() {
     : [
         { href: "/catalog", icon: "⌕", label: "Каталог" },
         ...(isClient ? [{ href: "/planner", icon: "✓", label: "План" }, { href: "/requests", icon: "↗", label: "Заявки" }] : []),
-        ...(isSupplier ? [{ href: "/supplier", icon: "↗", label: "Услуги" }] : []),
+        ...(isSupplier ? [{ href: "/supplier", icon: "↗", label: "Каталог" }] : []),
         ...(state.role === "admin" ? [{ href: "/admin", icon: "✓", label: "Управление" }] : []),
         { href: "/account", icon: "●", label: "Кабинет" },
       ];

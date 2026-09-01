@@ -35,7 +35,7 @@ export default async function SupplierPage({ params }: { params: Promise<{ slug:
       </header>
       <div className="split">
         <section>
-          <div className="section-heading"><div><p className="eyebrow">Предложения</p><h2>Услуги поставщика</h2></div></div>
+          <div className="section-heading"><div><p className="eyebrow">Каталог поставщика</p><h2>Все предложения</h2></div></div>
           <div className="grid grid-2">
             {supplierServices.map((service) => <ServiceCard key={service.id} service={service} />)}
           </div>
@@ -61,7 +61,7 @@ export default async function SupplierPage({ params }: { params: Promise<{ slug:
             <div className="metric"><span>Учтено</span><strong>{supplier.responseSampleSize} заявок</strong></div>
           </div>
           <div className="callout callout-warning" style={{ marginTop: 16 }}>
-            Уточните цену и свободную дату в заявке. После ответа договоритесь с поставщиком о бронировании.
+            Уточните цену, наличие или свободную дату в заявке. После ответа договоритесь с поставщиком об условиях.
           </div>
           {supplierServices[0] ? (
             <Link className="button button-primary" style={{ width: "100%", marginTop: 16 }} href={`/requests/new?service=${supplierServices[0].id}`}>

@@ -37,7 +37,7 @@ export function RequestForm({ initialServiceId = "" }: { initialServiceId?: stri
     }
     const service = getServiceById(parsed.data.serviceId);
     if (!service) {
-      setErrors({ serviceId: "Услуга не найдена" });
+      setErrors({ serviceId: "Предложение не найдено" });
       return;
     }
     const request: DemoRequest = {
@@ -64,7 +64,7 @@ export function RequestForm({ initialServiceId = "" }: { initialServiceId?: stri
           {service?.title}. Статус и следующий шаг доступны в кабинете заявок.
         </div>
         <p className="muted" style={{ marginTop: 16 }}>
-          Поставщик свяжется с вами, чтобы подтвердить свободную дату, цену и остальные условия.
+          Поставщик свяжется с вами, чтобы подтвердить наличие или свободную дату, цену и остальные условия.
         </p>
         <div className="actions">
           <Link className="button button-primary" href="/requests">Открыть мои заявки</Link>
@@ -78,9 +78,9 @@ export function RequestForm({ initialServiceId = "" }: { initialServiceId?: stri
     <form className="panel" onSubmit={submit} noValidate>
       <div className="form-grid">
         <div className="field span-2">
-          <label htmlFor="serviceId">Услуга</label>
+          <label htmlFor="serviceId">Предложение</label>
           <select id="serviceId" value={values.serviceId} onChange={(event) => update("serviceId", event.target.value)}>
-            <option value="">Выберите услугу</option>
+            <option value="">Выберите услугу, товар или аренду</option>
             {services.map((service) => {
               const supplier = getSupplierById(service.supplierId);
               return <option key={service.id} value={service.id}>{service.title} · {supplier?.name}</option>;
@@ -126,7 +126,7 @@ export function RequestForm({ initialServiceId = "" }: { initialServiceId?: stri
         </div>
         <div className="field span-2">
           <label htmlFor="message">Что важно уточнить</label>
-          <textarea id="message" value={values.message} onChange={(event) => update("message", event.target.value)} placeholder="Расскажите о формате, времени, составе услуги и главном вопросе поставщику." />
+          <textarea id="message" value={values.message} onChange={(event) => update("message", event.target.value)} placeholder="Расскажите о формате, количестве, времени и главном вопросе поставщику." />
           {errors.message ? <span className="error-text small">{errors.message}</span> : null}
         </div>
       </div>

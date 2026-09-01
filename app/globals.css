@@ -489,9 +489,52 @@ h3 {
 
 .filters {
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) repeat(2, minmax(150px, 0.35fr));
+  grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(145px, 0.35fr));
   gap: 10px;
   margin: 20px 0 24px;
+}
+
+.catalog-sections {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0 8px;
+}
+
+.catalog-section-button {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  padding: 14px;
+  background: #ffffff;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.catalog-section-button > span:last-child {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.catalog-section-button small {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.catalog-section-button.active {
+  border-color: var(--ink);
+  background: var(--yellow-soft);
+}
+
+.catalog-section-button.active .category-icon {
+  background: var(--yellow);
 }
 
 .field {
@@ -977,6 +1020,10 @@ tr:last-child td {
     grid-template-columns: 1fr 1fr;
   }
 
+  .catalog-sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .filters > :first-child {
     grid-column: 1 / -1;
   }
@@ -1068,6 +1115,18 @@ tr:last-child td {
   .form-grid,
   .filters {
     grid-template-columns: 1fr;
+  }
+
+  .catalog-sections {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    scroll-snap-type: x proximity;
+  }
+
+  .catalog-section-button {
+    min-width: min(78vw, 280px);
+    scroll-snap-align: start;
   }
 
   .filters > :first-child,
