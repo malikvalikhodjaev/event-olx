@@ -55,6 +55,7 @@ test("клиент пишет поставщику и получает отве�
   await page.getByLabel("Пароль").fill("marosim2026");
   await page.getByRole("radio", { name: /Ищу для события/ }).check();
   await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await expect(page).toHaveURL(/\/catalog$/);
 
   await page.goto("/catalog");
   const hallCard = page.getByRole("article").filter({ hasText: "Банкетный зал Silk Hall" });
@@ -62,25 +63,27 @@ test("клиент пишет поставщику и получает отве�
   await expect(page).toHaveURL(/\/chats\?service=service-silk-hall/);
   await page.getByLabel("Сообщение").fill(clientMessage);
   await page.getByRole("button", { name: "Отправить" }).click();
-  await expect(page.getByText(clientMessage)).toBeVisible();
+  await expect(page.locator(".chat-message p").filter({ hasText: clientMessage })).toBeVisible();
 
   await page.goto("/login");
   await page.getByLabel("Телефон или электронная почта").fill("supplier@marosim.local");
   await page.getByLabel("Пароль").fill("Marosim-Local-2026!");
   await page.getByRole("radio", { name: /Предлагаю товары и услуги/ }).check();
   await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await expect(page).toHaveURL(/\/supplier$/);
   await page.goto("/chats");
-  await page.getByRole("button", { name: new RegExp(`chat-client.*${clientMessage}`) }).click();
+  await page.locator(".chat-list-item").filter({ hasText: clientMessage }).click();
   await page.getByLabel("Сообщение").fill(supplierMessage);
   await page.getByRole("button", { name: "Отправить" }).click();
-  await expect(page.getByText(supplierMessage)).toBeVisible();
+  await expect(page.locator(".chat-message p").filter({ hasText: supplierMessage })).toBeVisible();
 
   await page.goto("/login?next=/chats");
   await page.getByLabel("Телефон или электронная почта").fill("chat-client@example.com");
   await page.getByLabel("Пароль").fill("marosim2026");
   await page.getByRole("radio", { name: /Ищу для события/ }).check();
   await page.getByRole("button", { name: "Войти", exact: true }).click();
-  await expect(page.getByText(supplierMessage)).toBeVisible();
+  await expect(page).toHaveURL(/\/chats$/);
+  await expect(page.locator(".chat-message p").filter({ hasText: supplierMessage })).toBeVisible();
 });
 
 test("администратор фиксирует модерацию и блокировку в аудите", async ({ page }) => {
