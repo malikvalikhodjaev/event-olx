@@ -16,8 +16,8 @@ export default function HomePage() {
             sizes="(max-width: 720px) 100vw, 1180px"
           />
           <div className="hero-copy">
-            <p className="eyebrow">Все для события — в одном месте</p>
-            <h1>Найдите тех, кто сделает событие вашим</h1>
+            <p className="eyebrow">Всё для события — в одном месте</p>
+            <h1>Найди всё для своего мероприятия</h1>
             <p className="lead">
               Сравните предложения, соберите план и отправьте поставщикам одну понятную заявку.
             </p>
