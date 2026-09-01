@@ -8,7 +8,7 @@ describe("trust signals", () => {
   });
 
   it("не показывает статистику ответа на малой выборке", () => {
-    expect(responseLabel(15, 2)).toContain("Недостаточно данных");
+    expect(responseLabel(15, 2)).toContain("Пока мало ответов для оценки");
     expect(responseLabel(38, 12)).toContain("38 мин");
   });
 });
