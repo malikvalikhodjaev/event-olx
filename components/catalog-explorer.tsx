@@ -52,7 +52,7 @@ export function CatalogExplorer({ initialCategory = "", initialSection = "", ini
           aria-pressed={section === ""}
           onClick={() => { setSection(""); setCategory(""); }}
         >
-          <span className="category-icon">●</span>
+          <span className="category-icon" aria-hidden="true">●</span>
           <span><strong>Всё для события</strong><small>Все предложения</small></span>
         </button>
         {catalogSections.map((item) => (
@@ -63,7 +63,7 @@ export function CatalogExplorer({ initialCategory = "", initialSection = "", ini
             key={item.id}
             onClick={() => { setSection(item.id); setCategory(""); }}
           >
-            <span className="category-icon">{item.icon}</span>
+            <span className="category-icon" aria-hidden="true">{item.icon}</span>
             <span><strong>{item.name}</strong><small>{item.description}</small></span>
           </button>
         ))}
