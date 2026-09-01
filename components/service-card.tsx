@@ -40,7 +40,7 @@ export function ServiceCard({ service }: { service: Service }) {
             refresh();
           }}
         >
-          {shortlisted ? "Убрать из shortlist" : "В shortlist"}
+          {shortlisted ? "Убрать из подборки" : "В подборку"}
         </button>
       </div>
     </article>

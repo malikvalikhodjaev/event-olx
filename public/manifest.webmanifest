@@ -2,11 +2,19 @@
   "name": "EventHub UZ",
   "short_name": "EventHub",
   "description": "Каталог и заявки на услуги для мероприятий в Узбекистане",
-  "start_url": "/",
+  "id": "/mobile_app",
+  "start_url": "/catalog?source=mobile_app",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#f7f5ef",
-  "theme_color": "#12604a",
+  "background_color": "#ffffff",
+  "theme_color": "#ffdc00",
   "lang": "ru",
+  "categories": ["lifestyle", "shopping", "productivity"],
+  "shortcuts": [
+    { "name": "Каталог", "url": "/catalog", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "План события", "url": "/planner", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Заявки", "url": "/requests", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
+  ],
   "icons": [
     {
       "src": "/icon-192.png",

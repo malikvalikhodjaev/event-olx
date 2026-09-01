@@ -46,7 +46,7 @@ export function AdminDashboard() {
         })}
       </section>
 
-      <section className="panel"><p className="eyebrow">Неизменяемая история в production</p><h2>Журнал действий</h2>{state.audit.length ? <div className="table-wrap"><table><thead><tr><th>Когда</th><th>Действие</th><th>Объект</th><th>Причина</th></tr></thead><tbody>{state.audit.map((entry) => <tr key={entry.id}><td>{formatDateTime(entry.createdAt)}</td><td>{entry.action}</td><td>{entry.target}</td><td>{entry.reason}</td></tr>)}</tbody></table></div> : <div className="empty-state">Изменений пока нет. Выполните действие модерации.</div>}</section>
+      <section className="panel"><p className="eyebrow">История решений</p><h2>Журнал действий</h2>{state.audit.length ? <div className="table-wrap"><table><thead><tr><th>Когда</th><th>Действие</th><th>Объект</th><th>Причина</th></tr></thead><tbody>{state.audit.map((entry) => <tr key={entry.id}><td>{formatDateTime(entry.createdAt)}</td><td>{entry.action}</td><td>{entry.target}</td><td>{entry.reason}</td></tr>)}</tbody></table></div> : <div className="empty-state">Изменений пока нет. Выполните действие модерации.</div>}</section>
     </div>
   );
 }

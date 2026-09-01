@@ -185,9 +185,9 @@ export const demoAccounts: Array<{
   description: string;
 }> = [
   { email: "client@eventhub.local", password: "EventHub-Demo-2026!", name: "Клиент", role: "client", description: "Ищет услуги и отправляет заявки" },
-  { email: "planner@eventhub.local", password: "EventHub-Demo-2026!", name: "Планировщик клиента", role: "client_planner", description: "Собирает свадебный чек-лист" },
+  { email: "planner@eventhub.local", password: "EventHub-Demo-2026!", name: "Организатор", role: "client_planner", description: "Собирает план события и бюджет" },
   { email: "supplier@eventhub.local", password: "EventHub-Demo-2026!", name: "Поставщик", role: "supplier", description: "Управляет услугами и заявками" },
-  { email: "supplier-planner@eventhub.local", password: "EventHub-Demo-2026!", name: "Планировщик поставщика", role: "supplier_planner", description: "Следит за загрузкой и ответами" },
+  { email: "supplier-planner@eventhub.local", password: "EventHub-Demo-2026!", name: "Координатор поставщика", role: "supplier_planner", description: "Следит за загрузкой и ответами" },
   { email: "admin@eventhub.local", password: "EventHub-Demo-2026!", name: "Администратор", role: "admin", description: "Модерирует каталог и блокировки" },
 ];
 

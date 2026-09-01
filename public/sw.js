@@ -1,5 +1,5 @@
-const CACHE = "eventhub-uz-v1";
-const CORE = ["/", "/catalog", "/planner", "/manifest.webmanifest", "/icon.svg"];
+const CACHE = "eventhub-uz-v2";
+const CORE = ["/", "/catalog", "/planner", "/mobile_app", "/manifest.webmanifest", "/icon.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(CORE)));

@@ -2,8 +2,9 @@ import { expect, test } from "@playwright/test";
 import ExcelJS from "exceljs";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/demo");
-  await page.getByRole("button", { name: "Сбросить демонстрационные данные" }).click();
+  await page.goto("/");
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
 });
 
 test("клиент фильтрует каталог и добавляет услугу в shortlist", async ({ page }) => {
@@ -11,8 +12,8 @@ test("клиент фильтрует каталог и добавляет ус�
   await page.getByRole("searchbox", { name: "Что ищете" }).fill("фото");
   const photoCard = page.getByRole("article").filter({ hasText: "Фото + видео полного свадебного дня" });
   await expect(photoCard).toBeVisible();
-  await photoCard.getByRole("button", { name: "В shortlist" }).click();
-  await expect(photoCard.getByRole("button", { name: "Убрать из shortlist" })).toHaveAttribute("aria-pressed", "true");
+  await photoCard.getByRole("button", { name: "В подборку" }).click();
+  await expect(photoCard.getByRole("button", { name: "Убрать из подборки" })).toHaveAttribute("aria-pressed", "true");
 });
 
 test("планировщик закрывает категорию и видит прогресс", async ({ page }) => {
