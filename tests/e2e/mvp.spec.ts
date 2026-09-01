@@ -72,7 +72,8 @@ test("поставщик загружает Excel и создает непубл
   expect(templateResponse.ok()).toBe(true);
   const templateWorkbook = new ExcelJS.Workbook();
   const templateBytes = Uint8Array.from(await templateResponse.body());
-  await templateWorkbook.xlsx.load(Buffer.from(templateBytes));
+  const templateBuffer = Buffer.from(templateBytes) as unknown as Parameters<typeof templateWorkbook.xlsx.load>[0];
+  await templateWorkbook.xlsx.load(templateBuffer);
   const templateSheet = templateWorkbook.getWorksheet("Предложения");
   expect(templateSheet?.getCell("D1").value).toBe("offer_kind");
   expect(templateSheet?.getCell("D3").value).toBe("sale");
