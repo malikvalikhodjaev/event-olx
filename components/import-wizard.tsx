@@ -51,7 +51,7 @@ export function ImportWizard() {
     const drafts = importRowsToDraftServices(validRows, "supplier-silk-road");
     addImportedServices(drafts);
     refresh();
-    setMessage(`Создано черновиков: ${drafts.length}. Они не опубликованы и ждут проверки.`);
+    setMessage(`Добавлено услуг: ${drafts.length}. Пока их видите только вы.`);
     setRows([]);
     setFileName("");
   }
@@ -59,20 +59,20 @@ export function ImportWizard() {
   return (
     <div className="grid" style={{ gap: 20 }}>
       <section className="panel">
-        <div className="toolbar"><div><p className="eyebrow">Шаг 1</p><h2>Скачайте шаблон</h2></div><a className="button button-secondary" href="/api/templates/services">Скачать services-template.xlsx</a></div>
-        <p className="muted">Внутри есть обязательные колонки, справочники и две примерные строки. Примеры можно заменить своими услугами.</p>
+        <div className="toolbar"><div><p className="eyebrow">Шаг 1</p><h2>Скачайте шаблон</h2></div><a className="button button-secondary" href="/api/templates/services">Скачать шаблон Excel</a></div>
+        <p className="muted">В шаблоне уже есть нужные столбцы и две строки для примера. Замените их своими услугами.</p>
       </section>
       <section className="panel">
         <p className="eyebrow">Шаг 2</p><h2>Загрузите и проверьте файл</h2>
-        <div className="field"><label htmlFor="price-file">Excel .xlsx, до 2 МБ</label><input id="price-file" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onChange={(event) => { const file = event.target.files?.[0]; if (file) void readFile(file); }} /></div>
+        <div className="field"><label htmlFor="price-file">Файл Excel, до 2 МБ</label><input id="price-file" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onChange={(event) => { const file = event.target.files?.[0]; if (file) void readFile(file); }} /></div>
         {fileName ? <p className="small muted" style={{ marginTop: 10 }}>Файл: {fileName}</p> : null}
         {message ? <div className="callout" style={{ marginTop: 14 }}>{message}</div> : null}
       </section>
       {rows.length ? <section className="panel">
-        <div className="toolbar"><div><p className="eyebrow">Шаг 3</p><h2>Предпросмотр</h2></div><div className="badge-row"><StatusBadge tone="success">Корректно: {validRows.length}</StatusBadge><StatusBadge tone={rows.length === validRows.length ? "success" : "danger"}>С ошибками: {rows.length - validRows.length}</StatusBadge></div></div>
+        <div className="toolbar"><div><p className="eyebrow">Шаг 3</p><h2>Проверьте услуги</h2></div><div className="badge-row"><StatusBadge tone="success">Готово: {validRows.length}</StatusBadge><StatusBadge tone={rows.length === validRows.length ? "success" : "danger"}>Нужно исправить: {rows.length - validRows.length}</StatusBadge></div></div>
         <div className="table-wrap"><table><thead><tr><th>Строка</th><th>Услуга</th><th>Категория</th><th>Город</th><th>Цена</th><th>Результат</th></tr></thead><tbody>{rows.map((row) => <tr key={`${row.rowNumber}-${row.externalId}`}><td>{row.rowNumber}</td><td>{row.title || "—"}</td><td>{row.category || "—"}</td><td>{row.city || "—"}</td><td>{row.priceFrom ?? "—"} · {row.priceUnit}</td><td>{row.errors.length ? <span className="error-text">{row.errors.join("; ")}</span> : <StatusBadge tone="success">Готово</StatusBadge>}</td></tr>)}</tbody></table></div>
-        <div className="callout callout-warning" style={{ marginTop: 16 }}>Импорт создаст только черновики. Ошибочные строки пропускаются; публикация требует отдельной модерации.</div>
-        <button className="button button-primary" style={{ marginTop: 16 }} disabled={!validRows.length} onClick={importDrafts}>Создать {validRows.length} черновиков</button>
+        <div className="callout callout-warning" style={{ marginTop: 16 }}>Строки с ошибками не будут добавлены. Остальные услуги сохранятся как неопубликованные.</div>
+        <button className="button button-primary" style={{ marginTop: 16 }} disabled={!validRows.length} onClick={importDrafts}>Добавить услуги: {validRows.length}</button>
       </section> : null}
     </div>
   );

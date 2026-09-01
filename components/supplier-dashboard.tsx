@@ -37,11 +37,11 @@ export function SupplierDashboard() {
       <section className="grid grid-3">
         <article className="card"><p className="eyebrow">Новые заявки</p><h2>{supplierRequests.filter((item) => item.status === "submitted").length}</h2><span className="muted small">Нужно открыть и дать ясный ответ</span></article>
         <article className="card"><p className="eyebrow">Услуги</p><h2>{ownServices.length}</h2><span className="muted small">{ownServices.filter((item) => item.published).length} опубликовано</span></article>
-        <article className="card"><p className="eyebrow">Черновики импорта</p><h2>{state.importedServices.length}</h2><span className="muted small">Не видны клиентам до модерации</span></article>
+        <article className="card"><p className="eyebrow">Неопубликованные услуги</p><h2>{state.importedServices.length}</h2><span className="muted small">Станут видны клиентам после проверки</span></article>
       </section>
 
       <section className="panel">
-        <div className="toolbar"><div><p className="eyebrow">Целевой поток</p><h2>Входящие заявки</h2></div><StatusBadge tone="warning">Заявка ≠ бронь</StatusBadge></div>
+        <div className="toolbar"><div><p className="eyebrow">Заявки клиентов</p><h2>Новые обращения</h2></div><StatusBadge tone="warning">Ждут вашего ответа</StatusBadge></div>
         {supplierRequests.length ? supplierRequests.map((request) => (
           <article className="request-row" key={request.id}>
             <div>
@@ -59,15 +59,15 @@ export function SupplierDashboard() {
       </section>
 
       <section className="panel">
-        <div className="toolbar"><div><p className="eyebrow">Прейскурант</p><h2>Мои услуги</h2></div><Link className="button button-primary" href="/supplier/import">Импортировать Excel</Link></div>
-        <div className="table-wrap"><table><thead><tr><th>Услуга</th><th>Цена от</th><th>Статус</th><th>Свежесть</th></tr></thead><tbody>{ownServices.map((service) => (
+        <div className="toolbar"><div><p className="eyebrow">Ваши предложения</p><h2>Мои услуги</h2></div><Link className="button button-primary" href="/supplier/import">Загрузить цены из Excel</Link></div>
+        <div className="table-wrap"><table><thead><tr><th>Услуга</th><th>Цена от</th><th>Статус</th><th>Обновлено</th></tr></thead><tbody>{ownServices.map((service) => (
           <tr key={service.id}><td><strong>{service.title}</strong><br /><span className="muted">{service.city}</span></td><td>{formatMoney(service.priceFrom)} · {service.priceUnit}</td><td><StatusBadge tone={service.published ? "success" : "warning"}>{service.published ? "Опубликована" : "Черновик"}</StatusBadge></td><td>{formatDateTime(service.updatedAt)}</td></tr>
         ))}</tbody></table></div>
       </section>
 
       <section className="panel">
-        <p className="eyebrow">Планировщик загрузки</p><h2>Ближайшие запросы по датам</h2>
-        <div className="callout callout-warning">Календарь показывает намерения клиентов, а не подтвержденные брони. Двойная продажа предотвращается только после явного подтверждения поставщиком вне MVP.</div>
+        <p className="eyebrow">Свободные даты</p><h2>Ближайшие события</h2>
+        <div className="callout callout-warning">Даты в заявках ещё не забронированы. Сначала подтвердите дату с клиентом, а затем отмечайте её занятой.</div>
         <div className="metric-list">{supplierRequests.map((request) => <div className="metric" key={request.id}><span>{request.eventDate} · {request.eventType}</span><strong>{statusLabels[request.status]}</strong></div>)}</div>
       </section>
     </div>

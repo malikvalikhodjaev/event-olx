@@ -51,7 +51,7 @@ export function CatalogExplorer({ initialCategory = "" }: { initialCategory?: st
       </div>
       <div className="toolbar">
         <strong>Найдено: {filtered.length}</strong>
-        <span className="small muted">Цена и доступность требуют подтверждения поставщиком</span>
+        <span className="small muted">Цену и свободную дату уточняйте у поставщика</span>
       </div>
       {filtered.length ? (
         <div className="grid grid-3">{filtered.map((service) => <ServiceCard key={service.id} service={service} />)}</div>

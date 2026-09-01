@@ -33,7 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <footer className="site-footer">
             <div className="shell footer-row">
               <strong>Marosim</strong>
-              <span>Каталог и заявки. Без платежей и юридически значимой брони.</span>
+              <span>Находите услуги и собирайте событие в одном месте.</span>
             </div>
           </footer>
         </DemoSessionProvider>

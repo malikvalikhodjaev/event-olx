@@ -2,16 +2,28 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useDemoSession } from "@/components/demo-session";
 
-const items = [
+const guestItems = [
   { href: "/catalog", icon: "⌕", label: "Каталог" },
   { href: "/planner", icon: "✓", label: "План" },
-  { href: "/requests", icon: "↗", label: "Заявки" },
-  { href: "/account", icon: "●", label: "Профиль" },
+  { href: "/login", icon: "●", label: "Войти" },
 ];
 
 export function MobileNavigation() {
   const pathname = usePathname();
+  const { state } = useDemoSession();
+  const isClient = state.role === "client" || state.role === "client_planner";
+  const isSupplier = state.role === "supplier" || state.role === "supplier_planner";
+  const items = !state.signedIn
+    ? guestItems
+    : [
+        { href: "/catalog", icon: "⌕", label: "Каталог" },
+        ...(isClient ? [{ href: "/planner", icon: "✓", label: "План" }, { href: "/requests", icon: "↗", label: "Заявки" }] : []),
+        ...(isSupplier ? [{ href: "/supplier", icon: "↗", label: "Услуги" }] : []),
+        ...(state.role === "admin" ? [{ href: "/admin", icon: "✓", label: "Управление" }] : []),
+        { href: "/account", icon: "●", label: "Кабинет" },
+      ];
 
   return (
     <nav className="mobile-nav" aria-label="Мобильная навигация">

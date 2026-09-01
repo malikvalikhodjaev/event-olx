@@ -9,8 +9,8 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
     <>
       <header className="page-intro">
         <p className="eyebrow">Каталог Marosim</p>
-        <h1>Сравнимые услуги для события</h1>
-        <p className="lead">Фильтруйте по категории и городу. Свежесть данных и проверяемые сигналы показаны отдельно от будущего рейтинга.</p>
+        <h1>Услуги для вашего события</h1>
+        <p className="lead">Выберите категорию и город. На карточке видно цену, поставщика и дату последнего обновления.</p>
       </header>
       <CatalogExplorer initialCategory={params.category ?? ""} />
     </>

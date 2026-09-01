@@ -64,7 +64,7 @@ export function RequestForm({ initialServiceId = "" }: { initialServiceId?: stri
           {service?.title}. Статус и следующий шаг доступны в кабинете заявок.
         </div>
         <p className="muted" style={{ marginTop: 16 }}>
-          Это запрос на обсуждение. Он не блокирует дату, не является договором, бронью или оплатой.
+          Поставщик свяжется с вами, чтобы подтвердить свободную дату, цену и остальные условия.
         </p>
         <div className="actions">
           <Link className="button button-primary" href="/requests">Открыть мои заявки</Link>
@@ -131,7 +131,7 @@ export function RequestForm({ initialServiceId = "" }: { initialServiceId?: stri
         </div>
       </div>
       <div className="callout callout-warning" style={{ marginTop: 16 }}>
-        Отправка заявки не означает бронь, оплату или гарантированную цену. Поставщик должен подтвердить условия отдельно.
+        После отправки поставщик свяжется с вами. Дата и цена будут закреплены после его подтверждения.
       </div>
       <button className="button button-primary" style={{ marginTop: 16 }} type="submit">Отправить заявку</button>
     </form>

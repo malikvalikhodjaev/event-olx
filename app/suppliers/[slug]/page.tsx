@@ -52,16 +52,16 @@ export default async function SupplierPage({ params }: { params: Promise<{ slug:
           </section>
         </section>
         <aside className="panel sticky-panel">
-          <p className="eyebrow">Надёжность выбора</p>
-          <h3>Факты вместо неподтверждённых звёзд</h3>
+          <p className="eyebrow">О поставщике</p>
+          <h3>Полезно знать перед заявкой</h3>
           <div className="metric-list">
             <div className="metric"><span>Город</span><strong>{supplier.city}</strong></div>
             <div className="metric"><span>Профиль обновлён</span><strong>{formatDateTime(supplier.updatedAt)}</strong></div>
-            <div className="metric"><span>Ответы</span><strong>{responseLabel(supplier.responseMedianMinutes, supplier.responseSampleSize)}</strong></div>
-            <div className="metric"><span>Выборка</span><strong>{supplier.responseSampleSize} заявок</strong></div>
+            <div className="metric"><span>Скорость ответа</span><strong>{responseLabel(supplier.responseMedianMinutes, supplier.responseSampleSize)}</strong></div>
+            <div className="metric"><span>Учтено</span><strong>{supplier.responseSampleSize} заявок</strong></div>
           </div>
           <div className="callout callout-warning" style={{ marginTop: 16 }}>
-            Публичного рейтинга пока нет: авторизация подтверждает аккаунт, но не реальный опыт заказа. Цена и свободная дата подтверждаются в заявке.
+            Уточните цену и свободную дату в заявке. После ответа договоритесь с поставщиком о бронировании.
           </div>
           {supplierServices[0] ? (
             <Link className="button button-primary" style={{ width: "100%", marginTop: 16 }} href={`/requests/new?service=${supplierServices[0].id}`}>

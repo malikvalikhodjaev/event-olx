@@ -98,6 +98,8 @@ export type AuditEntry = {
 
 export type DemoState = {
   role: DemoRole;
+  signedIn: boolean;
+  accountName: string;
   shortlist: string[];
   plannerItems: PlannerItem[];
   requests: DemoRequest[];

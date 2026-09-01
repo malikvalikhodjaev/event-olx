@@ -26,7 +26,7 @@ export function RequestList() {
         return (
           <article className="request-row" key={request.id}>
             <div>
-              <strong>{service?.title ?? "Импортированная услуга"}</strong><br />
+              <strong>{service?.title ?? "Услуга из Excel"}</strong><br />
               <span className="small muted">{supplier?.name ?? "Поставщик"} · {request.eventType} · {request.eventDate}</span>
             </div>
             <div><StatusBadge tone={request.status === "declined" ? "danger" : request.status === "accepted_for_discussion" ? "success" : "warning"}>{labels[request.status]}</StatusBadge></div>

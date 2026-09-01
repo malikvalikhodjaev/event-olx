@@ -1,26 +1,30 @@
+"use client";
+
 import Link from "next/link";
+import { useDemoSession } from "@/components/demo-session";
 
 export function SiteHeader() {
+  const { state } = useDemoSession();
+  const isClient = state.role === "client" || state.role === "client_planner";
+  const isSupplier = state.role === "supplier" || state.role === "supplier_planner";
+
   return (
-    <>
-      <div className="product-note">Заявка помогает связаться с поставщиком и не является бронью или оплатой</div>
-      <header className="site-header">
-        <div className="shell header-row">
-          <Link href="/" className="brand" aria-label="Marosim — главная">
-            <span className="brand-mark">M</span>
-            <span>Marosim</span>
-          </Link>
-          <nav className="top-nav" aria-label="Основная навигация">
-            <Link href="/catalog">Каталог</Link>
-            <Link href="/planner">Планировщик</Link>
-            <Link href="/requests">Заявки</Link>
-            <Link href="/supplier">Поставщик</Link>
-            <Link href="/admin">Модерация</Link>
-            <Link href="/mobile_app">На телефон</Link>
-          </nav>
-          <Link className="header-account" href="/account">Кабинет</Link>
-        </div>
-      </header>
-    </>
+    <header className="site-header">
+      <div className="shell header-row">
+        <Link href="/" className="brand" aria-label="Marosim — главная">
+          <span className="brand-mark">M</span>
+          <span>Marosim</span>
+        </Link>
+        <nav className="top-nav" aria-label="Основная навигация">
+          <Link href="/catalog">Каталог</Link>
+          {(!state.signedIn || isClient) ? <Link href="/planner">План события</Link> : null}
+          {state.signedIn && isClient ? <Link href="/requests">Мои заявки</Link> : null}
+          {state.signedIn && isSupplier ? <Link href="/supplier">Мои услуги</Link> : null}
+          {state.signedIn && state.role === "admin" ? <Link href="/admin">Управление</Link> : null}
+          <Link href="/mobile_app">На телефон</Link>
+        </nav>
+        <Link className="header-account" href={state.signedIn ? "/account" : "/login"}>{state.signedIn ? "Кабинет" : "Войти"}</Link>
+      </div>
+    </header>
   );
 }

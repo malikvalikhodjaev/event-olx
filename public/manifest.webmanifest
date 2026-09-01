@@ -3,7 +3,7 @@
   "short_name": "Marosim",
   "description": "Каталог и заявки на услуги для мероприятий в Узбекистане",
   "id": "/mobile_app",
-  "start_url": "/catalog?source=mobile_app",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",

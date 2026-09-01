@@ -7,7 +7,7 @@ export default function MobileAppPage() {
   return (
     <section className="mobile-app-page">
       <div className="mobile-app-copy">
-        <p className="eyebrow">Мобильная версия · PWA</p>
+        <p className="eyebrow">Marosim на телефоне</p>
         <h1>Marosim всегда под рукой</h1>
         <p className="lead">Установите сайт на главный экран и открывайте каталог, план и заявки как обычное приложение.</p>
         <div className="actions">

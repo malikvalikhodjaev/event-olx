@@ -7,6 +7,16 @@ test.beforeEach(async ({ page }) => {
   await page.reload();
 });
 
+test("пользователь входит и выбирает задачу", async ({ page }) => {
+  await page.getByRole("link", { name: "Войти", exact: true }).first().click();
+  await page.getByLabel("Телефон или электронная почта").fill("malika@example.com");
+  await page.getByLabel("Пароль").fill("marosim2026");
+  await page.getByRole("radio", { name: /Организую событие/ }).check();
+  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await expect(page).toHaveURL(/\/planner$/);
+  await expect(page.getByRole("link", { name: "Кабинет", exact: true }).first()).toBeVisible();
+});
+
 test("клиент фильтрует каталог и добавляет услугу в shortlist", async ({ page }) => {
   await page.goto("/catalog");
   await page.getByRole("searchbox", { name: "Что ищете" }).fill("фото");
@@ -39,10 +49,10 @@ test("администратор фиксирует модерацию и бло
   await page.goto("/admin");
   await page.locator("#reason-moderation-sabo").fill("Цена подтверждена поставщиком 1 сентября");
   await page.getByRole("button", { name: "Одобрить" }).click();
-  await expect(page.getByText("approved")).toBeVisible();
+  await expect(page.getByText("Карточка одобрена")).toBeVisible();
   await page.locator("#ban-supplier-sabo-decor").fill("Проверка жалобы клиента");
   await page.getByRole("button", { name: "Заблокировать" }).nth(2).click();
-  await expect(page.getByText("supplier_banned")).toBeVisible();
+  await expect(page.getByText("Поставщик заблокирован")).toBeVisible();
 });
 
 test("поставщик загружает Excel и создает непубличный черновик", async ({ page }) => {
@@ -53,8 +63,8 @@ test("поставщик загружает Excel и создает непубл
   const buffer = await workbook.xlsx.writeBuffer();
   await page.goto("/supplier/import");
   await page.locator("#price-file").setInputFiles({ name: "services.xlsx", mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", buffer: Buffer.from(buffer) });
-  await expect(page.getByText("Корректно: 1")).toBeVisible();
-  const createDrafts = page.getByRole("button", { name: "Создать 1 черновиков" });
+  await expect(page.getByText("Готово: 1")).toBeVisible();
+  const createDrafts = page.getByRole("button", { name: "Добавить услуги: 1" });
   await createDrafts.scrollIntoViewIfNeeded();
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
   await createDrafts.click();

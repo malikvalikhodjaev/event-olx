@@ -5,5 +5,5 @@ import { SupplierDashboard } from "@/components/supplier-dashboard";
 export const metadata: Metadata = { title: "Кабинет поставщика" };
 
 export default function SupplierPage() {
-  return <><section className="page-intro"><p className="eyebrow">Поставщик · Silk Road Events</p><h1>Услуги, заявки и загрузка</h1><p className="lead">Обновляйте прайс без CRM-интеграции и отвечайте клиентам в одной очереди.</p><Link className="button button-secondary" href="/account">Сменить рабочую роль</Link></section><SupplierDashboard /></>;
+  return <><section className="page-intro"><p className="eyebrow">Silk Road Events</p><h1>Услуги, заявки и свободные даты</h1><p className="lead">Добавляйте предложения, обновляйте цены и отвечайте клиентам в одном месте.</p><Link className="button button-secondary" href="/account">Мой кабинет</Link></section><SupplierDashboard /></>;
 }

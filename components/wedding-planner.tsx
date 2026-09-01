@@ -88,7 +88,7 @@ export function WeddingPlanner() {
           <div className="metric"><span>В подборке</span><strong>{state.shortlist.length}</strong></div>
         </div>
         <div className={`callout ${progress === 100 ? "" : "callout-warning"}`} style={{ marginTop: 16 }}>
-          План не подтверждает расходы и не бронирует поставщиков. Конфликты дат и окончательная стоимость проверяются в заявках.
+          Уточните свободные даты и итоговую цену у выбранных поставщиков. План сам по себе ничего не бронирует.
         </div>
       </aside>
     </div>

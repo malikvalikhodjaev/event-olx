@@ -8,6 +8,8 @@ const STORAGE_KEY = "eventhub-uz-demo-v1";
 export function createInitialDemoState(): DemoState {
   return {
     role: "client",
+    signedIn: false,
+    accountName: "",
     shortlist: [],
     plannerItems: categories
       .filter((category) => category.requiredForWedding)

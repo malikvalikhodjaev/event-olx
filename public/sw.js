@@ -1,5 +1,5 @@
-const CACHE = "marosim-v3";
-const CORE = ["/", "/catalog", "/planner", "/mobile_app", "/manifest.webmanifest", "/icon.svg"];
+const CACHE = "marosim-v4";
+const CORE = ["/", "/login", "/catalog", "/planner", "/mobile_app", "/manifest.webmanifest", "/icon.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(CORE)));

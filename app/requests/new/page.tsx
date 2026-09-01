@@ -7,7 +7,7 @@ export default async function NewRequestPage({ searchParams }: { searchParams: P
   const params = await searchParams;
   return (
     <>
-      <header className="page-intro"><p className="eyebrow">Нормализованный запрос</p><h1>Передайте поставщику нужный контекст</h1><p className="lead">Одна форма вместо серии уточняющих звонков: событие, дата, город, гости, бюджет и главный вопрос.</p></header>
+      <header className="page-intro"><p className="eyebrow">Новая заявка</p><h1>Расскажите поставщику о событии</h1><p className="lead">Укажите дату, город, число гостей, бюджет и то, что для вас особенно важно.</p></header>
       <RequestForm initialServiceId={params.service ?? ""} />
     </>
   );

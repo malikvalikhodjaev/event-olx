@@ -1,17 +1,8 @@
 import type { Metadata } from "next";
-import { RoleSwitcher } from "@/components/role-switcher";
+import { AccountPanel } from "@/components/account-panel";
 
-export const metadata: Metadata = { title: "Рабочая область" };
+export const metadata: Metadata = { title: "Кабинет" };
 
 export default function AccountPage() {
-  return (
-    <>
-      <header className="page-intro">
-        <p className="eyebrow">Рабочая область</p>
-        <h1>Выберите свою роль</h1>
-        <p className="lead">Переключайтесь между задачами клиента, организатора, поставщика и администратора.</p>
-      </header>
-      <RoleSwitcher />
-    </>
-  );
+  return <AccountPanel />;
 }
