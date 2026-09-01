@@ -31,7 +31,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--canvas);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geologica), Arial, Helvetica, sans-serif;
   line-height: 1.48;
 }
 
@@ -469,22 +469,184 @@ h3 {
 }
 
 .service-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  overflow: hidden;
+  border: 0;
+  border-radius: 6px;
+  padding: 0;
+  background: #ffffff;
+  box-shadow: none;
+  transition: box-shadow 0.16s ease, transform 0.16s ease;
 }
 
-.service-card .service-actions {
-  margin-top: auto;
-  padding-top: 16px;
+.service-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(2, 40, 44, 0.12);
+}
+
+.service-card-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #e7e9e9;
+}
+
+.service-card-media img {
+  object-fit: cover;
+  transition: transform 0.24s ease;
+}
+
+.service-card:hover .service-card-media img {
+  transform: scale(1.02);
+}
+
+.service-card-kind {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.service-card-favorite {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  color: #02282c;
+  cursor: pointer;
+  font-size: 25px;
+  line-height: 1;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.service-card-favorite:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+.service-card-body {
+  flex: 1;
   display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.service-card-category {
+  margin-bottom: 6px;
+  color: #5b6b6d;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.service-card h3 {
+  min-height: 44px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  color: #02282c;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.service-card h3 a:hover {
+  text-decoration: underline;
+}
+
+.service-card-description {
+  min-height: 42px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  color: #526164;
+  font-size: 13px;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.service-card-meta {
+  margin: 8px 0 0;
+  color: #6f7e80;
+  font-size: 11px;
+}
+
+.service-card-signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.service-card-signals span {
+  border-radius: 999px;
+  padding: 4px 7px;
+  background: #eef1f1;
+  color: #4c5e60;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.service-card-signals .signal-positive {
+  background: var(--green-soft);
+  color: var(--green-dark);
+}
+
+.service-card-signals .signal-warning {
+  background: var(--gold-soft);
+  color: #72501f;
+}
+
+.service-card-footer {
+  margin-top: auto;
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
+  color: #667577;
+  font-size: 10px;
+}
+
+.service-details-link {
+  flex: 0 0 auto;
+  color: #02282c;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .service-price {
-  margin: 8px 0 0;
-  font-size: 18px;
+  margin: auto 0 0;
+  color: #02282c;
+  font-size: 20px;
   font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.service-price span {
+  color: #687779;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.catalog-results {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  border-radius: 18px;
+  padding: 10px;
+  background: #f2f4f5;
 }
 
 .filters {
@@ -1020,6 +1182,10 @@ tr:last-child td {
     grid-template-columns: 1fr 1fr;
   }
 
+  .catalog-results {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .catalog-sections {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1150,12 +1316,10 @@ tr:last-child td {
     padding-left: 4px;
   }
 
-  .service-card .service-actions {
-    flex-direction: column;
-  }
-
-  .service-card .button {
-    width: 100%;
+  .catalog-results {
+    grid-template-columns: 1fr;
+    gap: 9px;
+    padding: 9px;
   }
 
   .story-card {

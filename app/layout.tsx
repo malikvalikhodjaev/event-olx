@@ -1,9 +1,16 @@
 import type { Metadata, Viewport } from "next";
+import { Geologica } from "next/font/google";
 import "./globals.css";
 import { DemoSessionProvider } from "@/components/demo-session";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { SiteHeader } from "@/components/site-header";
 import { MobileNavigation } from "@/components/mobile-navigation";
+
+const geologica = Geologica({
+  subsets: ["cyrillic", "latin"],
+  display: "swap",
+  variable: "--font-geologica",
+});
 
 export const metadata: Metadata = {
   title: { default: "Marosim", template: "%s · Marosim" },
@@ -22,7 +29,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ru">
-      <body>
+      <body className={geologica.variable}>
         <DemoSessionProvider>
           <ServiceWorkerRegister />
           <SiteHeader />

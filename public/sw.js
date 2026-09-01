@@ -1,4 +1,4 @@
-const CACHE = "marosim-v5";
+const CACHE = "marosim-v6";
 const CORE = ["/", "/login", "/catalog", "/planner", "/mobile_app", "/manifest.webmanifest", "/icon.svg"];
 
 self.addEventListener("install", (event) => {

@@ -22,6 +22,8 @@ test("клиент фильтрует каталог и добавляет ус�
   await page.getByRole("searchbox", { name: "Что ищете" }).fill("фото");
   const photoCard = page.getByRole("article").filter({ hasText: "Фото + видео полного свадебного дня" });
   await expect(photoCard).toBeVisible();
+  await expect(photoCard.locator("img")).toBeVisible();
+  await expect(photoCard.getByText("Поставщик проверен")).toBeVisible();
   await photoCard.getByRole("button", { name: "В подборку" }).click();
   await expect(photoCard.getByRole("button", { name: "Убрать из подборки" })).toHaveAttribute("aria-pressed", "true");
 });
