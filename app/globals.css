@@ -771,9 +771,12 @@ tr:last-child td {
 
 .role-option input {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
+  top: 16px;
+  left: 15px;
+  z-index: 1;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--ink);
 }
 
 .role-option > span {
@@ -781,7 +784,7 @@ tr:last-child td {
   display: grid;
   align-content: start;
   gap: 5px;
-  padding: 15px;
+  padding: 15px 15px 15px 43px;
   border: 2px solid var(--line);
   border-radius: 18px;
   background: #ffffff;
