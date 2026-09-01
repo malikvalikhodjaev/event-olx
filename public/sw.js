@@ -1,4 +1,4 @@
-const CACHE = "eventhub-uz-v2";
+const CACHE = "marosim-v3";
 const CORE = ["/", "/catalog", "/planner", "/mobile_app", "/manifest.webmanifest", "/icon.svg"];
 
 self.addEventListener("install", (event) => {

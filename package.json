@@ -1,9 +1,9 @@
 {
-  "name": "eventhub-uz",
-  "version": "0.1.0-alpha.1",
+  "name": "marosim",
+  "version": "0.1.0-alpha.2",
   "private": true,
   "type": "module",
-  "description": "Mobile-first EventHub UZ validation MVP for event-service discovery and requests.",
+  "description": "Mobile-first Marosim catalog and request platform for event services.",
   "packageManager": "pnpm@11.19.0",
   "engines": {
     "node": ">=20.9.0"

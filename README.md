@@ -1,4 +1,4 @@
-# EventHub UZ — Каталог и заявки
+# Marosim — каталог и заявки
 
 Production-shaped validation MVP маркетплейса услуг для свадеб, культурных мероприятий, тренингов и корпоративных событий в Узбекистане.
 
@@ -24,15 +24,15 @@ pnpm dev
 
 Откройте `http://localhost:3000`. По умолчанию работает `demo`-режим: данные сохраняются в `localStorage`, поэтому продукт можно целиком проверить без внешних сервисов. Сброс состояния и роли доступны на `/demo`.
 
-Все демонстрационные учетные записи используют пароль `EventHub-Demo-2026!`:
+Все локальные учетные записи используют пароль `Marosim-Local-2026!`:
 
 | Роль | Email |
 |---|---|
-| Клиент | `client@eventhub.local` |
-| Планировщик клиента | `planner@eventhub.local` |
-| Поставщик | `supplier@eventhub.local` |
-| Планировщик поставщика | `supplier-planner@eventhub.local` |
-| Администратор | `admin@eventhub.local` |
+| Клиент | `client@marosim.local` |
+| Планировщик клиента | `planner@marosim.local` |
+| Поставщик | `supplier@marosim.local` |
+| Планировщик поставщика | `supplier-planner@marosim.local` |
+| Администратор | `admin@marosim.local` |
 
 В текущем demo-срезе вход имитируется переключателем ролей: это позволяет провести приемку сценариев без ложного ощущения production-аутентификации.
 

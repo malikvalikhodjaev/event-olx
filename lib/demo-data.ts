@@ -184,11 +184,11 @@ export const demoAccounts: Array<{
   role: DemoRole;
   description: string;
 }> = [
-  { email: "client@eventhub.local", password: "EventHub-Demo-2026!", name: "Клиент", role: "client", description: "Ищет услуги и отправляет заявки" },
-  { email: "planner@eventhub.local", password: "EventHub-Demo-2026!", name: "Организатор", role: "client_planner", description: "Собирает план события и бюджет" },
-  { email: "supplier@eventhub.local", password: "EventHub-Demo-2026!", name: "Поставщик", role: "supplier", description: "Управляет услугами и заявками" },
-  { email: "supplier-planner@eventhub.local", password: "EventHub-Demo-2026!", name: "Координатор поставщика", role: "supplier_planner", description: "Следит за загрузкой и ответами" },
-  { email: "admin@eventhub.local", password: "EventHub-Demo-2026!", name: "Администратор", role: "admin", description: "Модерирует каталог и блокировки" },
+  { email: "client@marosim.local", password: "Marosim-Local-2026!", name: "Клиент", role: "client", description: "Ищет услуги и отправляет заявки" },
+  { email: "planner@marosim.local", password: "Marosim-Local-2026!", name: "Организатор", role: "client_planner", description: "Собирает план события и бюджет" },
+  { email: "supplier@marosim.local", password: "Marosim-Local-2026!", name: "Поставщик", role: "supplier", description: "Управляет услугами и заявками" },
+  { email: "supplier-planner@marosim.local", password: "Marosim-Local-2026!", name: "Координатор поставщика", role: "supplier_planner", description: "Следит за загрузкой и ответами" },
+  { email: "admin@marosim.local", password: "Marosim-Local-2026!", name: "Администратор", role: "admin", description: "Модерирует каталог и блокировки" },
 ];
 
 export function getSupplierById(id: string) {

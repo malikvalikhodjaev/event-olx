@@ -5,7 +5,7 @@ export const runtime = "nodejs";
 
 export async function GET() {
   const workbook = new ExcelJS.Workbook();
-  workbook.creator = "EventHub UZ";
+  workbook.creator = "Marosim";
   workbook.created = new Date("2026-09-01T00:00:00Z");
   const sheet = workbook.addWorksheet("Услуги", { views: [{ state: "frozen", ySplit: 1 }] });
   sheet.columns = [
@@ -34,5 +34,5 @@ export async function GET() {
   reference.getRow(1).font = { bold: true };
 
   const buffer = await workbook.xlsx.writeBuffer();
-  return new NextResponse(Buffer.from(buffer), { headers: { "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Content-Disposition": "attachment; filename=eventhub-services-template.xlsx", "Cache-Control": "public, max-age=3600" } });
+  return new NextResponse(Buffer.from(buffer), { headers: { "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Content-Disposition": "attachment; filename=marosim-services-template.xlsx", "Cache-Control": "public, max-age=3600" } });
 }

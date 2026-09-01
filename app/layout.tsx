@@ -6,11 +6,11 @@ import { SiteHeader } from "@/components/site-header";
 import { MobileNavigation } from "@/components/mobile-navigation";
 
 export const metadata: Metadata = {
-  title: { default: "EventHub UZ", template: "%s · EventHub UZ" },
+  title: { default: "Marosim", template: "%s · Marosim" },
   description: "Каталог и заявки на услуги для свадеб, культурных и деловых мероприятий в Узбекистане.",
-  applicationName: "EventHub UZ",
+  applicationName: "Marosim",
   manifest: "/manifest.webmanifest",
-  appleWebApp: { capable: true, title: "EventHub", statusBarStyle: "black-translucent" },
+  appleWebApp: { capable: true, title: "Marosim", statusBarStyle: "black-translucent" },
 };
 
 export const viewport: Viewport = {
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <MobileNavigation />
           <footer className="site-footer">
             <div className="shell footer-row">
-              <strong>EventHub UZ</strong>
+              <strong>Marosim</strong>
               <span>Каталог и заявки. Без платежей и юридически значимой брони.</span>
             </div>
           </footer>

@@ -6,9 +6,9 @@ export function SiteHeader() {
       <div className="product-note">Заявка помогает связаться с поставщиком и не является бронью или оплатой</div>
       <header className="site-header">
         <div className="shell header-row">
-          <Link href="/" className="brand" aria-label="EventHub UZ — главная">
-            <span className="brand-mark">E</span>
-            <span>EventHub UZ</span>
+          <Link href="/" className="brand" aria-label="Marosim — главная">
+            <span className="brand-mark">M</span>
+            <span>Marosim</span>
           </Link>
           <nav className="top-nav" aria-label="Основная навигация">
             <Link href="/catalog">Каталог</Link>

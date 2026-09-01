@@ -1,5 +1,5 @@
 [Unit]
-Description=EventHub UZ development MVP
+Description=Marosim development MVP
 After=network-online.target
 Wants=network-online.target
 

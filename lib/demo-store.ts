@@ -100,7 +100,7 @@ export function updateModeration(itemId: string, status: ModerationStatus, reaso
   const state = loadDemoState();
   const auditEntry: AuditEntry = {
     id: crypto.randomUUID(),
-    actor: "admin@eventhub.local",
+    actor: "admin@marosim.local",
     action: status,
     target: itemId,
     reason,
@@ -122,7 +122,7 @@ export function setSupplierBanned(supplierId: string, banned: boolean, reason: s
     : state.bannedSupplierIds.filter((id) => id !== supplierId);
   const auditEntry: AuditEntry = {
     id: crypto.randomUUID(),
-    actor: "admin@eventhub.local",
+    actor: "admin@marosim.local",
     action: banned ? "supplier_banned" : "supplier_unbanned",
     target: supplierId,
     reason,

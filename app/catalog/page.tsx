@@ -8,7 +8,7 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
   return (
     <>
       <header className="page-intro">
-        <p className="eyebrow">Каталог EventHub UZ</p>
+        <p className="eyebrow">Каталог Marosim</p>
         <h1>Сравнимые услуги для события</h1>
         <p className="lead">Фильтруйте по категории и городу. Свежесть данных и проверяемые сигналы показаны отдельно от будущего рейтинга.</p>
       </header>

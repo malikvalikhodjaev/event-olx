@@ -27,7 +27,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        <div className="hero-proof" aria-label="Принципы EventHub">
+        <div className="hero-proof" aria-label="Принципы Marosim">
           <div><strong>Цена рядом</strong><span>Сразу виден формат расчёта</span></div>
           <div><strong>Данные свежее</strong><span>Показываем дату обновления</span></div>
           <div><strong>Заявка понятнее</strong><span>Но не выдаётся за бронь</span></div>
@@ -37,7 +37,7 @@ export default function HomePage() {
       <section className="section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">Как работает EventHub</p>
+            <p className="eyebrow">Как работает Marosim</p>
             <h2>Каждому — свой следующий шаг</h2>
           </div>
           <p>Роли разделены по задачам, но используют один каталог, одну заявку и общую историю изменений.</p>

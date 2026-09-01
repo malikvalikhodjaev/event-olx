@@ -1,6 +1,6 @@
 {
-  "name": "EventHub UZ",
-  "short_name": "EventHub",
+  "name": "Marosim",
+  "short_name": "Marosim",
   "description": "Каталог и заявки на услуги для мероприятий в Узбекистане",
   "id": "/mobile_app",
   "start_url": "/catalog?source=mobile_app",
