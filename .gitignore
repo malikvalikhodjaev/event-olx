@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+
+# tests and reports
+coverage/
+playwright-report/
+test-results/
+
+# environment and secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# operating systems and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# local working artifacts from ADR and transcription sessions
+_adr_work/
+_audio_work/
+
+# deployment state
+deploy/.runtime/
+*.log
+*.tsbuildinfo
