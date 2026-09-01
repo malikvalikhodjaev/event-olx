@@ -46,17 +46,41 @@ test("планировщик закрывает категорию и видит
   await expect(page.getByLabel(/Готовность/)).toHaveAttribute("aria-label", /17%/);
 });
 
-test("клиент отправляет заявку, поставщик отвечает", async ({ page }) => {
-  await page.goto("/requests/new?service=service-silk-hall");
-  await page.locator("#clientName").fill("Малика");
-  await page.locator("#clientPhone").fill("+998 90 555 44 33");
-  await page.locator("#eventDate").fill("2026-11-20");
-  await page.locator("#message").fill("Нужен зал на вечер, сообщите свободное время и состав пакета.");
-  await page.getByRole("button", { name: "Отправить заявку" }).click();
-  await expect(page.getByText(/Заявка отправлена поставщику/)).toBeVisible();
-  await page.goto("/supplier");
-  await page.getByRole("button", { name: "Принять к обсуждению" }).first().click();
-  await expect(page.getByText("Принята к обсуждению").first()).toBeVisible();
+test("клиент пишет поставщику и получает ответ в чате", async ({ page }) => {
+  const clientMessage = "Здравствуйте! Свободен ли зал 20 ноября и что входит в стоимость?";
+  const supplierMessage = "Здравствуйте! Дата свободна, сейчас пришлю полный состав предложения.";
+
+  await page.goto("/login");
+  await page.getByLabel("Телефон или электронная почта").fill("chat-client@example.com");
+  await page.getByLabel("Пароль").fill("marosim2026");
+  await page.getByRole("radio", { name: /Ищу для события/ }).check();
+  await page.getByRole("button", { name: "Войти", exact: true }).click();
+
+  await page.goto("/catalog");
+  const hallCard = page.getByRole("article").filter({ hasText: "Банкетный зал Silk Hall" });
+  await hallCard.getByRole("link", { name: "Написать поставщику" }).click();
+  await expect(page).toHaveURL(/\/chats\?service=service-silk-hall/);
+  await page.getByLabel("Сообщение").fill(clientMessage);
+  await page.getByRole("button", { name: "Отправить" }).click();
+  await expect(page.getByText(clientMessage)).toBeVisible();
+
+  await page.goto("/login");
+  await page.getByLabel("Телефон или электронная почта").fill("supplier@marosim.local");
+  await page.getByLabel("Пароль").fill("Marosim-Local-2026!");
+  await page.getByRole("radio", { name: /Предлагаю товары и услуги/ }).check();
+  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await page.goto("/chats");
+  await page.getByRole("button", { name: new RegExp(`chat-client.*${clientMessage}`) }).click();
+  await page.getByLabel("Сообщение").fill(supplierMessage);
+  await page.getByRole("button", { name: "Отправить" }).click();
+  await expect(page.getByText(supplierMessage)).toBeVisible();
+
+  await page.goto("/login?next=/chats");
+  await page.getByLabel("Телефон или электронная почта").fill("chat-client@example.com");
+  await page.getByLabel("Пароль").fill("marosim2026");
+  await page.getByRole("radio", { name: /Ищу для события/ }).check();
+  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await expect(page.getByText(supplierMessage)).toBeVisible();
 });
 
 test("администратор фиксирует модерацию и блокировку в аудите", async ({ page }) => {

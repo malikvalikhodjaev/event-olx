@@ -14,7 +14,7 @@ export function AccountPanel() {
       <section className="panel account-summary">
         <p className="eyebrow">Кабинет</p>
         <h1>Сначала войдите</h1>
-        <p className="lead">После входа здесь появятся ваши заявки, выбранные предложения и рабочие разделы.</p>
+        <p className="lead">После входа здесь появятся ваши диалоги, выбранные предложения и рабочие разделы.</p>
         <Link className="button button-primary" href="/login">Войти</Link>
       </section>
     );

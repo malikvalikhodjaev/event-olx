@@ -7,7 +7,7 @@ import { useDemoSession } from "@/components/demo-session";
 import { isDemoRole, roleDestination, roleOptions } from "@/lib/roles";
 import type { DemoRole } from "@/lib/types";
 
-export function LoginForm({ initialRole = "client" }: { initialRole?: string }) {
+export function LoginForm({ initialRole = "client", initialNext = "" }: { initialRole?: string; initialNext?: string }) {
   const router = useRouter();
   const { signIn } = useDemoSession();
   const [contact, setContact] = useState("");
@@ -26,7 +26,10 @@ export function LoginForm({ initialRole = "client" }: { initialRole?: string }) 
       return;
     }
     signIn(role, contact.trim());
-    router.push(roleDestination(role));
+    const destination = initialNext.startsWith("/") && !initialNext.startsWith("//")
+      ? initialNext
+      : roleDestination(role);
+    router.push(destination);
   }
 
   return (

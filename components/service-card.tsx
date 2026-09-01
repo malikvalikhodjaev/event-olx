@@ -21,6 +21,10 @@ export function ServiceCard({ service }: { service: Service }) {
   const category = getCategoryById(service.categoryId);
   const freshness = freshnessState(service.updatedAt);
   const shortlisted = state.shortlist.includes(service.id);
+  const chatDestination = `/chats?service=${encodeURIComponent(service.id)}`;
+  const chatHref = state.signedIn
+    ? chatDestination
+    : `/login?role=client&next=${encodeURIComponent(chatDestination)}`;
 
   if (!supplier || !category) return null;
 
@@ -62,6 +66,9 @@ export function ServiceCard({ service }: { service: Service }) {
         <div className="service-card-footer">
           <span>{responseLabel(supplier.responseMedianMinutes, supplier.responseSampleSize)}</span>
           <Link className="service-details-link" href={`/suppliers/${supplier.slug}`}>Подробнее →</Link>
+        </div>
+        <div className="service-card-actions">
+          <Link className="button button-primary button-small" href={chatHref}>Написать поставщику</Link>
         </div>
       </div>
     </article>

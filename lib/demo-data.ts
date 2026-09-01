@@ -1,6 +1,6 @@
 import type {
   CatalogSection,
-  DemoRequest,
+  Conversation,
   DemoRole,
   ModerationItem,
   OfferKind,
@@ -312,23 +312,51 @@ export const services: Service[] = [
   },
 ];
 
-export const seededRequests: DemoRequest[] = [
+export const seededConversations: Conversation[] = [
   {
-    id: "request-demo-1",
+    id: "conversation-silk-hall",
+    clientAccount: "client@marosim.local",
     clientName: "Алина",
-    clientPhone: "+998 90 123 45 67",
     supplierId: "supplier-silk-road",
     serviceId: "service-silk-hall",
-    eventType: "Свадьба",
-    eventDate: "2026-10-18",
-    city: "Ташкент",
-    guestCount: 120,
-    budget: 25_000_000,
-    message: "Нужен зал и информация по свободным датам, меню обсудим отдельно.",
-    status: "submitted",
     createdAt: "2026-09-01T18:20:00+05:00",
-    firstViewedAt: null,
-    firstRespondedAt: null,
+    updatedAt: "2026-09-01T18:42:00+05:00",
+    firstSupplierResponseAt: "2026-09-01T18:42:00+05:00",
+    messages: [
+      {
+        id: "message-silk-client",
+        sender: "client",
+        text: "Здравствуйте! Свободен ли зал 18 октября для свадьбы на 120 гостей?",
+        createdAt: "2026-09-01T18:20:00+05:00",
+        readAt: "2026-09-01T18:40:00+05:00",
+      },
+      {
+        id: "message-silk-supplier",
+        sender: "supplier",
+        text: "Здравствуйте, Алина! Дата пока свободна. Расскажите, пожалуйста, нужен ли вам кейтеринг вместе с залом?",
+        createdAt: "2026-09-01T18:42:00+05:00",
+        readAt: null,
+      },
+    ],
+  },
+  {
+    id: "conversation-silk-catering",
+    clientAccount: "malika@example.com",
+    clientName: "Малика",
+    supplierId: "supplier-silk-road",
+    serviceId: "service-silk-catering",
+    createdAt: "2026-09-02T08:15:00+05:00",
+    updatedAt: "2026-09-02T08:15:00+05:00",
+    firstSupplierResponseAt: null,
+    messages: [
+      {
+        id: "message-catering-client",
+        sender: "client",
+        text: "Добрый день! Что входит в стоимость кейтеринга на одного гостя?",
+        createdAt: "2026-09-02T08:15:00+05:00",
+        readAt: null,
+      },
+    ],
   },
 ];
 
@@ -350,9 +378,9 @@ export const demoAccounts: Array<{
   role: DemoRole;
   description: string;
 }> = [
-  { email: "client@marosim.local", password: "Marosim-Local-2026!", name: "Клиент", role: "client", description: "Ищет предложения и отправляет заявки" },
+  { email: "client@marosim.local", password: "Marosim-Local-2026!", name: "Клиент", role: "client", description: "Ищет предложения и пишет поставщикам" },
   { email: "planner@marosim.local", password: "Marosim-Local-2026!", name: "Организатор", role: "client_planner", description: "Собирает план события и бюджет" },
-  { email: "supplier@marosim.local", password: "Marosim-Local-2026!", name: "Поставщик", role: "supplier", description: "Управляет предложениями и заявками" },
+  { email: "supplier@marosim.local", password: "Marosim-Local-2026!", name: "Поставщик", role: "supplier", description: "Управляет предложениями и отвечает в чатах" },
   { email: "supplier-planner@marosim.local", password: "Marosim-Local-2026!", name: "Координатор поставщика", role: "supplier_planner", description: "Следит за загрузкой и ответами" },
   { email: "admin@marosim.local", password: "Marosim-Local-2026!", name: "Администратор", role: "admin", description: "Модерирует каталог и блокировки" },
 ];

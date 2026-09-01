@@ -9,7 +9,7 @@ export default function MobileAppPage() {
       <div className="mobile-app-copy">
         <p className="eyebrow">Marosim на телефоне</p>
         <h1>Marosim всегда под рукой</h1>
-        <p className="lead">Установите сайт на главный экран и открывайте каталог, план и заявки как обычное приложение.</p>
+        <p className="lead">Установите сайт на главный экран и открывайте каталог, план и сообщения как обычное приложение.</p>
         <div className="actions">
           <Link className="button button-primary" href="/catalog">Открыть каталог</Link>
           <Link className="button button-secondary" href="/planner">Перейти к плану</Link>

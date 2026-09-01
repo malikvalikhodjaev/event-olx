@@ -89,16 +89,16 @@ export function AdminDashboard() {
       now,
       suppliers,
       services: [...services, ...state.importedServices],
-      requests: state.requests,
+      conversations: state.conversations,
       moderation: state.moderation,
       bannedSupplierIds: state.bannedSupplierIds,
       userSessions: state.userSessions,
     }),
-    [now, period, state.bannedSupplierIds, state.importedServices, state.moderation, state.requests, state.userSessions],
+    [now, period, state.bannedSupplierIds, state.conversations, state.importedServices, state.moderation, state.userSessions],
   );
   const chartMaximum = Math.max(
     1,
-    ...analytics.activity.flatMap((bucket) => [bucket.requests, bucket.users]),
+    ...analytics.activity.flatMap((bucket) => [bucket.conversations, bucket.users]),
   );
 
   function moderate(itemId: string, status: ModerationStatus) {
@@ -153,8 +153,8 @@ export function AdminDashboard() {
           <MetricCard label="Поставщики" value={analytics.suppliersTotal} note={supplierRegistrationNote(analytics.suppliersNew)} accent="yellow" />
           <MetricCard label="Активные пользователи" value={analytics.activeUsers} note={comparisonText(analytics.activeUsers, analytics.previous.activeUsers)} />
           <MetricCard label="Сейчас онлайн" value={analytics.onlineUsers} note="уникальные аккаунты за 15 минут" accent="green" />
-          <MetricCard label="Заявки" value={analytics.requests} note={comparisonText(analytics.requests, analytics.previous.requests)} />
-          <MetricCard label="Поставщики ответили" value={analytics.responseRate === null ? "—" : `${analytics.responseRate}%`} note={analytics.requests ? `${analytics.respondedRequests} из ${analytics.requests} заявок` : "в периоде пока нет заявок"} />
+          <MetricCard label="Новые диалоги" value={analytics.conversations} note={comparisonText(analytics.conversations, analytics.previous.conversations)} />
+          <MetricCard label="Поставщики ответили" value={analytics.responseRate === null ? "—" : `${analytics.responseRate}%`} note={analytics.conversations ? `${analytics.repliedConversations} из ${analytics.conversations} диалогов` : "в периоде пока нет диалогов"} />
           <MetricCard label="Первый ответ" value={responseTime(analytics.medianResponseMinutes)} note="медианное время ответа" />
         </div>
 
@@ -165,17 +165,17 @@ export function AdminDashboard() {
           <div><strong>{analytics.bannedSuppliers}</strong><span>поставщиков заблокировано</span></div>
         </div>
 
-        <div className="activity-chart" aria-label="Активность пользователей и новые заявки за выбранный период">
+        <div className="activity-chart" aria-label="Активность пользователей и новые диалоги за выбранный период">
           <div className="activity-chart-heading">
-            <div><strong>Активность</strong><span>Входы пользователей и новые заявки</span></div>
-            <div className="activity-legend"><span><i className="legend-users" />Пользователи</span><span><i className="legend-requests" />Заявки</span></div>
+            <div><strong>Активность</strong><span>Входы пользователей и новые диалоги</span></div>
+            <div className="activity-legend"><span><i className="legend-users" />Пользователи</span><span><i className="legend-conversations" />Диалоги</span></div>
           </div>
           <div className="activity-bars" style={{ gridTemplateColumns: `repeat(${analytics.activity.length}, minmax(32px, 1fr))` }}>
             {analytics.activity.map((bucket) => (
-              <div className="activity-bucket" key={bucket.key} title={`${bucket.label}: пользователи — ${bucket.users}, заявки — ${bucket.requests}`}>
+              <div className="activity-bucket" key={bucket.key} title={`${bucket.label}: пользователи — ${bucket.users}, диалоги — ${bucket.conversations}`}>
                 <div className="bar-pair" aria-hidden="true">
                   <span className="bar-users" style={{ height: bucket.users ? `${Math.max(10, (bucket.users / chartMaximum) * 100)}%` : 2 }} />
-                  <span className="bar-requests" style={{ height: bucket.requests ? `${Math.max(10, (bucket.requests / chartMaximum) * 100)}%` : 2 }} />
+                  <span className="bar-conversations" style={{ height: bucket.conversations ? `${Math.max(10, (bucket.conversations / chartMaximum) * 100)}%` : 2 }} />
                 </div>
                 <small>{bucket.label}</small>
               </div>

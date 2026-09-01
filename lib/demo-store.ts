@@ -1,7 +1,7 @@
 "use client";
 
-import { categories, seededModeration, seededRequests } from "@/lib/demo-data";
-import type { AuditEntry, DemoRequest, DemoRole, DemoState, ModerationStatus, Service } from "@/lib/types";
+import { categories, getServiceById, seededConversations, seededModeration } from "@/lib/demo-data";
+import type { AuditEntry, ChatSender, Conversation, DemoRole, DemoState, ModerationStatus, Service } from "@/lib/types";
 
 const STORAGE_KEY = "eventhub-uz-demo-v1";
 
@@ -14,7 +14,7 @@ export function createInitialDemoState(): DemoState {
     plannerItems: categories
       .filter((category) => category.requiredForWedding)
       .map((category) => ({ categoryId: category.id, selectedServiceId: null, budget: 0, done: false })),
-    requests: seededRequests,
+    conversations: seededConversations,
     importedServices: [],
     moderation: seededModeration,
     audit: [],
@@ -138,16 +138,53 @@ export function addToShortlist(serviceId: string) {
   return shortlist;
 }
 
-export function addDemoRequest(request: DemoRequest) {
+export function startConversation(serviceId: string, clientAccount: string, text: string) {
   const state = loadDemoState();
-  saveDemoState({ ...state, requests: [request, ...state.requests] });
+  const service = getServiceById(serviceId);
+  if (!service) throw new Error("Предложение не найдено");
+  const accountKey = clientAccount.trim().toLocaleLowerCase();
+  const existing = state.conversations.find(
+    (conversation) => conversation.serviceId === serviceId && conversation.clientAccount === accountKey,
+  );
+  if (existing) {
+    addChatMessage(existing.id, "client", text);
+    return existing.id;
+  }
+  const now = new Date().toISOString();
+  const conversation: Conversation = {
+    id: crypto.randomUUID(),
+    clientAccount: accountKey,
+    clientName: clientAccount.includes("@") ? clientAccount.split("@")[0] : clientAccount,
+    supplierId: service.supplierId,
+    serviceId,
+    createdAt: now,
+    updatedAt: now,
+    firstSupplierResponseAt: null,
+    messages: [{ id: crypto.randomUUID(), sender: "client", text, createdAt: now, readAt: null }],
+  };
+  saveDemoState({ ...state, conversations: [conversation, ...state.conversations] });
+  return conversation.id;
 }
 
-export function updateDemoRequest(requestId: string, patch: Partial<DemoRequest>) {
+export function addChatMessage(conversationId: string, sender: ChatSender, text: string) {
   const state = loadDemoState();
+  const now = new Date().toISOString();
   saveDemoState({
     ...state,
-    requests: state.requests.map((request) => (request.id === requestId ? { ...request, ...patch } : request)),
+    conversations: state.conversations.map((conversation) => {
+      if (conversation.id !== conversationId) return conversation;
+      return {
+        ...conversation,
+        updatedAt: now,
+        firstSupplierResponseAt: sender === "supplier" && !conversation.firstSupplierResponseAt
+          ? now
+          : conversation.firstSupplierResponseAt,
+        messages: [
+          ...conversation.messages,
+          { id: crypto.randomUUID(), sender, text, createdAt: now, readAt: null },
+        ],
+      };
+    }),
   });
 }
 

@@ -3,7 +3,7 @@ import type { DemoRole } from "@/lib/types";
 export const roleOptions: Array<{ role: DemoRole; title: string; description: string }> = [
   { role: "client", title: "Ищу для события", description: "Выбрать услуги, купить нужные вещи или арендовать технику" },
   { role: "client_planner", title: "Организую событие", description: "Собрать план, бюджет и список выбранных предложений" },
-  { role: "supplier", title: "Предлагаю товары и услуги", description: "Разместить предложения и отвечать на заявки" },
+  { role: "supplier", title: "Предлагаю товары и услуги", description: "Разместить предложения и отвечать клиентам в чате" },
   { role: "supplier_planner", title: "Планирую работу команды", description: "Следить за датами, загрузкой и ответами клиентам" },
   { role: "admin", title: "Управляю платформой", description: "Проверять карточки и обращения пользователей" },
 ];

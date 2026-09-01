@@ -58,29 +58,26 @@ export type Service = {
   availabilityConfirmedAt: string | null;
 };
 
-export type RequestStatus =
-  | "submitted"
-  | "viewed"
-  | "accepted_for_discussion"
-  | "declined"
-  | "closed";
+export type ChatSender = "client" | "supplier";
 
-export type DemoRequest = {
+export type ChatMessage = {
   id: string;
+  sender: ChatSender;
+  text: string;
+  createdAt: string;
+  readAt: string | null;
+};
+
+export type Conversation = {
+  id: string;
+  clientAccount: string;
   clientName: string;
-  clientPhone: string;
   supplierId: string;
   serviceId: string;
-  eventType: string;
-  eventDate: string;
-  city: string;
-  guestCount: number;
-  budget: number;
-  message: string;
-  status: RequestStatus;
   createdAt: string;
-  firstViewedAt: string | null;
-  firstRespondedAt: string | null;
+  updatedAt: string;
+  firstSupplierResponseAt: string | null;
+  messages: ChatMessage[];
 };
 
 export type PlannerItem = {
@@ -125,7 +122,7 @@ export type DemoState = {
   accountName: string;
   shortlist: string[];
   plannerItems: PlannerItem[];
-  requests: DemoRequest[];
+  conversations: Conversation[];
   importedServices: Service[];
   moderation: ModerationItem[];
   audit: AuditEntry[];

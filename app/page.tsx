@@ -19,7 +19,7 @@ export default function HomePage() {
             <p className="eyebrow">Всё для события — в одном месте</p>
             <h1>Найди всё для своего мероприятия</h1>
             <p className="lead">
-              Сравните предложения, соберите план и отправьте поставщикам одну понятную заявку.
+              Сравните предложения, соберите план и сразу напишите подходящему поставщику.
             </p>
             <div className="actions">
               <Link className="button button-primary hero-login" href="/login">Войти в Marosim</Link>
@@ -30,7 +30,7 @@ export default function HomePage() {
         <div className="hero-proof" aria-label="Принципы Marosim">
           <div><strong>Понятные цены</strong><span>Сразу видно, от какой суммы начинается предложение</span></div>
           <div><strong>Актуальные предложения</strong><span>Видно, когда поставщик обновил информацию</span></div>
-          <div><strong>Заявки в одном месте</strong><span>Следите за ответами без долгих переписок</span></div>
+          <div><strong>Прямой разговор</strong><span>Задайте вопрос поставщику прямо из карточки</span></div>
         </div>
       </section>
 
@@ -40,19 +40,19 @@ export default function HomePage() {
             <p className="eyebrow">Как работает Marosim</p>
             <h2>Каждому — свой следующий шаг</h2>
           </div>
-          <p>Найдите всё нужное, составьте план события или принимайте заявки от клиентов.</p>
+          <p>Найдите всё нужное, составьте план события или отвечайте клиентам в чате.</p>
         </div>
         <div className="grid grid-3">
           <article className="card story-card story-card-yellow">
             <div className="category-icon">♡</div>
             <h3>Клиент и организатор</h3>
-            <p>План события, подборка вариантов и заявки с понятным следующим шагом.</p>
+            <p>План события, подборка вариантов и прямые диалоги с поставщиками.</p>
             <Link className="text-link" href="/login?role=client_planner">Войти как организатор <span aria-hidden="true">→</span></Link>
           </article>
           <article className="card story-card story-card-black">
             <div className="category-icon">↗</div>
             <h3>Поставщик</h3>
-            <p>Добавляйте услуги, товары и аренду, загружайте цены из Excel и отвечайте на заявки.</p>
+            <p>Добавляйте услуги, товары и аренду, загружайте цены из Excel и отвечайте клиентам.</p>
             <Link className="text-link" href="/login?role=supplier">Войти как поставщик <span aria-hidden="true">→</span></Link>
           </article>
           <article className="card story-card story-card-lilac">

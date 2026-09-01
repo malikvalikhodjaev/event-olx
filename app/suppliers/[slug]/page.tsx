@@ -53,19 +53,19 @@ export default async function SupplierPage({ params }: { params: Promise<{ slug:
         </section>
         <aside className="panel sticky-panel">
           <p className="eyebrow">О поставщике</p>
-          <h3>Полезно знать перед заявкой</h3>
+          <h3>Полезно знать перед разговором</h3>
           <div className="metric-list">
             <div className="metric"><span>Город</span><strong>{supplier.city}</strong></div>
             <div className="metric"><span>Профиль обновлён</span><strong>{formatDateTime(supplier.updatedAt)}</strong></div>
             <div className="metric"><span>Скорость ответа</span><strong>{responseLabel(supplier.responseMedianMinutes, supplier.responseSampleSize)}</strong></div>
-            <div className="metric"><span>Учтено</span><strong>{supplier.responseSampleSize} заявок</strong></div>
+            <div className="metric"><span>Учтено</span><strong>{supplier.responseSampleSize} диалогов</strong></div>
           </div>
           <div className="callout callout-warning" style={{ marginTop: 16 }}>
-            Уточните цену, наличие или свободную дату в заявке. После ответа договоритесь с поставщиком об условиях.
+            Напишите поставщику и уточните цену, наличие или свободную дату. Сообщение само по себе не подтверждает бронь.
           </div>
           {supplierServices[0] ? (
-            <Link className="button button-primary" style={{ width: "100%", marginTop: 16 }} href={`/requests/new?service=${supplierServices[0].id}`}>
-              Отправить заявку
+            <Link className="button button-primary" style={{ width: "100%", marginTop: 16 }} href={`/chats?service=${supplierServices[0].id}`}>
+              Написать поставщику
             </Link>
           ) : null}
         </aside>

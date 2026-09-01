@@ -1,11 +1,11 @@
-import type { DemoRequest, ModerationItem, Service, Supplier, UserSession } from "@/lib/types";
+import type { Conversation, ModerationItem, Service, Supplier, UserSession } from "@/lib/types";
 
 export type DashboardPeriod = "7d" | "30d" | "90d" | "all";
 
 export type ActivityBucket = {
   key: string;
   label: string;
-  requests: number;
+  conversations: number;
   users: number;
 };
 
@@ -15,9 +15,9 @@ export type AdminAnalytics = {
   suppliersNew: number;
   activeUsers: number;
   onlineUsers: number;
-  requests: number;
+  conversations: number;
   responseRate: number | null;
-  respondedRequests: number;
+  repliedConversations: number;
   medianResponseMinutes: number | null;
   publishedServices: number;
   verifiedSuppliers: number;
@@ -25,7 +25,7 @@ export type AdminAnalytics = {
   bannedSuppliers: number;
   previous: {
     activeUsers: number | null;
-    requests: number | null;
+    conversations: number | null;
   };
   activity: ActivityBucket[];
 };
@@ -35,7 +35,7 @@ type AdminAnalyticsInput = {
   now: Date;
   suppliers: Supplier[];
   services: Service[];
-  requests: DemoRequest[];
+  conversations: Conversation[];
   moderation: ModerationItem[];
   bannedSupplierIds: string[];
   userSessions: UserSession[];
@@ -83,7 +83,7 @@ function resolvePeriodStart(input: AdminAnalyticsInput, end: number) {
 
   const timestamps = [
     ...input.suppliers.map((supplier) => asTime(supplier.createdAt)),
-    ...input.requests.map((request) => asTime(request.createdAt)),
+    ...input.conversations.map((conversation) => asTime(conversation.createdAt)),
     ...input.userSessions.map((session) => asTime(session.signedInAt)),
   ].filter((time) => time > 0 && time <= end);
   return timestamps.length ? startOfDay(Math.min(...timestamps)) : startOfDay(end);
@@ -92,7 +92,7 @@ function resolvePeriodStart(input: AdminAnalyticsInput, end: number) {
 function activityBuckets(
   start: number,
   end: number,
-  requests: DemoRequest[],
+  conversations: Conversation[],
   sessions: UserSession[],
 ) {
   const durationDays = Math.max(1, Math.ceil((end - start) / DAY_MS));
@@ -108,7 +108,7 @@ function activityBuckets(
     return {
       key: `${Math.round(bucketStart)}-${Math.round(bucketEnd)}`,
       label,
-      requests: requests.filter((request) => isWithin(request.createdAt, bucketStart, bucketEnd)).length,
+      conversations: conversations.filter((conversation) => isWithin(conversation.createdAt, bucketStart, bucketEnd)).length,
       users: uniqueAccounts(sessions.filter((session) => isWithin(session.signedInAt, bucketStart, bucketEnd))),
     };
   });
@@ -120,10 +120,10 @@ export function calculateAdminAnalytics(input: AdminAnalyticsInput): AdminAnalyt
   const duration = end - start;
   const previousStart = start - duration;
   const periodSessions = input.userSessions.filter((session) => isWithin(session.signedInAt, start, end));
-  const periodRequests = input.requests.filter((request) => isWithin(request.createdAt, start, end));
-  const respondedRequests = periodRequests.filter((request) => request.firstRespondedAt);
-  const responseMinutes = respondedRequests.map((request) =>
-    Math.max(0, Math.round((asTime(request.firstRespondedAt ?? request.createdAt) - asTime(request.createdAt)) / 60_000)),
+  const periodConversations = input.conversations.filter((conversation) => isWithin(conversation.createdAt, start, end));
+  const repliedConversations = periodConversations.filter((conversation) => conversation.firstSupplierResponseAt);
+  const responseMinutes = repliedConversations.map((conversation) =>
+    Math.max(0, Math.round((asTime(conversation.firstSupplierResponseAt ?? conversation.createdAt) - asTime(conversation.createdAt)) / 60_000)),
   );
   const onlineThreshold = input.now.getTime() - 15 * 60_000;
   const onlineUsers = uniqueAccounts(
@@ -134,9 +134,9 @@ export function calculateAdminAnalytics(input: AdminAnalyticsInput): AdminAnalyt
   const previousSessions = input.period === "all"
     ? []
     : input.userSessions.filter((session) => isWithin(session.signedInAt, previousStart, start));
-  const previousRequests = input.period === "all"
+  const previousConversations = input.period === "all"
     ? []
-    : input.requests.filter((request) => isWithin(request.createdAt, previousStart, start));
+    : input.conversations.filter((conversation) => isWithin(conversation.createdAt, previousStart, start));
 
   return {
     periodLabel: input.period === "all" ? "За всё время" : `Последние ${PERIOD_DAYS[input.period]} дней`,
@@ -144,9 +144,9 @@ export function calculateAdminAnalytics(input: AdminAnalyticsInput): AdminAnalyt
     suppliersNew: input.suppliers.filter((supplier) => isWithin(supplier.createdAt, start, end)).length,
     activeUsers: uniqueAccounts(periodSessions),
     onlineUsers,
-    requests: periodRequests.length,
-    responseRate: periodRequests.length ? Math.round((respondedRequests.length / periodRequests.length) * 100) : null,
-    respondedRequests: respondedRequests.length,
+    conversations: periodConversations.length,
+    responseRate: periodConversations.length ? Math.round((repliedConversations.length / periodConversations.length) * 100) : null,
+    repliedConversations: repliedConversations.length,
     medianResponseMinutes: median(responseMinutes),
     publishedServices: input.services.filter(
       (service) => service.published && service.active && !input.bannedSupplierIds.includes(service.supplierId),
@@ -158,8 +158,8 @@ export function calculateAdminAnalytics(input: AdminAnalyticsInput): AdminAnalyt
     bannedSuppliers: input.bannedSupplierIds.length,
     previous: {
       activeUsers: input.period === "all" ? null : uniqueAccounts(previousSessions),
-      requests: input.period === "all" ? null : previousRequests.length,
+      conversations: input.period === "all" ? null : previousConversations.length,
     },
-    activity: activityBuckets(start, end, periodRequests, periodSessions),
+    activity: activityBuckets(start, end, periodConversations, periodSessions),
   };
 }

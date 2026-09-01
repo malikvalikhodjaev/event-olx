@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calculateAdminAnalytics } from "@/lib/admin-analytics";
-import { seededModeration, seededRequests, services, suppliers } from "@/lib/demo-data";
+import { seededConversations, seededModeration, services, suppliers } from "@/lib/demo-data";
 import type { UserSession } from "@/lib/types";
 
 const sessions: UserSession[] = [
@@ -32,15 +32,15 @@ const sessions: UserSession[] = [
 
 describe("admin analytics", () => {
   it("считает уникальных пользователей, онлайн и показатели ответа за период", () => {
-    const requests = [
-      { ...seededRequests[0], firstRespondedAt: "2026-09-01T19:20:00+05:00" },
+    const conversations = [
+      { ...seededConversations[0], firstSupplierResponseAt: "2026-09-01T19:20:00+05:00" },
     ];
     const result = calculateAdminAnalytics({
       period: "30d",
       now: new Date("2026-09-02T12:00:00+05:00"),
       suppliers,
       services,
-      requests,
+      conversations,
       moderation: seededModeration,
       bannedSupplierIds: [],
       userSessions: sessions,
@@ -50,26 +50,26 @@ describe("admin analytics", () => {
     expect(result.suppliersNew).toBe(4);
     expect(result.activeUsers).toBe(2);
     expect(result.onlineUsers).toBe(1);
-    expect(result.requests).toBe(1);
+    expect(result.conversations).toBe(1);
     expect(result.responseRate).toBe(100);
     expect(result.medianResponseMinutes).toBe(60);
     expect(result.pendingModeration).toBe(1);
-    expect(result.activity.reduce((sum, bucket) => sum + bucket.requests, 0)).toBe(1);
+    expect(result.activity.reduce((sum, bucket) => sum + bucket.conversations, 0)).toBe(1);
   });
 
-  it("не показывает выдуманный процент ответа, если заявок нет", () => {
+  it("не показывает выдуманный процент ответа, если диалогов нет", () => {
     const result = calculateAdminAnalytics({
       period: "7d",
       now: new Date("2026-10-02T12:00:00+05:00"),
       suppliers,
       services,
-      requests: seededRequests,
+      conversations: seededConversations,
       moderation: seededModeration,
       bannedSupplierIds: ["supplier-sabo-decor"],
       userSessions: sessions,
     });
 
-    expect(result.requests).toBe(0);
+    expect(result.conversations).toBe(0);
     expect(result.responseRate).toBeNull();
     expect(result.medianResponseMinutes).toBeNull();
     expect(result.bannedSuppliers).toBe(1);

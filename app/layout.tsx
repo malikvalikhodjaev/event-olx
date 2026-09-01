@@ -14,7 +14,7 @@ const geologica = Geologica({
 
 export const metadata: Metadata = {
   title: { default: "Marosim", template: "%s · Marosim" },
-  description: "Услуги, товары, техника и заявки для свадеб, культурных и деловых мероприятий в Узбекистане.",
+  description: "Услуги, товары и техника для свадеб, культурных и деловых мероприятий в Узбекистане.",
   applicationName: "Marosim",
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, title: "Marosim", statusBarStyle: "black-translucent" },

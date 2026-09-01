@@ -1,7 +1,7 @@
 {
   "name": "Marosim",
   "short_name": "Marosim",
-  "description": "Услуги, товары, техника и заявки для мероприятий в Узбекистане",
+  "description": "Услуги, товары, техника и прямые сообщения поставщикам для мероприятий в Узбекистане",
   "id": "/mobile_app",
   "start_url": "/",
   "scope": "/",
@@ -13,7 +13,7 @@
   "shortcuts": [
     { "name": "Каталог", "url": "/catalog", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
     { "name": "План события", "url": "/planner", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Заявки", "url": "/requests", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
+    { "name": "Сообщения", "url": "/chats", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
   ],
   "icons": [
     {
