@@ -1,0 +1,21 @@
+[Unit]
+Description=EventHub UZ development MVP
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/malik/apps/eventhub-uz/repo/.next/standalone
+Environment=NODE_ENV=production
+Environment=HOSTNAME=127.0.0.1
+Environment=PORT=3001
+ExecStart=/home/malik/apps/eventhub-uz/runtime/node/bin/node /home/malik/apps/eventhub-uz/repo/.next/standalone/server.js
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+StandardOutput=append:/home/malik/apps/eventhub-uz/logs/app.log
+StandardError=append:/home/malik/apps/eventhub-uz/logs/app.log
+
+[Install]
+WantedBy=default.target
