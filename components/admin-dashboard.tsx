@@ -1,14 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useDemoSession } from "@/components/demo-session";
 import { StatusBadge } from "@/components/status-badge";
-import { getServiceById, getSupplierById, suppliers } from "@/lib/demo-data";
+import { calculateAdminAnalytics, type DashboardPeriod } from "@/lib/admin-analytics";
+import { getServiceById, getSupplierById, services, suppliers } from "@/lib/demo-data";
 import { formatDateTime } from "@/lib/format";
 import { setSupplierBanned, updateModeration } from "@/lib/demo-store";
 import type { ModerationStatus } from "@/lib/types";
 
-const moderationLabels: Record<ModerationStatus, string> = { pending: "Ожидает", approved: "Одобрена", changes_requested: "Нужны правки", hidden: "Скрыта" };
+const moderationLabels: Record<ModerationStatus, string> = {
+  pending: "Ожидает",
+  approved: "Одобрена",
+  changes_requested: "Нужны правки",
+  hidden: "Скрыта",
+};
+
 const actionLabels: Record<string, string> = {
   approved: "Карточка одобрена",
   changes_requested: "Карточка возвращена на исправление",
@@ -17,13 +24,87 @@ const actionLabels: Record<string, string> = {
   supplier_unbanned: "Поставщик разблокирован",
 };
 
+const periodOptions: Array<{ value: DashboardPeriod; label: string }> = [
+  { value: "7d", label: "7 дней" },
+  { value: "30d", label: "30 дней" },
+  { value: "90d", label: "90 дней" },
+  { value: "all", label: "Всё время" },
+];
+
+function comparisonText(current: number, previous: number | null) {
+  if (previous === null) return "за весь доступный период";
+  const difference = current - previous;
+  if (difference > 0) return `+${difference} к предыдущему периоду`;
+  if (difference < 0) return `${difference} к предыдущему периоду`;
+  return "без изменения к предыдущему периоду";
+}
+
+function responseTime(minutes: number | null) {
+  if (minutes === null) return "—";
+  if (minutes < 60) return `${minutes} мин`;
+  const hours = Math.floor(minutes / 60);
+  const remainder = minutes % 60;
+  return remainder ? `${hours} ч ${remainder} мин` : `${hours} ч`;
+}
+
+function supplierRegistrationNote(count: number) {
+  const lastTwo = count % 100;
+  const last = count % 10;
+  const verb = last === 1 && lastTwo !== 11
+    ? "зарегистрирован"
+    : last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)
+      ? "зарегистрированы"
+      : "зарегистрировано";
+  return `+${count} ${verb} за период`;
+}
+
+function MetricCard({
+  label,
+  value,
+  note,
+  accent = "neutral",
+}: {
+  label: string;
+  value: string | number;
+  note: string;
+  accent?: "neutral" | "yellow" | "green";
+}) {
+  return (
+    <article className={`admin-metric-card admin-metric-${accent}`}>
+      <span>{label}</span>
+      <strong>{value}</strong>
+      <small>{note}</small>
+    </article>
+  );
+}
+
 export function AdminDashboard() {
   const { state, refresh } = useDemoSession();
   const [reasons, setReasons] = useState<Record<string, string>>({});
+  const [period, setPeriod] = useState<DashboardPeriod>("30d");
+  const [now, setNow] = useState(() => new Date());
+  const analytics = useMemo(
+    () => calculateAdminAnalytics({
+      period,
+      now,
+      suppliers,
+      services: [...services, ...state.importedServices],
+      requests: state.requests,
+      moderation: state.moderation,
+      bannedSupplierIds: state.bannedSupplierIds,
+      userSessions: state.userSessions,
+    }),
+    [now, period, state.bannedSupplierIds, state.importedServices, state.moderation, state.requests, state.userSessions],
+  );
+  const chartMaximum = Math.max(
+    1,
+    ...analytics.activity.flatMap((bucket) => [bucket.requests, bucket.users]),
+  );
 
   function moderate(itemId: string, status: ModerationStatus) {
     const reason = reasons[itemId]?.trim() || (status === "approved" ? "Карточка соответствует правилам каталога" : "Требуется проверка данных карточки");
     updateModeration(itemId, status, reason);
+    setNow(new Date());
     refresh();
   }
 
@@ -31,6 +112,7 @@ export function AdminDashboard() {
     const isBanned = state.bannedSupplierIds.includes(supplierId);
     const reason = reasons[`supplier-${supplierId}`]?.trim() || (isBanned ? "Ограничение снято после проверки" : "Карточки скрыты до проверки администратором");
     setSupplierBanned(supplierId, !isBanned, reason);
+    setNow(new Date());
     refresh();
   }
 
@@ -41,7 +123,67 @@ export function AdminDashboard() {
   }
 
   return (
-    <div className="grid" style={{ gap: 20 }}>
+    <div className="grid admin-dashboard" style={{ gap: 20 }}>
+      <section className="panel admin-overview" aria-labelledby="admin-overview-title">
+        <div className="toolbar admin-overview-toolbar">
+          <div>
+            <p className="eyebrow">Коротко о главном</p>
+            <h2 id="admin-overview-title">Состояние платформы</h2>
+            <p className="small muted">{analytics.periodLabel}. Онлайн — активность за последние 15 минут.</p>
+          </div>
+          <div className="period-switch" role="group" aria-label="Период отчёта">
+            {periodOptions.map((option) => (
+              <button
+                className={period === option.value ? "active" : ""}
+                key={option.value}
+                type="button"
+                aria-pressed={period === option.value}
+                onClick={() => {
+                  setPeriod(option.value);
+                  setNow(new Date());
+                }}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="admin-metric-grid">
+          <MetricCard label="Поставщики" value={analytics.suppliersTotal} note={supplierRegistrationNote(analytics.suppliersNew)} accent="yellow" />
+          <MetricCard label="Активные пользователи" value={analytics.activeUsers} note={comparisonText(analytics.activeUsers, analytics.previous.activeUsers)} />
+          <MetricCard label="Сейчас онлайн" value={analytics.onlineUsers} note="уникальные аккаунты за 15 минут" accent="green" />
+          <MetricCard label="Заявки" value={analytics.requests} note={comparisonText(analytics.requests, analytics.previous.requests)} />
+          <MetricCard label="Поставщики ответили" value={analytics.responseRate === null ? "—" : `${analytics.responseRate}%`} note={analytics.requests ? `${analytics.respondedRequests} из ${analytics.requests} заявок` : "в периоде пока нет заявок"} />
+          <MetricCard label="Первый ответ" value={responseTime(analytics.medianResponseMinutes)} note="медианное время ответа" />
+        </div>
+
+        <div className="admin-operations" aria-label="Текущее состояние каталога">
+          <div><strong>{analytics.publishedServices}</strong><span>карточек опубликовано</span></div>
+          <div><strong>{analytics.verifiedSuppliers}</strong><span>поставщиков проверено</span></div>
+          <div><strong>{analytics.pendingModeration}</strong><span>ждут модерации</span></div>
+          <div><strong>{analytics.bannedSuppliers}</strong><span>поставщиков заблокировано</span></div>
+        </div>
+
+        <div className="activity-chart" aria-label="Активность пользователей и новые заявки за выбранный период">
+          <div className="activity-chart-heading">
+            <div><strong>Активность</strong><span>Входы пользователей и новые заявки</span></div>
+            <div className="activity-legend"><span><i className="legend-users" />Пользователи</span><span><i className="legend-requests" />Заявки</span></div>
+          </div>
+          <div className="activity-bars" style={{ gridTemplateColumns: `repeat(${analytics.activity.length}, minmax(32px, 1fr))` }}>
+            {analytics.activity.map((bucket) => (
+              <div className="activity-bucket" key={bucket.key} title={`${bucket.label}: пользователи — ${bucket.users}, заявки — ${bucket.requests}`}>
+                <div className="bar-pair" aria-hidden="true">
+                  <span className="bar-users" style={{ height: bucket.users ? `${Math.max(10, (bucket.users / chartMaximum) * 100)}%` : 2 }} />
+                  <span className="bar-requests" style={{ height: bucket.requests ? `${Math.max(10, (bucket.requests / chartMaximum) * 100)}%` : 2 }} />
+                </div>
+                <small>{bucket.label}</small>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="panel">
         <div className="toolbar"><div><p className="eyebrow">Новые карточки</p><h2>Проверка предложений</h2></div><StatusBadge tone="warning">{state.moderation.filter((item) => item.status === "pending").length} ожидает</StatusBadge></div>
         {state.moderation.map((item) => {

@@ -55,6 +55,7 @@ export const suppliers: Supplier[] = [
     responseMedianMinutes: 38,
     responseSampleSize: 12,
     portfolio: ["Свадьба на 120 гостей", "Никах и семейный ужин", "Корпоративная конференция"],
+    createdAt: "2026-07-06T11:20:00+05:00",
   },
   {
     id: "supplier-nur-photo",
@@ -68,6 +69,7 @@ export const suppliers: Supplier[] = [
     responseMedianMinutes: 74,
     responseSampleSize: 8,
     portfolio: ["Wedding story", "Love story", "Business highlights"],
+    createdAt: "2026-07-22T14:40:00+05:00",
   },
   {
     id: "supplier-sabo-decor",
@@ -81,6 +83,7 @@ export const suppliers: Supplier[] = [
     responseMedianMinutes: null,
     responseSampleSize: 2,
     portfolio: ["Garden wedding", "Национальная церемония"],
+    createdAt: "2026-08-12T10:15:00+05:00",
   },
   {
     id: "supplier-teamcraft",
@@ -94,6 +97,7 @@ export const suppliers: Supplier[] = [
     responseMedianMinutes: 51,
     responseSampleSize: 6,
     portfolio: ["Outdoor team day", "Leadership lab", "Стратегическая сессия"],
+    createdAt: "2026-08-19T16:30:00+05:00",
   },
   {
     id: "supplier-gulzor",
@@ -107,6 +111,7 @@ export const suppliers: Supplier[] = [
     responseMedianMinutes: 29,
     responseSampleSize: 15,
     portfolio: ["Свадебные букеты", "Декор для столов", "Именные приглашения"],
+    createdAt: "2026-08-28T09:45:00+05:00",
   },
   {
     id: "supplier-ovoza-tech",
@@ -120,6 +125,7 @@ export const suppliers: Supplier[] = [
     responseMedianMinutes: 42,
     responseSampleSize: 9,
     portfolio: ["Свет для свадебной сцены", "LED-экран для конференции", "Звук для тимбилдинга"],
+    createdAt: "2026-08-31T13:10:00+05:00",
   },
 ];
 

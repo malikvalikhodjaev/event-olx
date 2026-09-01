@@ -39,6 +39,7 @@ export type Supplier = {
   responseMedianMinutes: number | null;
   responseSampleSize: number;
   portfolio: string[];
+  createdAt: string;
 };
 
 export type Service = {
@@ -109,6 +110,15 @@ export type AuditEntry = {
   createdAt: string;
 };
 
+export type UserSession = {
+  id: string;
+  accountKey: string;
+  role: DemoRole;
+  signedInAt: string;
+  lastSeenAt: string;
+  signedOutAt: string | null;
+};
+
 export type DemoState = {
   role: DemoRole;
   signedIn: boolean;
@@ -120,6 +130,8 @@ export type DemoState = {
   moderation: ModerationItem[];
   audit: AuditEntry[];
   bannedSupplierIds: string[];
+  userSessions: UserSession[];
+  activeSessionId: string | null;
 };
 
 export type ImportServiceRow = {

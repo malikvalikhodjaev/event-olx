@@ -69,6 +69,21 @@ test("администратор фиксирует модерацию и бло
   await expect(page.getByText("Поставщик заблокирован")).toBeVisible();
 });
 
+test("администратор видит сводку и меняет период", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByLabel("Телефон или электронная почта").fill("admin@marosim.local");
+  await page.getByLabel("Пароль").fill("Marosim-Local-2026!");
+  await page.getByRole("radio", { name: /Управляю платформой/ }).check();
+  await page.getByRole("button", { name: "Войти", exact: true }).click();
+
+  await expect(page).toHaveURL(/\/admin$/);
+  await expect(page.getByRole("heading", { name: "Состояние платформы" })).toBeVisible();
+  await expect(page.getByRole("article").filter({ hasText: "Активные пользователи" }).locator("strong")).toHaveText("1");
+  await expect(page.getByRole("article").filter({ hasText: "Сейчас онлайн" }).locator("strong")).toHaveText("1");
+  await page.getByRole("button", { name: "7 дней" }).click();
+  await expect(page.getByText("Последние 7 дней.")).toBeVisible();
+});
+
 test("поставщик загружает Excel и создает непубличный черновик", async ({ page }) => {
   const templateResponse = await page.request.get("/api/templates/services");
   expect(templateResponse.ok()).toBe(true);

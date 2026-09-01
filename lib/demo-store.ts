@@ -19,6 +19,8 @@ export function createInitialDemoState(): DemoState {
     moderation: seededModeration,
     audit: [],
     bannedSupplierIds: [],
+    userSessions: [],
+    activeSessionId: null,
   };
 }
 
@@ -69,6 +71,62 @@ export function saveDemoState(state: DemoState) {
 export function setDemoRole(role: DemoRole) {
   const state = loadDemoState();
   saveDemoState({ ...state, role });
+}
+
+export function signInDemoUser(role: DemoRole, accountName: string) {
+  const state = loadDemoState();
+  const now = new Date().toISOString();
+  const sessionId = crypto.randomUUID();
+  saveDemoState({
+    ...state,
+    role,
+    signedIn: true,
+    accountName,
+    activeSessionId: sessionId,
+    userSessions: [
+      {
+        id: sessionId,
+        accountKey: accountName.trim().toLocaleLowerCase(),
+        role,
+        signedInAt: now,
+        lastSeenAt: now,
+        signedOutAt: null,
+      },
+      ...state.userSessions,
+    ].slice(0, 500),
+  });
+}
+
+export function signOutDemoUser() {
+  const state = loadDemoState();
+  const now = new Date().toISOString();
+  saveDemoState({
+    ...state,
+    signedIn: false,
+    accountName: "",
+    activeSessionId: null,
+    userSessions: state.userSessions.map((session) =>
+      session.id === state.activeSessionId
+        ? { ...session, lastSeenAt: now, signedOutAt: now }
+        : session,
+    ),
+  });
+}
+
+export function touchActiveDemoSession() {
+  const state = loadDemoState();
+  if (!state.signedIn || !state.activeSessionId) return;
+  const activeSession = state.userSessions.find((session) => session.id === state.activeSessionId);
+  if (!activeSession) return;
+  const now = Date.now();
+  if (now - new Date(activeSession.lastSeenAt).getTime() < 60_000) return;
+  const lastSeenAt = new Date(now).toISOString();
+  saveDemoState({
+    ...state,
+    userSessions: state.userSessions.map((session) =>
+      session.id === state.activeSessionId ? { ...session, lastSeenAt } : session,
+    ),
+  });
 }
 
 export function addToShortlist(serviceId: string) {

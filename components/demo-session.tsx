@@ -1,7 +1,18 @@
 "use client";
 
-import { createContext, useContext, useMemo, useSyncExternalStore } from "react";
-import { getDemoServerSnapshot, getDemoStateSnapshot, loadDemoState, parseDemoStateSnapshot, resetDemoState, saveDemoState, subscribeDemoState } from "@/lib/demo-store";
+import { createContext, useContext, useEffect, useMemo, useSyncExternalStore } from "react";
+import {
+  getDemoServerSnapshot,
+  getDemoStateSnapshot,
+  loadDemoState,
+  parseDemoStateSnapshot,
+  resetDemoState,
+  saveDemoState,
+  signInDemoUser,
+  signOutDemoUser,
+  subscribeDemoState,
+  touchActiveDemoSession,
+} from "@/lib/demo-store";
 import type { DemoRole, DemoState } from "@/lib/types";
 
 type DemoSessionValue = {
@@ -21,6 +32,12 @@ export function DemoSessionProvider({ children }: { children: React.ReactNode })
   const snapshot = useSyncExternalStore(subscribeDemoState, getDemoStateSnapshot, getDemoServerSnapshot);
   const state = useMemo(() => parseDemoStateSnapshot(snapshot), [snapshot]);
 
+  useEffect(() => {
+    touchActiveDemoSession();
+    const heartbeat = window.setInterval(touchActiveDemoSession, 60_000);
+    return () => window.clearInterval(heartbeat);
+  }, []);
+
   const value = useMemo<DemoSessionValue>(
     () => ({
       state,
@@ -31,12 +48,10 @@ export function DemoSessionProvider({ children }: { children: React.ReactNode })
         saveDemoState(next);
       },
       signIn: (role, accountName) => {
-        const next = { ...loadDemoState(), role, signedIn: true, accountName };
-        saveDemoState(next);
+        signInDemoUser(role, accountName);
       },
       signOut: () => {
-        const next = { ...loadDemoState(), signedIn: false, accountName: "" };
-        saveDemoState(next);
+        signOutDemoUser();
       },
       refresh: () => window.dispatchEvent(new CustomEvent("eventhub-demo-state")),
       reset: () => { resetDemoState(); },

@@ -4,5 +4,5 @@ import { AdminDashboard } from "@/components/admin-dashboard";
 export const metadata: Metadata = { title: "Управление" };
 
 export default function AdminPage() {
-  return <><section className="page-intro"><p className="eyebrow">Управление Marosim</p><h1>Проверка карточек и поставщиков</h1><p className="lead">Исправляйте ошибки, скрывайте неподходящие предложения и указывайте причину решения.</p></section><AdminDashboard /></>;
+  return <><section className="page-intro"><p className="eyebrow">Управление Marosim</p><h1>Платформа под контролем</h1><p className="lead">Следите за активностью, заявками и качеством каталога в одном месте.</p></section><AdminDashboard /></>;
 }
