@@ -36,7 +36,7 @@ rollback_config() {
   if [[ "${config_changed}" -eq 1 && -n "${backup_file}" && -f "${backup_file}" ]]; then
     printf 'Route setup failed; restoring the previous Cloudflare config.\n' >&2
     install -m 600 -- "${backup_file}" "${config_file}"
-    cloudflared tunnel ingress validate --config "${config_file}" >/dev/null
+    cloudflared tunnel --config "${config_file}" ingress validate >/dev/null
     systemctl --user restart "${service_name}"
   fi
   if [[ -n "${temp_file}" && -f "${temp_file}" ]]; then
@@ -74,7 +74,7 @@ if ! grep -Fq -- "hostname: ${new_hostname}" "${config_file}"; then
 fi
 
 cloudflared tunnel route dns --overwrite-dns "${tunnel_id}" "${new_hostname}"
-cloudflared tunnel ingress validate --config "${config_file}"
+cloudflared tunnel --config "${config_file}" ingress validate
 systemctl --user restart "${service_name}"
 
 new_health=""
@@ -112,7 +112,7 @@ if grep -Fq -- "hostname: ${old_hostname}" "${config_file}" || grep -Fq -- "host
   ' "${config_file}" > "${temp_file}"
   install -m 600 -- "${temp_file}" "${config_file}"
   config_changed=1
-  cloudflared tunnel ingress validate --config "${config_file}"
+  cloudflared tunnel --config "${config_file}" ingress validate
   systemctl --user restart "${service_name}"
   curl --fail --silent --max-time 5 "https://${new_hostname}/api/health" >/dev/null
 fi
