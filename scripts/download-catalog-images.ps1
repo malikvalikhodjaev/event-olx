@@ -55,11 +55,23 @@ $catalogImages = @(
     @{ Name = "wedding-buffet.jpg"; Id = "37976954" },
     @{ Name = "event-tent.jpg"; Id = "8392460" },
     @{ Name = "wireless-speaker.jpg"; Id = "20802528" },
-    @{ Name = "wireless-lapel.jpg"; Id = "33456958" }
+    @{ Name = "wireless-lapel.jpg"; Id = "33456958" },
+    @{ Name = "market-projector.jpg"; Url = "https://frankfurt.apollo.olxcdn.com:443/v1/files/yarxy8m08fnd1-UZ/image;s=1000x700" },
+    @{ Name = "market-audio-kit.jpg"; Url = "https://frankfurt.apollo.olxcdn.com:443/v1/files/ni7nglhve5wn3-UZ/image;s=1000x700" },
+    @{ Name = "market-decor-arch.jpg"; Url = "https://frankfurt.apollo.olxcdn.com:443/v1/files/v76m6h360oxy2-UZ/image;s=1000x700" },
+    @{ Name = "market-decor-stage.jpg"; Url = "https://frankfurt.apollo.olxcdn.com:443/v1/files/eigyhjpdgz5q3-UZ/image;s=1000x700" },
+    @{ Name = "market-decor-table.jpg"; Url = "https://frankfurt.apollo.olxcdn.com:443/v1/files/ib4cp145u98m1-UZ/image;s=1000x700" },
+    @{ Name = "market-decor-photozone.jpg"; Url = "https://frankfurt.apollo.olxcdn.com:443/v1/files/9vy8rxoqngfz-UZ/image;s=1000x700" },
+    @{ Name = "market-gift-box.jpg"; Url = "https://devel.prom.uz/upload/product_logos/30/ad/30ad5f8fff013fe19d1ed2c3a6063ea1.jpg" }
 )
 
 foreach ($catalogImage in $catalogImages) {
-    $downloadUrl = "https://images.pexels.com/photos/$($catalogImage.Id)/pexels-photo-$($catalogImage.Id).jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop"
+    if ($catalogImage.ContainsKey("Url")) {
+        $downloadUrl = $catalogImage.Url
+    }
+    else {
+        $downloadUrl = "https://images.pexels.com/photos/$($catalogImage.Id)/pexels-photo-$($catalogImage.Id).jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop"
+    }
     $targetPath = Join-Path $catalogImageDirectory $catalogImage.Name
     Invoke-WebRequest -Uri $downloadUrl -OutFile $targetPath
     Write-Host "Downloaded $($catalogImage.Name)"

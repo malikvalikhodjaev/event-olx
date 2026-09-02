@@ -15,7 +15,7 @@ describe("стартовый каталог", () => {
     expect(services.filter((service) => service.sku.startsWith("MR-SVC-")).length).toBe(54);
     expect(services.filter((service) => service.sku.startsWith("MR-MKT-")).length).toBe(23);
     expect(services.filter((service) => service.sku.startsWith("MR-EQP-")).length).toBe(23);
-    expect(new Set(services.map((service) => service.imageUrl)).size).toBe(52);
+    expect(new Set(services.map((service) => service.imageUrl)).size).toBe(59);
   });
 
   it("связывает каждый SKU с категорией, поставщиком и локальной фотографией", () => {

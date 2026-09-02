@@ -29,6 +29,7 @@ test("главная показывает один явный первый ша�
   await expect(page.getByRole("heading", { name: "Найдите всё для своего мероприятия" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Найти", exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Стать поставщиком", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Поддержка: +998 90 000-00-00" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Администратор" })).toHaveCount(0);
   await page.getByLabel("Что нужно для события?").fill("фото");
   await page.getByRole("button", { name: "Найти", exact: true }).click();
@@ -39,6 +40,13 @@ test("главная показывает один явный первый ша�
   await page.getByRole("button", { name: "Продолжить", exact: true }).click();
   await expect.poll(() => new URL(page.url()).searchParams.get("q")).toBe("фото");
   await expect(page.getByRole("searchbox", { name: "Что ищете" })).toHaveValue("фото");
+});
+
+test("условия использования доступны из публичного сайта", async ({ page }) => {
+  await page.goto("/offer");
+  await expect(page.getByRole("heading", { name: "Условия использования и публичная оферта" })).toBeVisible();
+  await expect(page.getByText("Платные функции Marosim пока не подключены.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "+998 90 000-00-00", exact: true })).toBeVisible();
 });
 
 test("мобильная главная начинает сценарий с поиска", async ({ page }) => {

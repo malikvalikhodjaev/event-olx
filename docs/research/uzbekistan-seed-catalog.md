@@ -47,7 +47,7 @@
 
 ## Изображения
 
-52 разные реальные фотографии скачаны в `public/catalog/photos` и отдаются самим приложением — каталог не зависит от доступности внешнего CDN. По [лицензии Pexels](https://www.pexels.com/license/) фотографии можно бесплатно использовать на сайтах и в приложениях; указание автора не обязательно, но сохранено здесь. Фотографии реальных объявлений OLX/Prom не копировались: карточки не должны выдавать чужое портфолио за работу seed-поставщика.
+59 разных реальных фотографий скачаны в `public/catalog/photos` и отдаются самим приложением — каталог не зависит от доступности внешнего CDN. 52 фотографии взяты по [лицензии Pexels](https://www.pexels.com/license/), ещё 7 — из публичных предложений узбекского рынка по решению владельца проекта. Для каждого такого файла сохранена исходная страница; его использование не означает партнёрство Marosim с автором объявления. Запрос на уточнение авторства или удаление принимается через поддержку.
 
 | Файл | Автор | Страница фотографии |
 |---|---|---|
@@ -103,5 +103,17 @@
 | `event-tent.jpg` | Anna Guerrero | [Столы и стулья под шатром](https://www.pexels.com/photo/tables-and-chairs-under-a-tent-8392460/) |
 | `wireless-speaker.jpg` | Khang Nguyễn | [Колонка и микрофоны](https://www.pexels.com/photo/loudspeaker-and-microphones-on-orange-background-20802528/) |
 | `wireless-lapel.jpg` | Alpha En | [Беспроводные микрофоны](https://www.pexels.com/photo/close-up-of-wireless-microphone-system-on-wooden-surface-33456958/) |
+
+Фотографии из публичных предложений рынка Узбекистана:
+
+| Файл | Публичный источник | Исходная страница |
+|---|---|---|
+| `market-projector.jpg` | Studio Anor, OLX.uz | [Проекторы и экраны](https://www.olx.uz/d/obyavlenie/arenda-proektora-kolonki-prokat-proektora-prokat-kolonok-ID3WCgZ.html) |
+| `market-audio-kit.jpg` | Studio Anor, OLX.uz | [Проекторы, колонки и микрофоны](https://www.olx.uz/d/obyavlenie/arenda-proektora-kolonki-prokat-proektora-prokat-kolonok-ID3WCgZ.html) |
+| `market-decor-arch.jpg` | Марина, OLX.uz | [Свадебное оформление под ключ](https://www.olx.uz/d/oz/obyavlenie/oformlenie-svadby-pod-klyuch-svadebnyj-dekorator-ID4iMoA.html) |
+| `market-decor-stage.jpg` | Марина, OLX.uz | [Свадебное оформление под ключ](https://www.olx.uz/d/oz/obyavlenie/oformlenie-svadby-pod-klyuch-svadebnyj-dekorator-ID4iMoA.html) |
+| `market-decor-table.jpg` | Марина, OLX.uz | [Свадебное оформление под ключ](https://www.olx.uz/d/oz/obyavlenie/oformlenie-svadby-pod-klyuch-svadebnyj-dekorator-ID4iMoA.html) |
+| `market-decor-photozone.jpg` | Марина, OLX.uz | [Свадебное оформление под ключ](https://www.olx.uz/d/oz/obyavlenie/oformlenie-svadby-pod-klyuch-svadebnyj-dekorator-ID4iMoA.html) |
+| `market-gift-box.jpg` | Gift Box Corporation, Prom.uz | [Подарочный набор № 33](https://www.prom.uz/uz/ads/podarocnyi-nabor-33/) |
 
 Скрипт `scripts/download-catalog-images.ps1` воспроизводит загрузку этих файлов. Перед публичным запуском с реальными поставщиками seed-фотографии нужно заменить их собственными материалами и подтвердить право публикации.
