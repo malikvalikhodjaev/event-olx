@@ -8,13 +8,30 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("пользователь входит и выбирает задачу", async ({ page }) => {
-  await page.getByRole("link", { name: "Войти", exact: true }).first().click();
-  await page.getByLabel("Телефон или электронная почта").fill("malika@example.com");
-  await page.getByLabel("Пароль").fill("marosim2026");
-  await page.getByRole("radio", { name: /Организую событие/ }).check();
-  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await page.getByRole("link", { name: "Войти в Маросим", exact: true }).click();
+  await expect(page.getByRole("radio", { name: /Управляю платформой/ })).toHaveCount(0);
+  await page.getByRole("radio", { name: /Я организую событие/ }).check();
+  await page.getByLabel("Номер телефона").fill("+998 90 555 44 33");
+  await page.getByRole("button", { name: "Получить код" }).click();
+  await page.getByLabel("Код из SMS").fill("1234");
+  await page.getByRole("button", { name: "Подтвердить и продолжить" }).click();
   await expect(page).toHaveURL(/\/planner$/);
   await expect(page.getByRole("link", { name: "Кабинет", exact: true }).first()).toBeVisible();
+});
+
+test("главная показывает один явный первый шаг", async ({ page }) => {
+  await expect(page.getByRole("heading", { name: "Найди всё для своего мероприятия" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Найти", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Администратор" })).toHaveCount(0);
+  await page.getByRole("link", { name: "Найти", exact: true }).click();
+  await expect(page).toHaveURL(/\/login\?role=client&next=(%2F|\/)catalog/);
+  await expect(page.getByRole("button", { name: "Продолжить с Google" })).toBeVisible();
+});
+
+test("админ-панель не открывается без внутреннего входа", async ({ page }) => {
+  await page.goto("/admin");
+  await expect(page.getByRole("heading", { name: "Раздел только для сотрудников" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Состояние платформы" })).toHaveCount(0);
 });
 
 test("клиент фильтрует каталог и добавляет услугу в shortlist", async ({ page }) => {
@@ -51,10 +68,8 @@ test("клиент пишет поставщику и получает отве�
   const supplierMessage = "Здравствуйте! Дата свободна, сейчас пришлю полный состав предложения.";
 
   await page.goto("/login");
-  await page.getByLabel("Телефон или электронная почта").fill("chat-client@example.com");
-  await page.getByLabel("Пароль").fill("marosim2026");
-  await page.getByRole("radio", { name: /Ищу для события/ }).check();
-  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await page.getByRole("radio", { name: /Я хочу найти для события/ }).check();
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
   await expect(page).toHaveURL(/\/catalog$/);
 
   await page.goto("/catalog");
@@ -66,10 +81,8 @@ test("клиент пишет поставщику и получает отве�
   await expect(page.locator(".chat-message p").filter({ hasText: clientMessage })).toBeVisible();
 
   await page.goto("/login");
-  await page.getByLabel("Телефон или электронная почта").fill("supplier@marosim.local");
-  await page.getByLabel("Пароль").fill("Marosim-Local-2026!");
-  await page.getByRole("radio", { name: /Предлагаю товары и услуги/ }).check();
-  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await page.getByRole("radio", { name: /Я предоставляю услуги или продаю товары/ }).check();
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
   await expect(page).toHaveURL(/\/supplier$/);
   await page.goto("/chats");
   await page.locator(".chat-list-item").filter({ hasText: clientMessage }).click();
@@ -78,16 +91,16 @@ test("клиент пишет поставщику и получает отве�
   await expect(page.locator(".chat-message p").filter({ hasText: supplierMessage })).toBeVisible();
 
   await page.goto("/login?next=/chats");
-  await page.getByLabel("Телефон или электронная почта").fill("chat-client@example.com");
-  await page.getByLabel("Пароль").fill("marosim2026");
-  await page.getByRole("radio", { name: /Ищу для события/ }).check();
-  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await page.getByRole("radio", { name: /Я хочу найти для события/ }).check();
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
   await expect(page).toHaveURL(/\/chats$/);
   await expect(page.locator(".chat-message p").filter({ hasText: supplierMessage })).toBeVisible();
 });
 
 test("администратор фиксирует модерацию и блокировку в аудите", async ({ page }) => {
-  await page.goto("/admin");
+  await page.goto("/login?role=admin&next=/admin");
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await expect(page).toHaveURL(/\/admin$/);
   await page.locator("#reason-moderation-sabo").fill("Цена подтверждена поставщиком 1 сентября");
   await page.getByRole("button", { name: "Одобрить" }).click();
   await expect(page.getByText("Карточка одобрена")).toBeVisible();
@@ -97,11 +110,9 @@ test("администратор фиксирует модерацию и бло
 });
 
 test("администратор видит сводку и меняет период", async ({ page }) => {
-  await page.goto("/login");
-  await page.getByLabel("Телефон или электронная почта").fill("admin@marosim.local");
-  await page.getByLabel("Пароль").fill("Marosim-Local-2026!");
+  await page.goto("/login?role=admin&next=/admin");
   await page.getByRole("radio", { name: /Управляю платформой/ }).check();
-  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
 
   await expect(page).toHaveURL(/\/admin$/);
   await expect(page.getByRole("heading", { name: "Состояние платформы" })).toBeVisible();

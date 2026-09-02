@@ -122,6 +122,15 @@ export function AdminDashboard() {
     return getSupplierById(target)?.name ?? "Поставщик";
   }
 
+  if (!state.signedIn || state.role !== "admin") {
+    return (
+      <section className="panel empty-state admin-access-gate">
+        <h2>Раздел только для сотрудников</h2>
+        <p>Для доступа нужен аккаунт сотрудника Маросим.</p>
+      </section>
+    );
+  }
+
   return (
     <div className="grid admin-dashboard" style={{ gap: 20 }}>
       <section className="panel admin-overview" aria-labelledby="admin-overview-title">

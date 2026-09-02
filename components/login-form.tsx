@@ -1,72 +1,83 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDemoSession } from "@/components/demo-session";
 import { isDemoRole, roleDestination, roleOptions } from "@/lib/roles";
 import type { DemoRole } from "@/lib/types";
 
+const googleAccounts: Record<DemoRole, string> = {
+  client: "google.client@marosim.local",
+  client_planner: "google.planner@marosim.local",
+  supplier: "supplier@marosim.local",
+  supplier_planner: "supplier-planner@marosim.local",
+  admin: "admin@marosim.local",
+};
+
+function safeNext(initialNext: string, role: DemoRole) {
+  return initialNext.startsWith("/") && !initialNext.startsWith("//")
+    ? initialNext
+    : roleDestination(role);
+}
+
 export function LoginForm({ initialRole = "client", initialNext = "" }: { initialRole?: string; initialNext?: string }) {
   const router = useRouter();
   const { signIn } = useDemoSession();
-  const [contact, setContact] = useState("");
-  const [password, setPassword] = useState("");
   const [role, setRole] = useState<DemoRole>(isDemoRole(initialRole) ? initialRole : "client");
+  const [phone, setPhone] = useState("");
+  const [code, setCode] = useState("");
+  const [codeRequested, setCodeRequested] = useState(false);
   const [error, setError] = useState("");
+  const availableRoles = useMemo(
+    () => roleOptions.filter((option) => option.role !== "admin" || initialRole === "admin"),
+    [initialRole],
+  );
 
-  function submit(event: React.FormEvent<HTMLFormElement>) {
+  function finish(account: string) {
+    signIn(role, account);
+    router.push(safeNext(initialNext, role));
+  }
+
+  function continueWithGoogle() {
+    setError("");
+    finish(googleAccounts[role]);
+  }
+
+  function submitPhone(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!contact.trim()) {
-      setError("Введите телефон или электронную почту");
+    const normalizedPhone = phone.replace(/[^\d+]/g, "");
+    if (!codeRequested) {
+      if (normalizedPhone.length < 9) {
+        setError("Введите номер телефона полностью");
+        return;
+      }
+      setPhone(normalizedPhone);
+      setCodeRequested(true);
+      setError("");
       return;
     }
-    if (password.length < 4) {
-      setError("Введите пароль — не меньше 4 символов");
+    if (code !== "1234") {
+      setError("Неверный код. Для входа используйте 1234");
       return;
     }
-    signIn(role, contact.trim());
-    const destination = initialNext.startsWith("/") && !initialNext.startsWith("//")
-      ? initialNext
-      : roleDestination(role);
-    router.push(destination);
+    finish(normalizedPhone);
   }
 
   return (
     <section className="login-layout">
       <div className="login-intro">
-        <p className="eyebrow">Вход в Marosim</p>
-        <h1>Продолжите со своей задачей</h1>
-        <p className="lead">Выберите, что вы хотите сделать, и откройте нужный раздел.</p>
+        <p className="eyebrow">Вход в Маросим</p>
+        <h1>Начните со своей задачи</h1>
+        <p className="lead">Выберите, что хотите сделать, затем продолжите через Google или телефон.</p>
         <Link className="text-link" href="/catalog">Сначала посмотреть каталог <span aria-hidden="true">→</span></Link>
       </div>
 
-      <form className="panel login-panel" onSubmit={submit}>
-        <div className="field">
-          <label htmlFor="login-contact">Телефон или электронная почта</label>
-          <input
-            id="login-contact"
-            autoComplete="username"
-            value={contact}
-            onChange={(event) => setContact(event.target.value)}
-            placeholder="+998 90 123 45 67"
-          />
-        </div>
-        <div className="field">
-          <label htmlFor="login-password">Пароль</label>
-          <input
-            id="login-password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-
+      <div className="panel login-panel">
         <fieldset className="role-picker">
-          <legend>Что вы хотите сделать?</legend>
+          <legend>Я хочу…</legend>
           <div className="role-options">
-            {roleOptions.map((option) => (
+            {availableRoles.map((option) => (
               <label className="role-option" key={option.role}>
                 <input
                   type="radio"
@@ -84,9 +95,60 @@ export function LoginForm({ initialRole = "client", initialNext = "" }: { initia
           </div>
         </fieldset>
 
-        {error ? <p className="error-text" role="alert">{error}</p> : null}
-        <button className="button button-primary login-submit" type="submit">Войти</button>
-      </form>
+        <div className="auth-methods">
+          <button className="button google-button" type="button" onClick={continueWithGoogle}>
+            <span className="google-mark" aria-hidden="true">G</span>
+            Продолжить с Google
+          </button>
+
+          <div className="auth-divider"><span>или</span></div>
+
+          <form className="phone-auth" onSubmit={submitPhone}>
+            {!codeRequested ? (
+              <div className="field">
+                <label htmlFor="login-phone">Номер телефона</label>
+                <input
+                  id="login-phone"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  value={phone}
+                  onChange={(event) => setPhone(event.target.value)}
+                  placeholder="+998 90 123 45 67"
+                />
+              </div>
+            ) : (
+              <>
+                <div className="phone-confirmation">
+                  <span>Код отправлен на</span>
+                  <strong>{phone}</strong>
+                  <button type="button" onClick={() => { setCodeRequested(false); setCode(""); setError(""); }}>Изменить номер</button>
+                </div>
+                <div className="field">
+                  <label htmlFor="login-code">Код из SMS</label>
+                  <input
+                    id="login-code"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    maxLength={4}
+                    value={code}
+                    onChange={(event) => setCode(event.target.value.replace(/\D/g, ""))}
+                    placeholder="••••"
+                    autoFocus
+                  />
+                </div>
+              </>
+            )}
+
+            {error ? <p className="error-text" role="alert">{error}</p> : null}
+            <button className="button button-primary login-submit" type="submit">
+              {codeRequested ? "Подтвердить и продолжить" : "Получить код"}
+            </button>
+          </form>
+
+          <p className="auth-simulation-note">Пока Google подтверждается сразу, код для телефона — <strong>1234</strong>.</p>
+        </div>
+      </div>
     </section>
   );
 }

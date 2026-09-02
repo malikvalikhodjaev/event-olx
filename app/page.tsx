@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { HomeFindButton } from "@/components/home-find-button";
 import { catalogSections } from "@/lib/demo-data";
 
 export default function HomePage() {
@@ -19,47 +20,36 @@ export default function HomePage() {
             <p className="eyebrow">Всё для события — в одном месте</p>
             <h1>Найди всё для своего мероприятия</h1>
             <p className="lead">
-              Сравните предложения, соберите план и сразу напишите подходящему поставщику.
+              Услуги, товары и техника — с понятными ценами и прямым чатом с поставщиками.
             </p>
-            <div className="actions">
-              <Link className="button button-primary hero-login" href="/login">Войти в Marosim</Link>
-              <Link className="button button-secondary" href="/catalog">Смотреть каталог</Link>
+            <div className="hero-primary-action">
+              <HomeFindButton />
+              <span>Начните с каталога предложений</span>
             </div>
           </div>
-        </div>
-        <div className="hero-proof" aria-label="Принципы Marosim">
-          <div><strong>Понятные цены</strong><span>Сразу видно, от какой суммы начинается предложение</span></div>
-          <div><strong>Актуальные предложения</strong><span>Видно, когда поставщик обновил информацию</span></div>
-          <div><strong>Прямой разговор</strong><span>Задайте вопрос поставщику прямо из карточки</span></div>
         </div>
       </section>
 
       <section className="section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">Как работает Marosim</p>
-            <h2>Каждому — свой следующий шаг</h2>
+            <p className="eyebrow">Выберите свой путь</p>
+            <h2>Что вы хотите сделать?</h2>
           </div>
-          <p>Найдите всё нужное, составьте план события или отвечайте клиентам в чате.</p>
+          <p>Начните с понятного действия — роль можно изменить после входа.</p>
         </div>
-        <div className="grid grid-3">
+        <div className="grid grid-2 identity-grid">
           <article className="card story-card story-card-yellow">
             <div className="category-icon">♡</div>
-            <h3>Клиент и организатор</h3>
-            <p>План события, подборка вариантов и прямые диалоги с поставщиками.</p>
-            <Link className="text-link" href="/login?role=client_planner">Войти как организатор <span aria-hidden="true">→</span></Link>
+            <h3>Я хочу найти всё для события</h3>
+            <p>Подобрать услуги, купить нужные вещи, арендовать технику и написать поставщикам.</p>
+            <Link className="text-link" href="/login?role=client&next=/catalog">Начать поиск <span aria-hidden="true">→</span></Link>
           </article>
           <article className="card story-card story-card-black">
             <div className="category-icon">↗</div>
-            <h3>Поставщик</h3>
-            <p>Добавляйте услуги, товары и аренду, загружайте цены из Excel и отвечайте клиентам.</p>
-            <Link className="text-link" href="/login?role=supplier">Войти как поставщик <span aria-hidden="true">→</span></Link>
-          </article>
-          <article className="card story-card story-card-lilac">
-            <div className="category-icon">✓</div>
-            <h3>Администратор</h3>
-            <p>Проверяйте карточки, помогайте исправлять ошибки и разбирайте жалобы.</p>
-            <Link className="text-link" href="/login?role=admin">Войти как администратор <span aria-hidden="true">→</span></Link>
+            <h3>Я предоставляю услуги или продаю товары</h3>
+            <p>Разместить предложения, загрузить цены и отвечать клиентам в чате.</p>
+            <Link className="text-link" href="/login?role=supplier&next=/supplier">Разместить предложение <span aria-hidden="true">→</span></Link>
           </article>
         </div>
       </section>

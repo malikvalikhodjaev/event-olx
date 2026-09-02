@@ -1,7 +1,6 @@
 import type {
   CatalogSection,
   Conversation,
-  DemoRole,
   ModerationItem,
   OfferKind,
   Service,
@@ -369,20 +368,6 @@ export const seededModeration: ModerationItem[] = [
     status: "pending",
     updatedAt: "2026-09-01T10:00:00+05:00",
   },
-];
-
-export const demoAccounts: Array<{
-  email: string;
-  password: string;
-  name: string;
-  role: DemoRole;
-  description: string;
-}> = [
-  { email: "client@marosim.local", password: "Marosim-Local-2026!", name: "Клиент", role: "client", description: "Ищет предложения и пишет поставщикам" },
-  { email: "planner@marosim.local", password: "Marosim-Local-2026!", name: "Организатор", role: "client_planner", description: "Собирает план события и бюджет" },
-  { email: "supplier@marosim.local", password: "Marosim-Local-2026!", name: "Поставщик", role: "supplier", description: "Управляет предложениями и отвечает в чатах" },
-  { email: "supplier-planner@marosim.local", password: "Marosim-Local-2026!", name: "Координатор поставщика", role: "supplier_planner", description: "Следит за загрузкой и ответами" },
-  { email: "admin@marosim.local", password: "Marosim-Local-2026!", name: "Администратор", role: "admin", description: "Модерирует каталог и блокировки" },
 ];
 
 export function getSupplierById(id: string) {

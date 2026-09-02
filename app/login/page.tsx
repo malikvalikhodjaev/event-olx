@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LoginForm } from "@/components/login-form";
 
-export const metadata: Metadata = { title: "Вход" };
+export const metadata: Metadata = { title: "Вход в Маросим" };
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ role?: string; next?: string }> }) {
   const params = await searchParams;

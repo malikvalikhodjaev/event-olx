@@ -23,7 +23,7 @@ export function SiteHeader() {
           {state.signedIn && state.role === "admin" ? <Link href="/admin">Управление</Link> : null}
           <Link href="/mobile_app">На телефон</Link>
         </nav>
-        <Link className="header-account" href={state.signedIn ? "/account" : "/login"}>{state.signedIn ? "Кабинет" : "Войти"}</Link>
+        <Link className="header-account" href={state.signedIn ? "/account" : "/login"}>{state.signedIn ? "Кабинет" : "Войти в Маросим"}</Link>
       </div>
     </header>
   );
