@@ -47,7 +47,7 @@ pnpm test:e2e
 
 ## Развертывание
 
-CI проверяет lint, типы, unit-, browser-тесты и сборку. После push в `main` workflow публикует изолированный контейнер в GitHub Container Registry. Текущее dev-окружение запускается отдельным пользовательским `systemd`-сервисом на `127.0.0.1:3001` и доступно через Cloudflare Tunnel по адресу `https://eventhub-dev.fom-analytics.uz`. Воспроизводимая инструкция и вариант для Docker находятся в [deploy/README.md](deploy/README.md).
+CI проверяет lint, типы, unit-, browser-тесты и сборку. После push в `main` workflow публикует изолированный контейнер в GitHub Container Registry. Текущее dev-окружение запускается отдельным пользовательским `systemd`-сервисом на `127.0.0.1:3001` и доступно через Cloudflare Tunnel по адресу `https://marosim-dev.fom-analytics.uz`. Прежний `eventhub-dev.fom-analytics.uz` временно сохранён как алиас. Воспроизводимая инструкция и вариант для Docker находятся в [deploy/README.md](deploy/README.md).
 
 ## Очередь развития
 

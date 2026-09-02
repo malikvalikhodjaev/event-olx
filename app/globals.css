@@ -204,20 +204,32 @@ a {
   color: #252525;
 }
 
-.hero-primary-action {
+.hero-search {
+  max-width: 650px;
   display: grid;
-  justify-items: center;
-  gap: 9px;
-  margin-top: 26px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  margin: 26px auto 0;
 }
 
-.hero-primary-action > span {
-  color: var(--muted);
-  font-size: 12px;
+.hero-search input {
+  min-width: 0;
+  min-height: 60px;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  padding: 0 18px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  outline: none;
 }
 
-.hero-copy .hero-find-button {
-  min-width: 220px;
+.hero-search input:focus {
+  box-shadow: 0 0 0 4px rgba(255, 220, 0, 0.72);
+}
+
+.hero-search .button {
+  min-width: 128px;
   min-height: 60px;
   border-color: var(--ink);
   border-radius: 18px;
@@ -226,8 +238,14 @@ a {
   font-size: 18px;
 }
 
-.hero-copy .hero-find-button:hover {
+.hero-search .button:hover {
   background: #ffe733;
+}
+
+.hero-search small {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 11px;
 }
 
 .hero-proof {
@@ -384,6 +402,43 @@ h3 {
   color: var(--muted);
 }
 
+.catalog-primary-action {
+  justify-content: center;
+}
+
+.supplier-acquisition {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin: 44px 0;
+  border-radius: 28px;
+  padding: clamp(26px, 4vw, 44px);
+  background: #171717;
+  color: #ffffff;
+}
+
+.supplier-acquisition > div {
+  max-width: 760px;
+}
+
+.supplier-acquisition .eyebrow,
+.supplier-acquisition p {
+  color: #c9c9c9;
+}
+
+.supplier-acquisition h2,
+.supplier-acquisition p:last-child {
+  margin-bottom: 0;
+}
+
+.supplier-acquisition-button {
+  flex: 0 0 auto;
+  min-height: 54px;
+  background: var(--yellow);
+  color: var(--ink);
+}
+
 .grid {
   display: grid;
   gap: 16px;
@@ -421,10 +476,6 @@ h3 {
   flex-direction: column;
   padding: 30px;
   border: 0;
-}
-
-.identity-grid .story-card {
-  min-height: 280px;
 }
 
 .story-card h3 {
@@ -1913,8 +1964,20 @@ tr:last-child td {
     font-size: clamp(38px, 11vw, 50px);
   }
 
-  .hero-copy .hero-find-button {
-    width: 100%;
+  .hero-search {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .hero-search input {
+    padding-right: 12px;
+    padding-left: 12px;
+    font-size: 13px;
+  }
+
+  .hero-search .button {
+    min-width: 88px;
+    padding-right: 14px;
+    padding-left: 14px;
   }
 
   .hero-proof {
@@ -2081,8 +2144,15 @@ tr:last-child td {
     min-height: 280px;
   }
 
-  .identity-grid .story-card {
-    min-height: 250px;
+  .supplier-acquisition {
+    align-items: stretch;
+    flex-direction: column;
+    margin: 28px 0;
+    border-radius: 24px;
+  }
+
+  .supplier-acquisition-button {
+    width: 100%;
   }
 
   .mobile-app-page {

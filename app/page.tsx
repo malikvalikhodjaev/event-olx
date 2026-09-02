@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { HomeFindButton } from "@/components/home-find-button";
+import { HomeSearch } from "@/components/home-search";
 import { catalogSections } from "@/lib/demo-data";
 
 export default function HomePage() {
@@ -17,40 +17,13 @@ export default function HomePage() {
             sizes="(max-width: 720px) 100vw, 1180px"
           />
           <div className="hero-copy">
-            <p className="eyebrow">Всё для события — в одном месте</p>
-            <h1>Найди всё для своего мероприятия</h1>
+            <p className="eyebrow">Маросим для клиентов</p>
+            <h1>Найдите всё для своего мероприятия</h1>
             <p className="lead">
-              Услуги, товары и техника — с понятными ценами и прямым чатом с поставщиками.
+              Опишите, что вам нужно. Сравните предложения и сразу напишите подходящему поставщику.
             </p>
-            <div className="hero-primary-action">
-              <HomeFindButton />
-              <span>Начните с каталога предложений</span>
-            </div>
+            <HomeSearch />
           </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">Выберите свой путь</p>
-            <h2>Что вы хотите сделать?</h2>
-          </div>
-          <p>Начните с понятного действия — роль можно изменить после входа.</p>
-        </div>
-        <div className="grid grid-2 identity-grid">
-          <article className="card story-card story-card-yellow">
-            <div className="category-icon">♡</div>
-            <h3>Я хочу найти всё для события</h3>
-            <p>Подобрать услуги, купить нужные вещи, арендовать технику и написать поставщикам.</p>
-            <Link className="text-link" href="/login?role=client&next=/catalog">Начать поиск <span aria-hidden="true">→</span></Link>
-          </article>
-          <article className="card story-card story-card-black">
-            <div className="category-icon">↗</div>
-            <h3>Я предоставляю услуги или продаю товары</h3>
-            <p>Разместить предложения, загрузить цены и отвечать клиентам в чате.</p>
-            <Link className="text-link" href="/login?role=supplier&next=/supplier">Разместить предложение <span aria-hidden="true">→</span></Link>
-          </article>
         </div>
       </section>
 
@@ -58,9 +31,9 @@ export default function HomePage() {
         <div className="section-heading">
           <div>
             <p className="eyebrow">Каталог</p>
-            <h2>Услуги, покупки и техника</h2>
+            <h2>С чего начать поиск?</h2>
           </div>
-          <Link className="button button-secondary" href="/catalog">Весь каталог</Link>
+          <p>Выберите раздел или найдите конкретное предложение через строку поиска.</p>
         </div>
         <div className="grid grid-3">
           {catalogSections.map((section) => (
@@ -70,6 +43,18 @@ export default function HomePage() {
             </Link>
           ))}
         </div>
+        <div className="actions catalog-primary-action">
+          <Link className="button button-primary" href="/catalog">Открыть весь каталог</Link>
+        </div>
+      </section>
+
+      <section className="supplier-acquisition" aria-labelledby="supplier-acquisition-title">
+        <div>
+          <p className="eyebrow">Для поставщиков</p>
+          <h2 id="supplier-acquisition-title">Предоставляете услуги или продаёте товары?</h2>
+          <p>Разместите предложения в Маросим, загрузите цены и получайте обращения клиентов в чате.</p>
+        </div>
+        <Link className="button supplier-acquisition-button" href="/login?role=supplier&next=/supplier">Стать поставщиком</Link>
       </section>
     </>
   );

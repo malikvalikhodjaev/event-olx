@@ -6,18 +6,19 @@ import { catalogSections, categories, offerKindLabels, services } from "@/lib/de
 import type { CatalogSection, OfferKind } from "@/lib/types";
 
 type CatalogExplorerProps = {
+  initialQuery?: string;
   initialCategory?: string;
   initialSection?: string;
   initialKind?: string;
 };
 
-export function CatalogExplorer({ initialCategory = "", initialSection = "", initialKind = "" }: CatalogExplorerProps) {
+export function CatalogExplorer({ initialQuery = "", initialCategory = "", initialSection = "", initialKind = "" }: CatalogExplorerProps) {
   const initialCategoryDefinition = categories.find((item) => item.id === initialCategory);
   const normalizedInitialSection = catalogSections.some((item) => item.id === initialSection)
     ? initialSection as CatalogSection
     : initialCategoryDefinition?.section ?? "";
   const normalizedInitialKind = Object.hasOwn(offerKindLabels, initialKind) ? initialKind as OfferKind : "";
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
   const [category, setCategory] = useState(initialCategory);
   const [section, setSection] = useState<CatalogSection | "">(normalizedInitialSection);
   const [kind, setKind] = useState<OfferKind | "">(normalizedInitialKind);

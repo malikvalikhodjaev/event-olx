@@ -21,6 +21,7 @@ export function SiteHeader() {
           {state.signedIn && (isClient || isSupplier) ? <Link href="/chats">Сообщения</Link> : null}
           {state.signedIn && isSupplier ? <Link href="/supplier">Мои предложения</Link> : null}
           {state.signedIn && state.role === "admin" ? <Link href="/admin">Управление</Link> : null}
+          {!state.signedIn ? <Link href="/login?role=supplier&next=/supplier">Для поставщиков</Link> : null}
           <Link href="/mobile_app">На телефон</Link>
         </nav>
         <Link className="header-account" href={state.signedIn ? "/account" : "/login"}>{state.signedIn ? "Кабинет" : "Войти в Маросим"}</Link>

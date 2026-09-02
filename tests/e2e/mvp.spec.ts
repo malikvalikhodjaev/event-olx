@@ -20,12 +20,17 @@ test("пользователь входит и выбирает задачу", a
 });
 
 test("главная показывает один явный первый шаг", async ({ page }) => {
-  await expect(page.getByRole("heading", { name: "Найди всё для своего мероприятия" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Найти", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Найдите всё для своего мероприятия" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Найти", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Стать поставщиком", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Администратор" })).toHaveCount(0);
-  await page.getByRole("link", { name: "Найти", exact: true }).click();
-  await expect(page).toHaveURL(/\/login\?role=client&next=(%2F|\/)catalog/);
+  await page.getByLabel("Что нужно для события?").fill("фото");
+  await page.getByRole("button", { name: "Найти", exact: true }).click();
+  await expect.poll(() => decodeURIComponent(new URL(page.url()).searchParams.get("next") ?? "")).toBe("/catalog?q=фото");
   await expect(page.getByRole("button", { name: "Продолжить с Google" })).toBeVisible();
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await expect.poll(() => new URL(page.url()).searchParams.get("q")).toBe("фото");
+  await expect(page.getByRole("searchbox", { name: "Что ищете" })).toHaveValue("фото");
 });
 
 test("админ-панель не открывается без внутреннего входа", async ({ page }) => {
