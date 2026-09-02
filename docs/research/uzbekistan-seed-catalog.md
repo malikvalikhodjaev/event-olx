@@ -4,7 +4,7 @@
 
 ## Что добавлено
 
-В каталоге 48 опубликованных SKU: 26 услуг, 11 товаров Маркета и 11 предложений техники/аренды. Они распределены по 15 категориям и 10 профилям поставщиков. Один SKU — одна отдельная карточка с постоянным кодом, ценой «от», единицей расчёта, городом, описанием и изображением.
+В каталоге 100 опубликованных SKU: 54 услуги, 23 товара Маркета и 23 предложения техники/аренды. Они распределены по 18 категориям и 14 профилям поставщиков из Ташкента, Самарканда, Бухары и Ферганы. Один SKU — одна отдельная карточка с постоянным кодом, ценой «от», единицей расчёта, городом, описанием и изображением.
 
 Профили поставщиков и комплектация карточек — исследовательские seed-данные Marosim, а не копии объявлений или заявление о договоре с реальными компаниями. Цена и доступность в продукте требуют подтверждения в чате.
 
@@ -41,10 +41,13 @@
 - [SERCAT — декор и фотозоны](https://sercat.uz/book/14)
 - [Prom.uz — комплект для конференции](https://www.prom.uz/ads/arenda-oborudovaniya-dlya-konferencii-videokonferenciya/)
 - [OLX.uz — аренда столов, стульев, посуды и шатров](https://www.olx.uz/d/obyavlenie/50-ming-sm-prokat-arenda-stol-stul-naves-hontahta-chinni-idish-samovar-ID3VbeE.html)
+- [OLX.uz — проекторы и экраны разных размеров и яркости](https://www.olx.uz/d/obyavlenie/arenda-proektora-kolonki-prokat-proektora-prokat-kolonok-ID3WCgZ.html)
+- [OLX.uz — состав свадебного оформления под ключ](https://www.olx.uz/d/oz/obyavlenie/oformlenie-svadby-pod-klyuch-svadebnyj-dekorator-ID4iMoA.html)
+- [Prom.uz — подарочный набор с чаем и сладостями](https://www.prom.uz/uz/ads/podarocnyi-nabor-33/)
 
 ## Изображения
 
-16 реальных фотографий скачаны в `public/catalog/photos` и отдаются самим приложением — каталог не зависит от доступности внешнего CDN. По [лицензии Pexels](https://www.pexels.com/license/) фотографии можно бесплатно использовать на сайтах и в приложениях; указание автора не обязательно, но сохранено здесь.
+52 разные реальные фотографии скачаны в `public/catalog/photos` и отдаются самим приложением — каталог не зависит от доступности внешнего CDN. По [лицензии Pexels](https://www.pexels.com/license/) фотографии можно бесплатно использовать на сайтах и в приложениях; указание автора не обязательно, но сохранено здесь. Фотографии реальных объявлений OLX/Prom не копировались: карточки не должны выдавать чужое портфолио за работу seed-поставщика.
 
 | Файл | Автор | Страница фотографии |
 |---|---|---|
@@ -64,5 +67,41 @@
 | `audio.jpg` | Anna Pou | [Звуковое оборудование](https://www.pexels.com/photo/person-in-front-of-a-microphone-and-audio-mixer-console-8132756/) |
 | `stage.jpg` | Aibek Skakov | [Сцена и свет](https://www.pexels.com/photo/two-microphones-on-a-stage-16458219/) |
 | `microphone.jpg` | el jusuf | [Микрофон на сцене](https://www.pexels.com/photo/microphone-on-the-stage-15609007/) |
+| `conference-room.jpg` | Newman Photographs | [Конференционный зал](https://www.pexels.com/photo/elegant-empty-conference-room-setup-with-tables-31107445/) |
+| `wedding-terrace.jpg` | Matheus Bertelli | [Свадебная терраса](https://www.pexels.com/photo/spacious-luxury-terrace-with-glass-ceiling-decorated-for-a-wedding-reception-17023029/) |
+| `venue-luxury.jpg` | Matheus Bertelli | [Просторная площадка](https://www.pexels.com/photo/spacious-reception-venue-17206174/) |
+| `catering-wedding.jpg` | Mad Knoxx Deluxe | [Свадебный фуршет](https://www.pexels.com/photo/colorful-wedding-buffet-outdoor-celebration-33419107/) |
+| `buffet-luxury.jpg` | Change C.C | [Большой фуршет](https://www.pexels.com/photo/luxurious-buffet-spread-with-tropical-dishes-32689486/) |
+| `buffet-outdoor.jpg` | Alejandra Montenegro | [Фуршет на открытом воздухе](https://www.pexels.com/photo/selection-of-food-on-table-18281681/) |
+| `decor-floral.jpg` | Alexander Mass | [Цветочная арка](https://www.pexels.com/photo/elegant-floral-wedding-reception-decor-37710446/) |
+| `decor-balloon.jpg` | Vidal Balielo Jr. | [Фотозона из шаров](https://www.pexels.com/photo/wedding-reception-venue-decoration-11282245/) |
+| `decor-table.jpg` | Huynh Van | [Декор праздничного стола](https://www.pexels.com/photo/room-and-table-decorated-for-a-party-9509563/) |
+| `event-coordinator.jpg` | RDNE Stock project | [Координаторы события](https://www.pexels.com/photo/women-party-technology-event-7648051/) |
+| `event-registration.jpg` | RDNE Stock project | [Регистрация участников](https://www.pexels.com/photo/hands-people-party-connection-7648043/) |
+| `saxophone.jpg` | Nano Erdozain | [Саксофонистка](https://www.pexels.com/photo/brunette-woman-playing-saxophone-in-room-with-people-26835508/) |
+| `team-game.jpg` | RDNE Stock project | [Командная игра](https://www.pexels.com/photo/group-of-people-playing-outdoor-game-7551430/) |
+| `team-grid.jpg` | Speak Media Uganda | [Командное упражнение](https://www.pexels.com/photo/outdoor-team-building-activity-with-grid-game-35143632/) |
+| `team-trust.jpg` | Danny Sanz | [Упражнение на доверие](https://www.pexels.com/photo/women-going-to-catch-their-teammate-10855590/) |
+| `gift-boxes.jpg` | Letícia Alvares | [Подарочные коробочки](https://www.pexels.com/photo/elegant-wedding-table-with-gift-boxes-and-flowers-30151963/) |
+| `gift-floral.jpg` | Tuğba Kobal Yılmaz | [Подарочный набор](https://www.pexels.com/photo/wedding-day-preparation-16660109/) |
+| `tableware.jpg` | Rene Terp | [Сервировка](https://www.pexels.com/photo/tableware-and-bouquets-on-wedding-reception-tables-13965315/) |
+| `audio-mixer.jpg` | Kabacho Kariuki | [Аудиомикшер](https://www.pexels.com/photo/an-audio-mixer-on-the-table-12020445/) |
+| `sound-mixer-event.jpg` | Dextar Studio | [Микшер на событии](https://www.pexels.com/photo/close-up-of-a-sound-mixer-26690299/) |
+| `conference-av.jpg` | Matheus Bertelli | [Конференционный экран и звук](https://www.pexels.com/photo/event-hall-with-large-projection-screen-and-professional-sound-and-stage-light-equipment-17056964/) |
+| `projector-room.jpg` | Pavel Danilyuk | [Зал с проектором](https://www.pexels.com/photo/a-room-with-seats-and-an-image-on-the-screen-projector-8761313/) |
+| `led-stage.jpg` | Bence Szemerey | [Экран и сценический свет](https://www.pexels.com/photo/digital-screen-under-shiny-projectors-on-stage-7513414/) |
+| `conference-speaker.jpg` | Matheus Bertelli | [Спикер на конференции](https://www.pexels.com/photo/speaker-on-stage-at-conference-event-29708259/) |
+| `conference-presentation.jpg` | Matheus Bertelli | [Презентация в зале](https://www.pexels.com/photo/public-speaking-event-in-modern-conference-room-29708245/) |
+| `audio-engineer.jpg` | AS Photography | [Звуковой инженер](https://www.pexels.com/photo/professional-audio-mixing-at-an-outdoor-event-28643185/) |
+| `luxury-car.jpg` | Tristan Wilson | [Автомобиль бизнес-класса](https://www.pexels.com/photo/luxury-blue-sports-car-at-airport-taxiway-36676183/) |
+| `wedding-couple.jpg` | Andrés Oliver Joya Zapata | [Пара у свадебной арки](https://www.pexels.com/photo/elegant-wedding-couple-with-balloon-arch-29410867/) |
+| `garden-night.jpg` | Angel Ayala | [Вечернее оформление](https://www.pexels.com/photo/elegant-outdoor-wedding-table-decor-at-night-30562609/) |
+| `candy-balloons.jpg` | Jonathan Borba | [Сладкий стол и шары](https://www.pexels.com/photo/banquet-table-with-various-flowers-and-balloons-5610387/) |
+| `table-roses.jpg` | Amar Preciado | [Стол с розами](https://www.pexels.com/photo/a-table-set-up-with-red-roses-flower-arrangement-13045649/) |
+| `venue-round-tables.jpg` | aksinfo7 universe | [Площадка с круглыми столами](https://www.pexels.com/photo/elegant-event-venue-with-decorative-round-tables-36774692/) |
+| `wedding-buffet.jpg` | Jonathan Borba | [Фуршет с цветочным декором](https://www.pexels.com/photo/elegant-wedding-buffet-setup-with-floral-decor-37976954/) |
+| `event-tent.jpg` | Anna Guerrero | [Столы и стулья под шатром](https://www.pexels.com/photo/tables-and-chairs-under-a-tent-8392460/) |
+| `wireless-speaker.jpg` | Khang Nguyễn | [Колонка и микрофоны](https://www.pexels.com/photo/loudspeaker-and-microphones-on-orange-background-20802528/) |
+| `wireless-lapel.jpg` | Alpha En | [Беспроводные микрофоны](https://www.pexels.com/photo/close-up-of-wireless-microphone-system-on-wooden-surface-33456958/) |
 
 Скрипт `scripts/download-catalog-images.ps1` воспроизводит загрузку этих файлов. Перед публичным запуском с реальными поставщиками seed-фотографии нужно заменить их собственными материалами и подтвердить право публикации.
