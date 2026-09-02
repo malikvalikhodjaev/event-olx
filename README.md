@@ -39,6 +39,8 @@ pnpm test:e2e
 
 Проверка здоровья приложения: `GET /api/health`. Excel-шаблон: `GET /api/templates/services`.
 
+Последняя архитектурная запись: [ADR-001 Marosim MVP v0.8](docs/architecture/ADR-001_Marosim_MVP_Architecture_v0.8.docx). Краткое актуальное резюме хранится в [docs/architecture/ADR-001.md](docs/architecture/ADR-001.md).
+
 ## Production data path
 
 В `supabase/migrations` находится схема PostgreSQL с Row Level Security. Она разделяет данные клиента, поставщика и администратора; публично читает только опубликованные услуги активных поставщиков. `supabase/seed.sql` загружает справочник категорий, а `pnpm seed:auth` создает тестовые учетные записи после настройки переменных из `.env.example`.
