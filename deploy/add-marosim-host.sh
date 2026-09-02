@@ -87,7 +87,7 @@ done
 
 if [[ -z "${new_health}" ]]; then
   printf 'New Marosim hostname did not become healthy.\n' >&2
-  exit 1
+  false
 fi
 
 if grep -Fq -- "hostname: ${old_hostname}" "${config_file}" || grep -Fq -- "hostname: ${legacy_hostname}" "${config_file}"; then
@@ -114,7 +114,17 @@ if grep -Fq -- "hostname: ${old_hostname}" "${config_file}" || grep -Fq -- "host
   config_changed=1
   cloudflared tunnel --config "${config_file}" ingress validate
   systemctl --user restart "${service_name}"
-  curl --fail --silent --max-time 5 "https://${new_hostname}/api/health" >/dev/null
+  cleanup_health=""
+  for _attempt in {1..20}; do
+    if cleanup_health="$(curl --fail --silent --max-time 5 "https://${new_hostname}/api/health" 2>/dev/null)"; then
+      break
+    fi
+    sleep 2
+  done
+  if [[ -z "${cleanup_health}" ]]; then
+    printf 'Marosim hostname did not recover after removing dev ingress routes.\n' >&2
+    false
+  fi
 fi
 
 if [[ -n "${temp_file}" && -f "${temp_file}" ]]; then
