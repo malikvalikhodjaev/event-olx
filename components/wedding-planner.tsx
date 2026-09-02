@@ -85,7 +85,7 @@ export function WeddingPlanner() {
         <div className="metric-list">
           <div className="metric"><span>Готовность</span><strong>{progress}%</strong></div>
           <div className="metric"><span>Плановый бюджет</span><strong>{formatMoney(budget)}</strong></div>
-          <div className="metric"><span>В подборке</span><strong>{state.shortlist.length}</strong></div>
+          <div className="metric"><span>Сохранено</span><strong>{state.shortlist.length}</strong></div>
         </div>
         <div className={`callout ${progress === 100 ? "" : "callout-warning"}`} style={{ marginTop: 16 }}>
           Уточните свободные даты и итоговую цену у выбранных поставщиков. План сам по себе ничего не бронирует.

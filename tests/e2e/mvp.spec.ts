@@ -7,15 +7,21 @@ test.beforeEach(async ({ page }) => {
   await page.reload();
 });
 
-test("пользователь входит и выбирает задачу", async ({ page }) => {
+test("пользователь сначала входит, затем выбирает профиль", async ({ page }) => {
   await page.getByRole("link", { name: "Войти в Маросим", exact: true }).click();
-  await expect(page.getByRole("radio", { name: /Управляю платформой/ })).toHaveCount(0);
-  await page.getByRole("radio", { name: /Я организую событие/ }).check();
+  await expect(page.getByRole("radio")).toHaveCount(0);
   await page.getByLabel("Номер телефона").fill("+998 90 555 44 33");
   await page.getByRole("button", { name: "Получить код" }).click();
   await page.getByLabel("Код из SMS").fill("1234");
   await page.getByRole("button", { name: "Подтвердить и продолжить" }).click();
-  await expect(page).toHaveURL(/\/planner$/);
+  await expect(page).toHaveURL(/\/onboarding\?/);
+  await expect(page.getByRole("radio")).toHaveCount(2);
+  await expect(page.getByRole("radio", { name: /Я хочу найти для события/ })).toBeChecked();
+  await expect(page.getByRole("radio", { name: /Я предоставляю услуги или продаю товары/ })).toBeVisible();
+  await expect(page.getByText("Я организую событие")).toHaveCount(0);
+  await expect(page.getByText("Я планирую работу команды")).toHaveCount(0);
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
+  await expect(page).toHaveURL(/\/catalog$/);
   await expect(page.getByRole("link", { name: "Кабинет", exact: true }).first()).toBeVisible();
 });
 
@@ -29,6 +35,8 @@ test("главная показывает один явный первый ша�
   await expect.poll(() => decodeURIComponent(new URL(page.url()).searchParams.get("next") ?? "")).toBe("/catalog?q=фото");
   await expect(page.getByRole("button", { name: "Продолжить с Google" })).toBeVisible();
   await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await expect(page).toHaveURL(/\/onboarding\?/);
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
   await expect.poll(() => new URL(page.url()).searchParams.get("q")).toBe("фото");
   await expect(page.getByRole("searchbox", { name: "Что ищете" })).toHaveValue("фото");
 });
@@ -39,15 +47,20 @@ test("админ-панель не открывается без внутрен�
   await expect(page.getByRole("heading", { name: "Состояние платформы" })).toHaveCount(0);
 });
 
-test("клиент фильтрует каталог и добавляет услугу в shortlist", async ({ page }) => {
-  await page.goto("/catalog");
+test("клиент сохраняет предложение и открывает его из профиля", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
   await page.getByRole("searchbox", { name: "Что ищете" }).fill("фото");
   const photoCard = page.getByRole("article").filter({ hasText: "Фото + видео полного свадебного дня" });
   await expect(photoCard).toBeVisible();
   await expect(photoCard.locator("img")).toBeVisible();
   await expect(photoCard.getByText("Поставщик проверен")).toBeVisible();
-  await photoCard.getByRole("button", { name: "В подборку" }).click();
-  await expect(photoCard.getByRole("button", { name: "Убрать из подборки" })).toHaveAttribute("aria-pressed", "true");
+  await photoCard.getByRole("button", { name: "Сохранить" }).click();
+  await expect(photoCard.getByRole("button", { name: "Убрать из сохранённых" })).toHaveAttribute("aria-pressed", "true");
+  await page.locator('a[href="/saved"]:visible').first().click();
+  await expect(page).toHaveURL(/\/saved$/);
+  await expect(page.getByText("Фото + видео полного свадебного дня")).toBeVisible();
 });
 
 test("клиент открывает Маркет и видит товары отдельно от услуг", async ({ page }) => {
@@ -73,8 +86,8 @@ test("клиент пишет поставщику и получает отве�
   const supplierMessage = "Здравствуйте! Дата свободна, сейчас пришлю полный состав предложения.";
 
   await page.goto("/login");
-  await page.getByRole("radio", { name: /Я хочу найти для события/ }).check();
   await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
   await expect(page).toHaveURL(/\/catalog$/);
 
   await page.goto("/catalog");
@@ -85,9 +98,10 @@ test("клиент пишет поставщику и получает отве�
   await page.getByRole("button", { name: "Отправить" }).click();
   await expect(page.locator(".chat-message p").filter({ hasText: clientMessage })).toBeVisible();
 
-  await page.goto("/login");
-  await page.getByRole("radio", { name: /Я предоставляю услуги или продаю товары/ }).check();
+  await page.goto("/login?role=supplier&next=/supplier");
   await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await expect(page.getByRole("radio", { name: /Я предоставляю услуги или продаю товары/ })).toBeChecked();
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
   await expect(page).toHaveURL(/\/supplier$/);
   await page.goto("/chats");
   await page.locator(".chat-list-item").filter({ hasText: clientMessage }).click();
@@ -95,9 +109,9 @@ test("клиент пишет поставщику и получает отве�
   await page.getByRole("button", { name: "Отправить" }).click();
   await expect(page.locator(".chat-message p").filter({ hasText: supplierMessage })).toBeVisible();
 
-  await page.goto("/login?next=/chats");
-  await page.getByRole("radio", { name: /Я хочу найти для события/ }).check();
+  await page.goto("/login?role=client&next=/chats");
   await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
   await expect(page).toHaveURL(/\/chats$/);
   await expect(page.locator(".chat-message p").filter({ hasText: supplierMessage })).toBeVisible();
 });
@@ -116,7 +130,7 @@ test("администратор фиксирует модерацию и бло
 
 test("администратор видит сводку и меняет период", async ({ page }) => {
   await page.goto("/login?role=admin&next=/admin");
-  await page.getByRole("radio", { name: /Управляю платформой/ }).check();
+  await expect(page.getByRole("radio")).toHaveCount(0);
   await page.getByRole("button", { name: "Продолжить с Google" }).click();
 
   await expect(page).toHaveURL(/\/admin$/);

@@ -1,47 +1,45 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDemoSession } from "@/components/demo-session";
-import { isDemoRole, roleDestination, roleOptions } from "@/lib/roles";
-import type { DemoRole } from "@/lib/types";
+import { roleDestination } from "@/lib/roles";
 
-const googleAccounts: Record<DemoRole, string> = {
-  client: "google.client@marosim.local",
-  client_planner: "google.planner@marosim.local",
-  supplier: "supplier@marosim.local",
-  supplier_planner: "supplier-planner@marosim.local",
-  admin: "admin@marosim.local",
-};
+const googleUserAccount = "google.user@marosim.local";
+const googleAdminAccount = "admin@marosim.local";
 
-function safeNext(initialNext: string, role: DemoRole) {
+function safeNext(initialNext: string, fallback: string) {
   return initialNext.startsWith("/") && !initialNext.startsWith("//")
     ? initialNext
-    : roleDestination(role);
+    : fallback;
 }
 
 export function LoginForm({ initialRole = "client", initialNext = "" }: { initialRole?: string; initialNext?: string }) {
   const router = useRouter();
   const { signIn } = useDemoSession();
-  const [role, setRole] = useState<DemoRole>(isDemoRole(initialRole) ? initialRole : "client");
   const [phone, setPhone] = useState("");
   const [code, setCode] = useState("");
   const [codeRequested, setCodeRequested] = useState(false);
   const [error, setError] = useState("");
-  const availableRoles = useMemo(
-    () => roleOptions.filter((option) => option.role !== "admin" || initialRole === "admin"),
-    [initialRole],
-  );
+  const isAdminLogin = initialRole === "admin";
+  const initialIntent = initialRole === "supplier" || initialRole === "supplier_planner" ? "supplier" : "client";
 
   function finish(account: string) {
-    signIn(role, account);
-    router.push(safeNext(initialNext, role));
+    if (isAdminLogin) {
+      signIn("admin", account);
+      router.replace(safeNext(initialNext, roleDestination("admin")));
+      return;
+    }
+
+    signIn("client", account);
+    const next = safeNext(initialNext, roleDestination("client"));
+    router.replace(`/onboarding?intent=${initialIntent}&next=${encodeURIComponent(next)}`);
   }
 
   function continueWithGoogle() {
     setError("");
-    finish(googleAccounts[role]);
+    finish(isAdminLogin ? googleAdminAccount : googleUserAccount);
   }
 
   function submitPhone(event: React.FormEvent<HTMLFormElement>) {
@@ -67,34 +65,13 @@ export function LoginForm({ initialRole = "client", initialNext = "" }: { initia
   return (
     <section className="login-layout">
       <div className="login-intro">
-        <p className="eyebrow">Вход в Маросим</p>
-        <h1>Начните со своей задачи</h1>
-        <p className="lead">Выберите, что хотите сделать, затем продолжите через Google или телефон.</p>
-        <Link className="text-link" href="/catalog">Сначала посмотреть каталог <span aria-hidden="true">→</span></Link>
+        <p className="eyebrow">{isAdminLogin ? "Вход для сотрудников" : "Вход в Маросим"}</p>
+        <h1>{isAdminLogin ? "Откройте панель управления" : "Войдите, чтобы продолжить"}</h1>
+        <p className="lead">{isAdminLogin ? "Используйте служебную учётную запись." : "После входа вы выберете, что хотите делать в Маросим."}</p>
+        {!isAdminLogin ? <Link className="text-link" href="/catalog">Сначала посмотреть каталог <span aria-hidden="true">→</span></Link> : null}
       </div>
 
       <div className="panel login-panel">
-        <fieldset className="role-picker">
-          <legend>Я хочу…</legend>
-          <div className="role-options">
-            {availableRoles.map((option) => (
-              <label className="role-option" key={option.role}>
-                <input
-                  type="radio"
-                  name="role"
-                  value={option.role}
-                  checked={role === option.role}
-                  onChange={() => setRole(option.role)}
-                />
-                <span>
-                  <strong>{option.title}</strong>
-                  <small>{option.description}</small>
-                </span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
         <div className="auth-methods">
           <button className="button google-button" type="button" onClick={continueWithGoogle}>
             <span className="google-mark" aria-hidden="true">G</span>

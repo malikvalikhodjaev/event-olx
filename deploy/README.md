@@ -1,12 +1,11 @@
-# Развертывание Marosim в выделенном dev-space
+# Развертывание Marosim в выделенном пространстве
 
 Фактическое dev-окружение изолировано от FOM/Datfo:
 
 - код и runtime: `/home/malik/apps/eventhub-uz`;
 - процесс: пользовательский `systemd`-сервис `eventhub-uz.service`;
 - внутренний адрес: `http://127.0.0.1:3001`;
-- основной внешний адрес: `https://marosim-dev.fom-analytics.uz`;
-- временный алиас для прежних ссылок: `https://eventhub-dev.fom-analytics.uz`;
+- внешний адрес: `https://marosim.fom-analytics.uz`;
 - публикация: существующий Cloudflare Tunnel, без открытия порта приложения наружу.
 
 В production-процессе не используется системный Node.js 18. Для Marosim закреплен собственный проверенный Node.js `22.23.2`, поэтому обновление MVP не влияет на Datfo. Технические идентификаторы каталога и сервиса `eventhub-uz` пока сохранены, чтобы не затрагивать runtime; публичный hostname уже использует название Marosim.
@@ -39,20 +38,20 @@ curl --fail http://127.0.0.1:3001/api/health
 В активный `~/.cloudflared/config.yml` перед завершающим `http_status:404` добавляется маршрут:
 
 ```yaml
-    - hostname: marosim-dev.fom-analytics.uz
-      service: http://127.0.0.1:3001
-    - hostname: eventhub-dev.fom-analytics.uz
+    - hostname: marosim.fom-analytics.uz
       service: http://127.0.0.1:3001
 ```
 
 DNS связывается с уже действующим именованным tunnel, после чего конфигурация проверяется до перезапуска:
 
 ```bash
-cloudflared tunnel route dns --overwrite-dns 08ddeab2-0062-4eaf-9452-3d3b45643fad marosim-dev.fom-analytics.uz
+cloudflared tunnel route dns --overwrite-dns 08ddeab2-0062-4eaf-9452-3d3b45643fad marosim.fom-analytics.uz
 cloudflared tunnel ingress validate --config /home/malik/.cloudflared/config.yml
 systemctl --user restart cloudflared.service
-curl --fail https://marosim-dev.fom-analytics.uz/api/health
+curl --fail https://marosim.fom-analytics.uz/api/health
 ```
+
+Скрипт `deploy/add-marosim-host.sh` сначала добавляет и проверяет новый адрес, затем удаляет маршруты `marosim-dev.fom-analytics.uz` и `eventhub-dev.fom-analytics.uz` из ingress-конфигурации. Перед изменением создаётся резервная копия, при ошибке конфигурация откатывается.
 
 ## Обновление
 

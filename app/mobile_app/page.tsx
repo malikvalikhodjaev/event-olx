@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Marosim на телефоне" };
+export const metadata: Metadata = { title: "Мобильное приложение Marosim" };
 
 export default function MobileAppPage() {
   return (
     <section className="mobile-app-page">
       <div className="mobile-app-copy">
-        <p className="eyebrow">Marosim на телефоне</p>
+        <p className="eyebrow">Мобильное приложение</p>
         <h1>Marosim всегда под рукой</h1>
         <p className="lead">Установите сайт на главный экран и открывайте каталог, план и сообщения как обычное приложение.</p>
         <div className="actions">

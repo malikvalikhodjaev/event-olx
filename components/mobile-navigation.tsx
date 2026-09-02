@@ -19,7 +19,7 @@ export function MobileNavigation() {
     ? guestItems
     : [
         { href: "/catalog", icon: "⌕", label: "Каталог" },
-        ...(isClient ? [{ href: "/planner", icon: "✓", label: "План" }, { href: "/chats", icon: "↗", label: "Чаты" }] : []),
+        ...(isClient ? [{ href: "/saved", icon: "♡", label: "Сохранено" }, { href: "/chats", icon: "↗", label: "Чаты" }] : []),
         ...(isSupplier ? [{ href: "/supplier", icon: "↗", label: "Каталог" }, { href: "/chats", icon: "◌", label: "Чаты" }] : []),
         ...(state.role === "admin" ? [{ href: "/admin", icon: "✓", label: "Управление" }] : []),
         { href: "/account", icon: "●", label: "Кабинет" },

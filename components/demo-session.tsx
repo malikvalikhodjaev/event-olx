@@ -4,10 +4,9 @@ import { createContext, useContext, useEffect, useMemo, useSyncExternalStore } f
 import {
   getDemoServerSnapshot,
   getDemoStateSnapshot,
-  loadDemoState,
   parseDemoStateSnapshot,
   resetDemoState,
-  saveDemoState,
+  setDemoRole,
   signInDemoUser,
   signOutDemoUser,
   subscribeDemoState,
@@ -44,8 +43,7 @@ export function DemoSessionProvider({ children }: { children: React.ReactNode })
       role: state.role,
       signedIn: state.signedIn,
       setRole: (role) => {
-        const next = { ...loadDemoState(), role };
-        saveDemoState(next);
+        setDemoRole(role);
       },
       signIn: (role, accountName) => {
         signInDemoUser(role, accountName);

@@ -70,7 +70,13 @@ export function saveDemoState(state: DemoState) {
 
 export function setDemoRole(role: DemoRole) {
   const state = loadDemoState();
-  saveDemoState({ ...state, role });
+  saveDemoState({
+    ...state,
+    role,
+    userSessions: state.userSessions.map((session) =>
+      session.id === state.activeSessionId ? { ...session, role } : session,
+    ),
+  });
 }
 
 export function signInDemoUser(role: DemoRole, accountName: string) {

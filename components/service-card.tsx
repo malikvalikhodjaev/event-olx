@@ -40,7 +40,7 @@ export function ServiceCard({ service }: { service: Service }) {
         <button
           className="service-card-favorite"
           type="button"
-          aria-label={shortlisted ? "Убрать из подборки" : "В подборку"}
+          aria-label={shortlisted ? "Убрать из сохранённых" : "Сохранить"}
           aria-pressed={shortlisted}
           onClick={() => {
             addToShortlist(service.id);

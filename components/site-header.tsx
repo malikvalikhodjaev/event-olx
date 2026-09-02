@@ -18,11 +18,12 @@ export function SiteHeader() {
         <nav className="top-nav" aria-label="Основная навигация">
           <Link href="/catalog">Каталог</Link>
           {(!state.signedIn || isClient) ? <Link href="/planner">План события</Link> : null}
+          {state.signedIn && isClient ? <Link href="/saved">Сохранённые</Link> : null}
           {state.signedIn && (isClient || isSupplier) ? <Link href="/chats">Сообщения</Link> : null}
           {state.signedIn && isSupplier ? <Link href="/supplier">Мои предложения</Link> : null}
           {state.signedIn && state.role === "admin" ? <Link href="/admin">Управление</Link> : null}
           {!state.signedIn ? <Link href="/login?role=supplier&next=/supplier">Для поставщиков</Link> : null}
-          <Link href="/mobile_app">На телефон</Link>
+          <Link href="/mobile_app">Мобильное приложение</Link>
         </nav>
         <Link className="header-account" href={state.signedIn ? "/account" : "/login"}>{state.signedIn ? "Кабинет" : "Войти в Маросим"}</Link>
       </div>

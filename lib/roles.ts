@@ -1,15 +1,20 @@
 import type { DemoRole } from "@/lib/types";
 
-export const roleOptions: Array<{ role: DemoRole; title: string; description: string }> = [
+export type ProfileRole = Extract<DemoRole, "client" | "supplier">;
+
+export const profileRoleOptions: Array<{ role: ProfileRole; title: string; description: string }> = [
   { role: "client", title: "Я хочу найти для события", description: "Выбрать услуги, купить нужные вещи или арендовать технику" },
-  { role: "client_planner", title: "Я организую событие", description: "Собрать план, бюджет и список выбранных предложений" },
   { role: "supplier", title: "Я предоставляю услуги или продаю товары", description: "Разместить предложения и отвечать клиентам в чате" },
-  { role: "supplier_planner", title: "Я планирую работу команды", description: "Следить за датами, загрузкой и ответами клиентам" },
-  { role: "admin", title: "Управляю платформой", description: "Проверять карточки и обращения пользователей" },
 ];
 
+const demoRoles: DemoRole[] = ["client", "client_planner", "supplier", "supplier_planner", "admin"];
+
 export function isDemoRole(value: string | undefined): value is DemoRole {
-  return roleOptions.some((option) => option.role === value);
+  return demoRoles.some((role) => role === value);
+}
+
+export function isProfileRole(value: string | undefined): value is ProfileRole {
+  return profileRoleOptions.some((option) => option.role === value);
 }
 
 export function roleDestination(role: DemoRole) {
@@ -20,5 +25,19 @@ export function roleDestination(role: DemoRole) {
 }
 
 export function roleTitle(role: DemoRole) {
-  return roleOptions.find((option) => option.role === role)?.title ?? "Пользователь";
+  const titles: Record<DemoRole, string> = {
+    client: "Ищу для события",
+    client_planner: "Планирую событие",
+    supplier: "Предоставляю услуги или продаю товары",
+    supplier_planner: "Планирую работу команды",
+    admin: "Администратор",
+  };
+  return titles[role];
+}
+
+export function profileDestination(role: ProfileRole, requestedPath: string) {
+  if (role === "supplier") return "/supplier";
+  if (!requestedPath.startsWith("/") || requestedPath.startsWith("//")) return "/catalog";
+  if (requestedPath.startsWith("/supplier") || requestedPath.startsWith("/admin")) return "/catalog";
+  return requestedPath;
 }
