@@ -3,31 +3,32 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useDemoSession } from "@/components/demo-session";
-
-const guestItems = [
-  { href: "/mobile_app", icon: "⌂", label: "Главная" },
-  { href: "/catalog", icon: "⌕", label: "Каталог" },
-  { href: "/mobile_app/supplier", icon: "↗", label: "Поставщикам" },
-  { href: "/login", icon: "●", label: "Войти" },
-];
+import { useLocale } from "@/components/locale-provider";
 
 export function MobileNavigation() {
   const pathname = usePathname();
   const { state } = useDemoSession();
+  const { text } = useLocale();
   const isClient = state.role === "client" || state.role === "client_planner";
   const isSupplier = state.role === "supplier" || state.role === "supplier_planner";
+  const guestItems = [
+    { href: "/mobile_app", icon: "⌂", label: text("Главная", "Bosh sahifa") },
+    { href: "/catalog", icon: "⌕", label: text("Каталог", "Katalog") },
+    { href: "/mobile_app/supplier", icon: "↗", label: text("Предложить", "E’lon berish") },
+    { href: "/login", icon: "●", label: text("Войти", "Kirish") },
+  ];
   const items = !state.signedIn
     ? guestItems
     : [
-        ...(isClient ? [{ href: "/mobile_app", icon: "⌂", label: "Главная" }] : []),
-        ...(isClient ? [{ href: "/saved", icon: "♡", label: "Сохранено" }, { href: "/chats", icon: "↗", label: "Чаты" }] : []),
-        ...(isSupplier ? [{ href: "/mobile_app/supplier", icon: "⌂", label: "Главная" }, { href: "/supplier", icon: "▣", label: "Предложения" }, { href: "/chats", icon: "↗", label: "Чаты" }] : []),
+        ...(isClient ? [{ href: "/mobile_app", icon: "⌂", label: text("Главная", "Bosh sahifa") }] : []),
+        ...(isClient ? [{ href: "/saved", icon: "♡", label: text("Сохранено", "Saqlangan") }, { href: "/chats", icon: "↗", label: text("Чаты", "Xabarlar") }] : []),
+        ...(isSupplier ? [{ href: "/mobile_app/supplier", icon: "⌂", label: text("Главная", "Bosh sahifa") }, { href: "/supplier", icon: "▣", label: text("Предложения", "E’lonlar") }, { href: "/chats", icon: "↗", label: text("Чаты", "Xabarlar") }] : []),
         ...(state.role === "admin" ? [{ href: "/admin", icon: "✓", label: "Управление" }] : []),
-        { href: "/account", icon: "●", label: "Кабинет" },
+        { href: "/account", icon: "●", label: text("Кабинет", "Kabinet") },
       ];
 
   return (
-    <nav className="mobile-nav" aria-label="Мобильная навигация">
+    <nav className="mobile-nav" aria-label={text("Мобильная навигация", "Mobil navigatsiya")}>
       {items.map((item) => {
         const active = item.href === "/mobile_app"
           ? pathname === item.href

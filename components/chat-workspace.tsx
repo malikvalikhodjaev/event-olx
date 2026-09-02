@@ -6,14 +6,9 @@ import { useDemoSession } from "@/components/demo-session";
 import { addChatMessage, startConversation } from "@/lib/demo-store";
 import { getServiceById, getSupplierById } from "@/lib/demo-data";
 import { formatDateTime } from "@/lib/format";
+import { useLocale } from "@/components/locale-provider";
 
 const supplierId = "supplier-silk-road";
-const quickMessages = [
-  "Свободна ли нужная дата?",
-  "Что входит в стоимость?",
-  "Подскажите итоговую цену",
-];
-
 export function ChatWorkspace({
   initialServiceId = "",
   initialConversationId = "",
@@ -22,6 +17,10 @@ export function ChatWorkspace({
   initialConversationId?: string;
 }) {
   const { state, refresh } = useDemoSession();
+  const { locale, text } = useLocale();
+  const quickMessages = locale === "uz"
+    ? ["Kerakli sana bo‘shmi?", "Narxga nimalar kiradi?", "Yakuniy narxni ayting"]
+    : ["Свободна ли нужная дата?", "Что входит в стоимость?", "Подскажите итоговую цену"];
   const [selectedId, setSelectedId] = useState(initialConversationId);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -52,28 +51,28 @@ export function ChatWorkspace({
     const destination = `/chats${initialServiceId ? `?service=${encodeURIComponent(initialServiceId)}` : ""}`;
     return (
       <section className="panel empty-state chat-sign-in">
-        <h2>Войдите, чтобы написать поставщику</h2>
-        <p>После входа откроется выбранное предложение и поле сообщения.</p>
-        <Link className="button button-primary" href={`/login?role=client&next=${encodeURIComponent(destination)}`}>Войти и продолжить</Link>
+        <h2>{text("Войдите, чтобы написать автору предложения", "E’lon muallifiga yozish uchun kiring")}</h2>
+        <p>{text("После входа откроется выбранное предложение и поле сообщения.", "Kirgandan so‘ng tanlangan taklif va xabar maydoni ochiladi.")}</p>
+        <Link className="button button-primary" href={`/login?role=client&next=${encodeURIComponent(destination)}`}>{text("Войти и продолжить", "Kirish va davom etish")}</Link>
       </section>
     );
   }
 
   function sendMessage(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const text = message.trim();
-    if (text.length < 2) {
-      setError("Напишите сообщение поставщику");
+    const messageText = message.trim();
+    if (messageText.length < 2) {
+      setError(text("Напишите сообщение автору предложения", "E’lon muallifiga xabar yozing"));
       return;
     }
     if (activeConversation) {
-      addChatMessage(activeConversation.id, isSupplier ? "supplier" : "client", text);
+      addChatMessage(activeConversation.id, isSupplier ? "supplier" : "client", messageText);
       setSelectedId(activeConversation.id);
     } else if (draftService && !isSupplier) {
-      const conversationId = startConversation(draftService.id, state.accountName, text);
+      const conversationId = startConversation(draftService.id, state.accountName, messageText);
       setSelectedId(conversationId);
     } else {
-      setError("Сначала выберите предложение");
+      setError(text("Сначала выберите предложение", "Avval taklifni tanlang"));
       return;
     }
     setMessage("");
@@ -83,10 +82,10 @@ export function ChatWorkspace({
 
   return (
     <section className="chat-shell">
-      <aside className="chat-sidebar" aria-label="Список диалогов">
+      <aside className="chat-sidebar" aria-label={text("Список диалогов", "Suhbatlar ro‘yxati")}>
         <div className="chat-sidebar-heading">
-          <div><p className="eyebrow">Сообщения</p><h2>Диалоги</h2></div>
-          {!isSupplier ? <Link className="button button-secondary button-small" href="/catalog">Каталог</Link> : null}
+          <div><p className="eyebrow">{text("Сообщения", "Xabarlar")}</p><h2>{text("Диалоги", "Suhbatlar")}</h2></div>
+          {!isSupplier ? <Link className="button button-secondary button-small" href="/catalog">{text("Каталог", "Katalog")}</Link> : null}
         </div>
         <div className="chat-list">
           {visibleConversations.map((conversation) => {
@@ -107,11 +106,11 @@ export function ChatWorkspace({
                   <small>{service?.title}</small>
                   <small>{lastMessage?.text}</small>
                 </span>
-                <time>{formatDateTime(conversation.updatedAt)}</time>
+                <time>{formatDateTime(conversation.updatedAt, locale)}</time>
               </button>
             );
           })}
-          {!visibleConversations.length ? <div className="chat-list-empty">Здесь появятся ваши диалоги.</div> : null}
+          {!visibleConversations.length ? <div className="chat-list-empty">{text("Здесь появятся ваши диалоги.", "Suhbatlaringiz shu yerda paydo bo‘ladi.")}</div> : null}
         </div>
       </aside>
 
@@ -124,7 +123,7 @@ export function ChatWorkspace({
                 <strong>{isSupplier && activeConversation ? activeConversation.clientName : activeSupplier.name}</strong>
                 <span>{activeService.title}</span>
               </div>
-              <Link className="button button-secondary button-small" href={`/suppliers/${activeSupplier.slug}`}>Карточка</Link>
+              <Link className="button button-secondary button-small" href={`/suppliers/${activeSupplier.slug}`}>{text("Карточка", "Karta")}</Link>
             </header>
 
             <div className="chat-messages" aria-live="polite">
@@ -133,44 +132,44 @@ export function ChatWorkspace({
                 return (
                   <div className={`chat-message ${ownMessage ? "own" : ""}`} key={item.id}>
                     <p>{item.text}</p>
-                    <time>{formatDateTime(item.createdAt)}</time>
+                    <time>{formatDateTime(item.createdAt, locale)}</time>
                   </div>
                 );
               })}
               {!activeConversation ? (
                 <div className="chat-welcome">
                   <span className="chat-avatar" aria-hidden="true">{activeSupplier.name.slice(0, 1)}</span>
-                  <h3>Напишите {activeSupplier.name}</h3>
-                  <p>Уточните свободную дату, наличие, состав предложения или итоговую цену.</p>
+                  <h3>{text("Напишите", "Yozing")}: {activeSupplier.name}</h3>
+                  <p>{text("Уточните свободную дату, наличие, состав предложения или итоговую цену.", "Bo‘sh sana, mavjudlik, taklif tarkibi yoki yakuniy narxni aniqlashtiring.")}</p>
                 </div>
               ) : null}
             </div>
 
             {!isSupplier && (!activeConversation || activeConversation.messages.length < 2) ? (
-              <div className="quick-messages" aria-label="Быстрые вопросы">
+              <div className="quick-messages" aria-label={text("Быстрые вопросы", "Tezkor savollar")}>
                 {quickMessages.map((text) => <button type="button" key={text} onClick={() => setMessage(text)}>{text}</button>)}
               </div>
             ) : null}
 
             <form className="chat-composer" onSubmit={sendMessage}>
-              <label className="sr-only" htmlFor="chat-message">Сообщение</label>
+              <label className="sr-only" htmlFor="chat-message">{text("Сообщение", "Xabar")}</label>
               <textarea
                 id="chat-message"
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
-                placeholder={isSupplier ? "Напишите клиенту…" : "Напишите поставщику…"}
+                placeholder={isSupplier ? text("Напишите клиенту…", "Mijozga yozing…") : text("Напишите автору…", "Muallifga yozing…")}
                 rows={2}
               />
-              <button className="button button-primary" type="submit">Отправить</button>
+              <button className="button button-primary" type="submit">{text("Отправить", "Yuborish")}</button>
               {error ? <span className="error-text small" role="alert">{error}</span> : null}
-              <small>Сообщение не подтверждает бронь, наличие или оплату.</small>
+              <small>{text("Сообщение не подтверждает бронь, наличие или оплату.", "Xabar bron, mavjudlik yoki to‘lovni tasdiqlamaydi.")}</small>
             </form>
           </>
         ) : (
           <div className="chat-welcome chat-welcome-empty">
-            <h2>Выберите предложение</h2>
-            <p>Откройте каталог и нажмите «Написать поставщику».</p>
-            <Link className="button button-primary" href="/catalog">Открыть каталог</Link>
+            <h2>{text("Выберите предложение", "Taklifni tanlang")}</h2>
+            <p>{text("Откройте каталог и нажмите «Написать автору».", "Katalogni oching va «Muallifga yozish» tugmasini bosing.")}</p>
+            <Link className="button button-primary" href="/catalog">{text("Открыть каталог", "Katalogni ochish")}</Link>
           </div>
         )}
       </div>

@@ -1,10 +1,11 @@
 import type { DemoRole } from "@/lib/types";
+import type { Locale } from "@/lib/i18n";
 
 export type ProfileRole = Extract<DemoRole, "client" | "supplier">;
 
 export const profileRoleOptions: Array<{ role: ProfileRole; title: string; description: string }> = [
   { role: "client", title: "Я хочу найти для события", description: "Выбрать услуги, купить нужные вещи или арендовать технику" },
-  { role: "supplier", title: "Я предоставляю услуги или продаю товары", description: "Разместить предложения и отвечать клиентам в чате" },
+  { role: "supplier", title: "Я предлагаю услуги или товары", description: "Размещать предложения и отвечать клиентам в чате" },
 ];
 
 const demoRoles: DemoRole[] = ["client", "client_planner", "supplier", "supplier_planner", "admin"];
@@ -24,15 +25,22 @@ export function roleDestination(role: DemoRole) {
   return "/catalog";
 }
 
-export function roleTitle(role: DemoRole) {
+export function roleTitle(role: DemoRole, locale: Locale = "ru") {
   const titles: Record<DemoRole, string> = {
     client: "Ищу для события",
     client_planner: "Планирую событие",
-    supplier: "Предоставляю услуги или продаю товары",
+    supplier: "Автор предложения",
     supplier_planner: "Планирую работу команды",
     admin: "Администратор",
   };
-  return titles[role];
+  const titlesUz: Record<DemoRole, string> = {
+    client: "Tadbir uchun izlayman",
+    client_planner: "Tadbirni rejalashtiraman",
+    supplier: "E’lon muallifi",
+    supplier_planner: "Jamoa ishini rejalashtiraman",
+    admin: "Administrator",
+  };
+  return locale === "uz" ? titlesUz[role] : titles[role];
 }
 
 export function profileDestination(role: ProfileRole, requestedPath: string) {

@@ -18,7 +18,7 @@ describe("стартовый каталог", () => {
     expect(new Set(services.map((service) => service.imageUrl)).size).toBe(59);
   });
 
-  it("связывает каждый SKU с категорией, поставщиком и локальной фотографией", () => {
+  it("связывает каждый SKU с категорией, автором предложения и локальной фотографией", () => {
     for (const service of services) {
       expect(categories.some((category) => category.id === service.categoryId)).toBe(true);
       expect(suppliers.some((supplier) => supplier.id === service.supplierId)).toBe(true);

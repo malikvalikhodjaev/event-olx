@@ -20,8 +20,8 @@ const actionLabels: Record<string, string> = {
   approved: "Карточка одобрена",
   changes_requested: "Карточка возвращена на исправление",
   hidden: "Карточка скрыта",
-  supplier_banned: "Поставщик заблокирован",
-  supplier_unbanned: "Поставщик разблокирован",
+  supplier_banned: "Автор предложения заблокирован",
+  supplier_unbanned: "Автор предложения разблокирован",
 };
 
 const periodOptions: Array<{ value: DashboardPeriod; label: string }> = [
@@ -119,7 +119,7 @@ export function AdminDashboard() {
   function targetName(target: string) {
     const moderationItem = state.moderation.find((item) => item.id === target);
     if (moderationItem) return getServiceById(moderationItem.serviceId)?.title ?? "Карточка предложения";
-    return getSupplierById(target)?.name ?? "Поставщик";
+    return getSupplierById(target)?.name ?? "Автор предложения";
   }
 
   if (!state.signedIn || state.role !== "admin") {
@@ -160,19 +160,19 @@ export function AdminDashboard() {
 
         <div className="admin-metric-grid">
           <MetricCard label="SKU в каталоге" value={analytics.totalSku} note={`${analytics.publishedServices} опубликовано`} accent="green" />
-          <MetricCard label="Поставщики" value={analytics.suppliersTotal} note={supplierRegistrationNote(analytics.suppliersNew)} accent="yellow" />
+          <MetricCard label="Авторы предложений" value={analytics.suppliersTotal} note={supplierRegistrationNote(analytics.suppliersNew)} accent="yellow" />
           <MetricCard label="Активные пользователи" value={analytics.activeUsers} note={comparisonText(analytics.activeUsers, analytics.previous.activeUsers)} />
           <MetricCard label="Сейчас онлайн" value={analytics.onlineUsers} note="уникальные аккаунты за 15 минут" accent="green" />
           <MetricCard label="Новые диалоги" value={analytics.conversations} note={comparisonText(analytics.conversations, analytics.previous.conversations)} />
-          <MetricCard label="Поставщики ответили" value={analytics.responseRate === null ? "—" : `${analytics.responseRate}%`} note={analytics.conversations ? `${analytics.repliedConversations} из ${analytics.conversations} диалогов` : "в периоде пока нет диалогов"} />
+          <MetricCard label="Авторы ответили" value={analytics.responseRate === null ? "—" : `${analytics.responseRate}%`} note={analytics.conversations ? `${analytics.repliedConversations} из ${analytics.conversations} диалогов` : "в периоде пока нет диалогов"} />
           <MetricCard label="Первый ответ" value={responseTime(analytics.medianResponseMinutes)} note="медианное время ответа" />
         </div>
 
         <div className="admin-operations" aria-label="Текущее состояние каталога">
           <div><strong>{analytics.publishedServices}</strong><span>карточек опубликовано</span></div>
-          <div><strong>{analytics.verifiedSuppliers}</strong><span>поставщиков проверено</span></div>
+          <div><strong>{analytics.verifiedSuppliers}</strong><span>авторов проверено</span></div>
           <div><strong>{analytics.pendingModeration}</strong><span>ждут модерации</span></div>
-          <div><strong>{analytics.bannedSuppliers}</strong><span>поставщиков заблокировано</span></div>
+          <div><strong>{analytics.bannedSuppliers}</strong><span>авторов заблокировано</span></div>
         </div>
 
         <div className="activity-chart" aria-label="Активность пользователей и новые диалоги за выбранный период">
@@ -204,14 +204,14 @@ export function AdminDashboard() {
       </section>
 
       <section className="panel">
-        <p className="eyebrow">Проверка поставщиков</p><h2>Доступ к платформе</h2>
+        <p className="eyebrow">Проверка авторов предложений</p><h2>Доступ к платформе</h2>
         {suppliers.map((supplier) => {
           const isBanned = state.bannedSupplierIds.includes(supplier.id);
           return <article className="moderation-row" key={supplier.id}><div><strong>{supplier.name}</strong><br /><span className="small muted">{supplier.city} · {supplier.verificationLabel}</span><div className="field" style={{ marginTop: 10 }}><label htmlFor={`ban-${supplier.id}`}>Причина блокировки / снятия</label><input id={`ban-${supplier.id}`} value={reasons[`supplier-${supplier.id}`] ?? ""} onChange={(event) => setReasons((current) => ({ ...current, [`supplier-${supplier.id}`]: event.target.value }))} /></div></div><div><StatusBadge tone={isBanned ? "danger" : "success"}>{isBanned ? "Заблокирован" : "Активен"}</StatusBadge><div style={{ marginTop: 10 }}><button className={`button button-small ${isBanned ? "button-secondary" : "button-danger"}`} onClick={() => toggleBan(supplier.id)}>{isBanned ? "Разблокировать" : "Заблокировать"}</button></div></div></article>;
         })}
       </section>
 
-      <section className="panel"><p className="eyebrow">Что изменилось</p><h2>Последние действия</h2>{state.audit.length ? <div className="table-wrap"><table><thead><tr><th>Когда</th><th>Что сделано</th><th>Карточка или поставщик</th><th>Комментарий</th></tr></thead><tbody>{state.audit.map((entry) => <tr key={entry.id}><td>{formatDateTime(entry.createdAt)}</td><td>{actionLabels[entry.action] ?? "Изменение сохранено"}</td><td>{targetName(entry.target)}</td><td>{entry.reason}</td></tr>)}</tbody></table></div> : <div className="empty-state">Здесь появятся последние изменения.</div>}</section>
+      <section className="panel"><p className="eyebrow">Что изменилось</p><h2>Последние действия</h2>{state.audit.length ? <div className="table-wrap"><table><thead><tr><th>Когда</th><th>Что сделано</th><th>Карточка или автор</th><th>Комментарий</th></tr></thead><tbody>{state.audit.map((entry) => <tr key={entry.id}><td>{formatDateTime(entry.createdAt)}</td><td>{actionLabels[entry.action] ?? "Изменение сохранено"}</td><td>{targetName(entry.target)}</td><td>{entry.reason}</td></tr>)}</tbody></table></div> : <div className="empty-state">Здесь появятся последние изменения.</div>}</section>
     </div>
   );
 }

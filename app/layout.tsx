@@ -1,11 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import { Geologica } from "next/font/google";
-import Link from "next/link";
+import { cookies } from "next/headers";
 import "./globals.css";
 import { DemoSessionProvider } from "@/components/demo-session";
+import { LocaleProvider } from "@/components/locale-provider";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { SiteHeader } from "@/components/site-header";
 import { MobileNavigation } from "@/components/mobile-navigation";
+import { SiteFooter } from "@/components/site-footer";
+import { localeCookieName, normalizeLocale } from "@/lib/i18n";
 
 const geologica = Geologica({
   subsets: ["cyrillic", "latin"],
@@ -27,32 +30,23 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const locale = normalizeLocale((await cookies()).get(localeCookieName)?.value);
+
   return (
-    <html lang="ru" data-scroll-behavior="smooth">
+    <html lang={locale} data-scroll-behavior="smooth">
       <body className={geologica.variable}>
-        <DemoSessionProvider>
-          <ServiceWorkerRegister />
-          <SiteHeader />
-          <main className="main">
-            <div className="shell">{children}</div>
-          </main>
-          <MobileNavigation />
-          <footer className="site-footer">
-            <div className="shell footer-row">
-              <div className="footer-copy">
-                <strong>Marosim</strong>
-                <span>Находите всё нужное и собирайте событие в одном месте.</span>
-              </div>
-              <div className="footer-support">
-                <span>Нужна помощь?</span>
-                <a href="tel:+998900000000">Поддержка: +998 90 000-00-00</a>
-                <Link href="/offer">Условия использования и оферта</Link>
-                <small>Фото и цены в стартовом каталоге ориентировочные.</small>
-              </div>
-            </div>
-          </footer>
-        </DemoSessionProvider>
+        <LocaleProvider initialLocale={locale}>
+          <DemoSessionProvider>
+            <ServiceWorkerRegister />
+            <SiteHeader />
+            <main className="main">
+              <div className="shell">{children}</div>
+            </main>
+            <MobileNavigation />
+            <SiteFooter />
+          </DemoSessionProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

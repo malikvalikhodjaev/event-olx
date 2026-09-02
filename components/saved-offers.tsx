@@ -4,16 +4,18 @@ import Link from "next/link";
 import { useDemoSession } from "@/components/demo-session";
 import { ServiceCard } from "@/components/service-card";
 import { services } from "@/lib/demo-data";
+import { useLocale } from "@/components/locale-provider";
 
 export function SavedOffers() {
   const { state } = useDemoSession();
+  const { text } = useLocale();
 
   if (!state.signedIn) {
     return (
       <section className="panel empty-state">
-        <h2>Войдите, чтобы открыть сохранённые предложения</h2>
-        <p>После входа здесь будут карточки, которые вы отметили в каталоге.</p>
-        <Link className="button button-primary" href="/login?role=client&next=/saved">Войти</Link>
+        <h2>{text("Войдите, чтобы открыть сохранённые предложения", "Saqlangan takliflarni ochish uchun kiring")}</h2>
+        <p>{text("После входа здесь будут карточки, которые вы отметили в каталоге.", "Kirgandan so‘ng katalogda belgilagan kartalaringiz shu yerda bo‘ladi.")}</p>
+        <Link className="button button-primary" href="/login?role=client&next=/saved">{text("Войти", "Kirish")}</Link>
       </section>
     );
   }
@@ -23,9 +25,9 @@ export function SavedOffers() {
   if (!saved.length) {
     return (
       <section className="panel empty-state">
-        <h2>Пока ничего не сохранено</h2>
-        <p>Нажмите на сердечко в карточке предложения, чтобы вернуться к нему позже.</p>
-        <Link className="button button-primary" href="/catalog">Найти предложения</Link>
+        <h2>{text("Пока ничего не сохранено", "Hozircha hech narsa saqlanmagan")}</h2>
+        <p>{text("Нажмите на сердечко в карточке предложения, чтобы вернуться к нему позже.", "Taklifga keyinroq qaytish uchun kartadagi yurakchani bosing.")}</p>
+        <Link className="button button-primary" href="/catalog">{text("Найти предложения", "Takliflarni topish")}</Link>
       </section>
     );
   }

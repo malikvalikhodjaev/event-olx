@@ -17,7 +17,7 @@ test("пользователь сначала входит, затем выби�
   await expect(page).toHaveURL(/\/onboarding\?/);
   await expect(page.getByRole("radio")).toHaveCount(2);
   await expect(page.getByRole("radio", { name: /Я хочу найти для события/ })).toBeChecked();
-  await expect(page.getByRole("radio", { name: /Я предоставляю услуги или продаю товары/ })).toBeVisible();
+  await expect(page.getByRole("radio", { name: /Я предлагаю услуги или товары/ })).toBeVisible();
   await expect(page.getByText("Я организую событие")).toHaveCount(0);
   await expect(page.getByText("Я планирую работу команды")).toHaveCount(0);
   await page.getByRole("button", { name: "Продолжить", exact: true }).click();
@@ -28,7 +28,7 @@ test("пользователь сначала входит, затем выби�
 test("главная показывает один явный первый шаг", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Найдите всё для своего мероприятия" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Найти", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Стать поставщиком", exact: true })).toBeVisible();
+  await expect(page.getByLabel("Предлагаете услуги или товары?").getByRole("link", { name: "Разместить предложение", exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Поддержка: +998 90 000-00-00" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Администратор" })).toHaveCount(0);
   await page.getByLabel("Что нужно для события?").fill("фото");
@@ -49,21 +49,38 @@ test("условия использования доступны из публи
   await expect(page.getByRole("link", { name: "+998 90 000-00-00", exact: true })).toBeVisible();
 });
 
+test("пользователь переключает сайт на узбекский и возвращает русский", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "O‘Z", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "uz");
+  await expect(page.getByRole("heading", { name: "Tadbiringiz uchun hamma narsani toping" })).toBeVisible();
+  await expect(page.getByLabel("Xizmat yoki mahsulot taklif qilasizmi?").getByRole("link", { name: "E’lon joylashtirish", exact: true })).toBeVisible();
+
+  await page.getByRole("link", { name: "Katalog", exact: true }).click();
+  await expect(page.getByText("Topildi: 100")).toBeVisible();
+  await page.getByLabel("Nima izlayapsiz").fill("boshlovchi");
+  await expect(page.locator('[data-testid="service-card"]')).not.toHaveCount(0);
+
+  await page.getByRole("button", { name: "RU", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "ru");
+  await expect(page.getByLabel("Что ищете")).toHaveValue("boshlovchi");
+});
+
 test("мобильная главная начинает сценарий с поиска", async ({ page }) => {
   await page.goto("/mobile_app");
   await expect(page.getByRole("heading", { name: "Что нужно для события?" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Открыть раздел поставщика" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Открыть раздел автора" })).toBeVisible();
   await page.getByRole("searchbox", { name: "Что нужно для события?" }).fill("ведущий");
   await page.getByRole("button", { name: "Найти", exact: true }).click();
   await expect.poll(() => decodeURIComponent(new URL(page.url()).searchParams.get("next") ?? "")).toBe("/catalog?q=ведущий");
 });
 
-test("поставщик входит в отдельный мобильный рабочий раздел", async ({ page }) => {
+test("автор предложения входит в отдельный мобильный рабочий раздел", async ({ page }) => {
   await page.goto("/mobile_app/supplier");
   await expect(page.getByRole("heading", { name: "Получайте обращения и управляйте предложениями" })).toBeVisible();
-  await page.getByRole("link", { name: "Войти как поставщик" }).click();
+  await page.getByRole("link", { name: "Войти как автор предложения" }).click();
   await page.getByRole("button", { name: "Продолжить с Google" }).click();
-  await expect(page.getByRole("radio", { name: /Я предоставляю услуги или продаю товары/ })).toBeChecked();
+  await expect(page.getByRole("radio", { name: /Я предлагаю услуги или товары/ })).toBeChecked();
   await page.getByRole("button", { name: "Продолжить", exact: true }).click();
   await expect(page).toHaveURL(/\/mobile_app\/supplier$/);
   await expect(page.getByRole("heading", { name: "Добрый день!" })).toBeVisible();
@@ -85,7 +102,7 @@ test("клиент сохраняет предложение и открывае
   const photoCard = page.getByRole("article").filter({ hasText: "Фото + видео полного свадебного дня" });
   await expect(photoCard).toBeVisible();
   await expect(photoCard.locator("img")).toBeVisible();
-  await expect(photoCard.getByText("Поставщик проверен")).toBeVisible();
+  await expect(photoCard.getByText("Автор предложения проверен")).toBeVisible();
   await photoCard.getByRole("button", { name: "Сохранить" }).click();
   await expect(photoCard.getByRole("button", { name: "Убрать из сохранённых" })).toHaveAttribute("aria-pressed", "true");
   await page.locator('a[href="/saved"]:visible').first().click();
@@ -113,7 +130,7 @@ test("планировщик закрывает категорию и видит
   await expect(page.getByLabel(/Готовность/)).toHaveAttribute("aria-label", /17%/);
 });
 
-test("клиент пишет поставщику и получает ответ в чате", async ({ page }) => {
+test("клиент пишет автору предложения и получает ответ в чате", async ({ page }) => {
   const clientMessage = "Здравствуйте! Свободен ли зал 20 ноября и что входит в стоимость?";
   const supplierMessage = "Здравствуйте! Дата свободна, сейчас пришлю полный состав предложения.";
 
@@ -124,7 +141,7 @@ test("клиент пишет поставщику и получает отве�
 
   await page.goto("/catalog");
   const hallCard = page.getByRole("article").filter({ hasText: "Банкетный зал Silk Hall" });
-  await hallCard.getByRole("link", { name: "Написать поставщику" }).click();
+  await hallCard.getByRole("link", { name: "Написать автору" }).click();
   await expect(page).toHaveURL(/\/chats\?service=service-silk-hall/);
   await page.getByLabel("Сообщение").fill(clientMessage);
   await page.getByRole("button", { name: "Отправить" }).click();
@@ -132,7 +149,7 @@ test("клиент пишет поставщику и получает отве�
 
   await page.goto("/login?role=supplier&next=/supplier");
   await page.getByRole("button", { name: "Продолжить с Google" }).click();
-  await expect(page.getByRole("radio", { name: /Я предоставляю услуги или продаю товары/ })).toBeChecked();
+  await expect(page.getByRole("radio", { name: /Я предлагаю услуги или товары/ })).toBeChecked();
   await page.getByRole("button", { name: "Продолжить", exact: true }).click();
   await expect(page).toHaveURL(/\/supplier$/);
   await page.goto("/chats");
@@ -152,12 +169,12 @@ test("администратор фиксирует модерацию и бло
   await page.goto("/login?role=admin&next=/admin");
   await page.getByRole("button", { name: "Продолжить с Google" }).click();
   await expect(page).toHaveURL(/\/admin$/);
-  await page.locator("#reason-moderation-sabo").fill("Цена подтверждена поставщиком 1 сентября");
+  await page.locator("#reason-moderation-sabo").fill("Цена подтверждена автором 1 сентября");
   await page.getByRole("button", { name: "Одобрить" }).click();
   await expect(page.getByText("Карточка одобрена")).toBeVisible();
   await page.locator("#ban-supplier-sabo-decor").fill("Проверка жалобы клиента");
   await page.getByRole("button", { name: "Заблокировать" }).nth(2).click();
-  await expect(page.getByText("Поставщик заблокирован")).toBeVisible();
+  await expect(page.getByText("Автор предложения заблокирован")).toBeVisible();
 });
 
 test("администратор видит сводку и меняет период", async ({ page }) => {
@@ -174,7 +191,7 @@ test("администратор видит сводку и меняет пер�
   await expect(page.getByText("Последние 7 дней.")).toBeVisible();
 });
 
-test("поставщик загружает Excel и создает непубличный черновик", async ({ page }) => {
+test("автор предложения загружает Excel и создает непубличный черновик", async ({ page }) => {
   const templateResponse = await page.request.get("/api/templates/services");
   expect(templateResponse.ok()).toBe(true);
   const templateWorkbook = new ExcelJS.Workbook();

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDemoSession } from "@/components/demo-session";
 import { roleDestination } from "@/lib/roles";
+import { useLocale } from "@/components/locale-provider";
 
 const googleUserAccount = "google.user@marosim.local";
 const googleAdminAccount = "admin@marosim.local";
@@ -18,6 +19,7 @@ function safeNext(initialNext: string, fallback: string) {
 export function LoginForm({ initialRole = "client", initialNext = "" }: { initialRole?: string; initialNext?: string }) {
   const router = useRouter();
   const { signIn } = useDemoSession();
+  const { text } = useLocale();
   const [phone, setPhone] = useState("");
   const [code, setCode] = useState("");
   const [codeRequested, setCodeRequested] = useState(false);
@@ -47,7 +49,7 @@ export function LoginForm({ initialRole = "client", initialNext = "" }: { initia
     const normalizedPhone = phone.replace(/[^\d+]/g, "");
     if (!codeRequested) {
       if (normalizedPhone.length < 9) {
-        setError("Введите номер телефона полностью");
+        setError(text("Введите номер телефона полностью", "Telefon raqamini to‘liq kiriting"));
         return;
       }
       setPhone(normalizedPhone);
@@ -56,7 +58,7 @@ export function LoginForm({ initialRole = "client", initialNext = "" }: { initia
       return;
     }
     if (code !== "1234") {
-      setError("Неверный код. Для входа используйте 1234");
+      setError(text("Неверный код. Для входа используйте 1234", "Kod noto‘g‘ri. Kirish uchun 1234 kodidan foydalaning"));
       return;
     }
     finish(normalizedPhone);
@@ -65,25 +67,25 @@ export function LoginForm({ initialRole = "client", initialNext = "" }: { initia
   return (
     <section className="login-layout">
       <div className="login-intro">
-        <p className="eyebrow">{isAdminLogin ? "Вход для сотрудников" : "Вход в Маросим"}</p>
-        <h1>{isAdminLogin ? "Откройте панель управления" : "Войдите, чтобы продолжить"}</h1>
-        <p className="lead">{isAdminLogin ? "Используйте служебную учётную запись." : "После входа вы выберете, что хотите делать в Маросим."}</p>
-        {!isAdminLogin ? <Link className="text-link" href="/catalog">Сначала посмотреть каталог <span aria-hidden="true">→</span></Link> : null}
+        <p className="eyebrow">{isAdminLogin ? "Вход для сотрудников" : text("Вход в Маросим", "Marosim’ga kirish")}</p>
+        <h1>{isAdminLogin ? "Откройте панель управления" : text("Войдите, чтобы продолжить", "Davom etish uchun kiring")}</h1>
+        <p className="lead">{isAdminLogin ? "Используйте служебную учётную запись." : text("После входа вы выберете, что хотите делать в Маросим.", "Kirgandan so‘ng Marosim’da nima qilmoqchi ekaningizni tanlaysiz.")}</p>
+        {!isAdminLogin ? <Link className="text-link" href="/catalog">{text("Сначала посмотреть каталог", "Avval katalogni ko‘rish")} <span aria-hidden="true">→</span></Link> : null}
       </div>
 
       <div className="panel login-panel">
         <div className="auth-methods">
           <button className="button google-button" type="button" onClick={continueWithGoogle}>
             <span className="google-mark" aria-hidden="true">G</span>
-            Продолжить с Google
+            {text("Продолжить с Google", "Google orqali davom etish")}
           </button>
 
-          <div className="auth-divider"><span>или</span></div>
+          <div className="auth-divider"><span>{text("или", "yoki")}</span></div>
 
           <form className="phone-auth" onSubmit={submitPhone}>
             {!codeRequested ? (
               <div className="field">
-                <label htmlFor="login-phone">Номер телефона</label>
+                <label htmlFor="login-phone">{text("Номер телефона", "Telefon raqami")}</label>
                 <input
                   id="login-phone"
                   type="tel"
@@ -97,12 +99,12 @@ export function LoginForm({ initialRole = "client", initialNext = "" }: { initia
             ) : (
               <>
                 <div className="phone-confirmation">
-                  <span>Код отправлен на</span>
+                  <span>{text("Код отправлен на", "Kod yuborildi")}</span>
                   <strong>{phone}</strong>
-                  <button type="button" onClick={() => { setCodeRequested(false); setCode(""); setError(""); }}>Изменить номер</button>
+                  <button type="button" onClick={() => { setCodeRequested(false); setCode(""); setError(""); }}>{text("Изменить номер", "Raqamni o‘zgartirish")}</button>
                 </div>
                 <div className="field">
-                  <label htmlFor="login-code">Код из SMS</label>
+                  <label htmlFor="login-code">{text("Код из SMS", "SMS kodi")}</label>
                   <input
                     id="login-code"
                     inputMode="numeric"
@@ -119,11 +121,11 @@ export function LoginForm({ initialRole = "client", initialNext = "" }: { initia
 
             {error ? <p className="error-text" role="alert">{error}</p> : null}
             <button className="button button-primary login-submit" type="submit">
-              {codeRequested ? "Подтвердить и продолжить" : "Получить код"}
+              {codeRequested ? text("Подтвердить и продолжить", "Tasdiqlash va davom etish") : text("Получить код", "Kod olish")}
             </button>
           </form>
 
-          <p className="auth-simulation-note">Пока Google подтверждается сразу, код для телефона — <strong>1234</strong>.</p>
+          <p className="auth-simulation-note">{text("Пока Google подтверждается сразу, код для телефона —", "Hozircha Google darhol tasdiqlanadi, telefon kodi —")} <strong>1234</strong>.</p>
         </div>
       </div>
     </section>

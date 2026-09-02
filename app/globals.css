@@ -2372,6 +2372,45 @@ body:has(.mobile-app-home) .main > .shell {
   max-width: 390px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #f4f4f2;
+}
+
+.language-switcher button {
+  min-width: 38px;
+  min-height: 30px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.language-switcher button.active {
+  background: var(--ink);
+  color: #fff;
+}
+
+.mobile-app-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .legal-page {
   display: grid;
   gap: 22px;
@@ -2660,6 +2699,10 @@ body:has(.mobile-app-home) .main > .shell {
   .footer-support {
     justify-items: start;
     text-align: left;
+  }
+
+  .site-header .language-switcher {
+    display: inline-flex;
   }
 
   .check-row,
