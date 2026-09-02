@@ -155,7 +155,7 @@ a {
 
 .hero-stage {
   position: relative;
-  min-height: clamp(440px, 58vh, 600px);
+  min-height: clamp(480px, 60vh, 600px);
   overflow: hidden;
   border-radius: 32px;
   background: #e7e1d5;
@@ -181,8 +181,8 @@ a {
   top: 50%;
   left: 50%;
   z-index: 2;
-  width: min(740px, calc(100% - 48px));
-  padding: clamp(30px, 5vw, 58px);
+  width: min(820px, calc(100% - 48px));
+  padding: clamp(28px, 4vw, 44px);
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.93);
   box-shadow: 0 18px 55px rgba(0, 0, 0, 0.16);
@@ -192,9 +192,9 @@ a {
 }
 
 .hero-copy h1 {
-  max-width: 680px;
+  max-width: 740px;
   margin-bottom: 14px;
-  font-size: clamp(42px, 5.4vw, 70px);
+  font-size: clamp(40px, 4.6vw, 60px);
 }
 
 .hero-copy .lead {
@@ -216,7 +216,7 @@ a {
   font-size: 12px;
 }
 
-.hero-find-button {
+.hero-copy .hero-find-button {
   min-width: 220px;
   min-height: 60px;
   border-color: var(--ink);
@@ -226,7 +226,7 @@ a {
   font-size: 18px;
 }
 
-.hero-find-button:hover {
+.hero-copy .hero-find-button:hover {
   background: #ffe733;
 }
 
@@ -1913,7 +1913,7 @@ tr:last-child td {
     font-size: clamp(38px, 11vw, 50px);
   }
 
-  .hero-find-button {
+  .hero-copy .hero-find-button {
     width: 100%;
   }
 
