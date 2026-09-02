@@ -16,7 +16,8 @@ export type PriceUnit =
   | "за день"
   | "за штуку"
   | "за набор"
-  | "за комплект";
+  | "за комплект"
+  | "за килограмм";
 
 export type ServiceCategory = {
   id: string;
@@ -44,6 +45,7 @@ export type Supplier = {
 
 export type Service = {
   id: string;
+  sku: string;
   supplierId: string;
   categoryId: string;
   title: string;
@@ -52,6 +54,7 @@ export type Service = {
   priceFrom: number;
   priceUnit: PriceUnit;
   offerKind: OfferKind;
+  imageUrl: string;
   active: boolean;
   published: boolean;
   updatedAt: string;

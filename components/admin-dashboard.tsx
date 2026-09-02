@@ -159,6 +159,7 @@ export function AdminDashboard() {
         </div>
 
         <div className="admin-metric-grid">
+          <MetricCard label="SKU в каталоге" value={analytics.totalSku} note={`${analytics.publishedServices} опубликовано`} accent="green" />
           <MetricCard label="Поставщики" value={analytics.suppliersTotal} note={supplierRegistrationNote(analytics.suppliersNew)} accent="yellow" />
           <MetricCard label="Активные пользователи" value={analytics.activeUsers} note={comparisonText(analytics.activeUsers, analytics.previous.activeUsers)} />
           <MetricCard label="Сейчас онлайн" value={analytics.onlineUsers} note="уникальные аккаунты за 15 минут" accent="green" />

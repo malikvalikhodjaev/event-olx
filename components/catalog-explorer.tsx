@@ -107,7 +107,7 @@ export function CatalogExplorer({ initialQuery = "", initialCategory = "", initi
         <span className="small muted">Цену и свободную дату уточняйте у поставщика</span>
       </div>
       {filtered.length ? (
-        <div className="catalog-results">{filtered.map((service) => <ServiceCard key={service.id} service={service} />)}</div>
+        <div className="catalog-results">{filtered.map((service, index) => <ServiceCard key={service.id} service={service} priority={index < 4} />)}</div>
       ) : (
         <div className="empty-state">По этим фильтрам предложений пока нет. Измените раздел, категорию, город или запрос.</div>
       )}

@@ -9,13 +9,7 @@ import { getCategoryById, getSupplierById, offerKindLabels } from "@/lib/demo-da
 import { formatMoney, freshnessState, responseLabel } from "@/lib/format";
 import type { Service } from "@/lib/types";
 
-const sectionImages = {
-  services: "/catalog-services-v1.png",
-  market: "/catalog-market-v1.png",
-  equipment: "/catalog-equipment-v1.png",
-} as const;
-
-export function ServiceCard({ service }: { service: Service }) {
+export function ServiceCard({ service, priority = false }: { service: Service; priority?: boolean }) {
   const { state, refresh } = useDemoSession();
   const supplier = getSupplierById(service.supplierId);
   const category = getCategoryById(service.categoryId);
@@ -29,9 +23,11 @@ export function ServiceCard({ service }: { service: Service }) {
     <article className="card service-card" data-testid="service-card">
       <div className="service-card-media">
         <Image
-          src={sectionImages[category.section]}
-          alt=""
+          src={service.imageUrl}
+          alt={`Фото предложения «${service.title}»`}
           fill
+          unoptimized
+          priority={priority}
           sizes="(max-width: 620px) 100vw, (max-width: 900px) 50vw, 25vw"
         />
         <div className="service-card-kind">

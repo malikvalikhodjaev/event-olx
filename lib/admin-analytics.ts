@@ -19,6 +19,7 @@ export type AdminAnalytics = {
   responseRate: number | null;
   repliedConversations: number;
   medianResponseMinutes: number | null;
+  totalSku: number;
   publishedServices: number;
   verifiedSuppliers: number;
   pendingModeration: number;
@@ -148,6 +149,7 @@ export function calculateAdminAnalytics(input: AdminAnalyticsInput): AdminAnalyt
     responseRate: periodConversations.length ? Math.round((repliedConversations.length / periodConversations.length) * 100) : null,
     repliedConversations: repliedConversations.length,
     medianResponseMinutes: median(responseMinutes),
+    totalSku: input.services.length,
     publishedServices: input.services.filter(
       (service) => service.published && service.active && !input.bannedSupplierIds.includes(service.supplierId),
     ).length,

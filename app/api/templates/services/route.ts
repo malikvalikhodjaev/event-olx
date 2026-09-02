@@ -35,7 +35,7 @@ export async function GET() {
   for (let row = 2; row <= 500; row += 1) {
     sheet.getCell(`C${row}`).dataValidation = { type: "list", allowBlank: false, formulae: [`Справочники!$A$2:$A$${lastCategoryRow}`] };
     sheet.getCell(`D${row}`).dataValidation = { type: "list", allowBlank: false, formulae: ['"service,sale,rental"'] };
-    sheet.getCell(`H${row}`).dataValidation = { type: "list", allowBlank: false, formulae: ['"за услугу,за час,за гостя,за день,за штуку,за набор,за комплект"'] };
+    sheet.getCell(`H${row}`).dataValidation = { type: "list", allowBlank: false, formulae: ['"за услугу,за час,за гостя,за день,за штуку,за набор,за комплект,за килограмм"'] };
     sheet.getCell(`I${row}`).dataValidation = { type: "list", allowBlank: false, formulae: ['"доступно,по запросу,недоступно"'] };
   }
 
@@ -58,7 +58,7 @@ export async function GET() {
     { header: "availability", width: 20 },
   ];
   const offerKinds = Object.keys(offerKindLabels) as OfferKind[];
-  const priceUnits: PriceUnit[] = ["за услугу", "за час", "за гостя", "за день", "за штуку", "за набор", "за комплект"];
+  const priceUnits: PriceUnit[] = ["за услугу", "за час", "за гостя", "за день", "за штуку", "за набор", "за комплект", "за килограмм"];
   const availability = ["доступно", "по запросу", "недоступно"];
   categories.forEach((category, index) => {
     reference.addRow([

@@ -87,6 +87,8 @@ test("клиент сохраняет предложение и открывае
 
 test("клиент открывает Маркет и видит товары отдельно от услуг", async ({ page }) => {
   await page.goto("/catalog");
+  await expect(page.getByText("Найдено: 48")).toBeVisible();
+  await expect(page.getByTestId("service-card")).toHaveCount(48);
   await page.getByRole("button", { name: /^Маркет/ }).click();
   await page.getByLabel("Как получить").selectOption("sale");
   await expect(page.getByText("Свадебный букет из сезонных цветов")).toBeVisible();
@@ -157,6 +159,7 @@ test("администратор видит сводку и меняет пер�
 
   await expect(page).toHaveURL(/\/admin$/);
   await expect(page.getByRole("heading", { name: "Состояние платформы" })).toBeVisible();
+  await expect(page.getByRole("article").filter({ hasText: "SKU в каталоге" }).locator("strong")).toHaveText("48");
   await expect(page.getByRole("article").filter({ hasText: "Активные пользователи" }).locator("strong")).toHaveText("1");
   await expect(page.getByRole("article").filter({ hasText: "Сейчас онлайн" }).locator("strong")).toHaveText("1");
   await page.getByRole("button", { name: "7 дней" }).click();

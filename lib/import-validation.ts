@@ -15,7 +15,7 @@ export const templateHeaders = [
 
 export const requiredTemplateHeaders = templateHeaders.filter((header) => header !== "offer_kind");
 
-const priceUnits: PriceUnit[] = ["за услугу", "за час", "за гостя", "за день", "за штуку", "за набор", "за комплект"];
+const priceUnits: PriceUnit[] = ["за услугу", "за час", "за гостя", "за день", "за штуку", "за набор", "за комплект", "за килограмм"];
 const offerKinds: OfferKind[] = ["service", "sale", "rental"];
 
 function cellText(value: unknown) {
@@ -57,8 +57,14 @@ export function importRowsToDraftServices(rows: ImportServiceRow[], supplierId: 
   const now = new Date().toISOString();
   return rows.filter((row) => row.errors.length === 0).map((row) => {
     const category = categories.find((item) => item.slug === row.category || item.name.toLowerCase() === row.category.toLowerCase());
+    const sectionImage = category?.section === "market"
+      ? "/catalog-market-v1.png"
+      : category?.section === "equipment"
+        ? "/catalog-equipment-v1.png"
+        : "/catalog-services-v1.png";
     return {
       id: `import-${row.externalId}-${crypto.randomUUID()}`,
+      sku: row.externalId,
       supplierId,
       categoryId: category?.id ?? "cat-venue",
       title: row.title,
@@ -67,6 +73,7 @@ export function importRowsToDraftServices(rows: ImportServiceRow[], supplierId: 
       priceFrom: row.priceFrom ?? 0,
       priceUnit: row.priceUnit as PriceUnit,
       offerKind: row.offerKind as OfferKind,
+      imageUrl: sectionImage,
       active: row.availability !== "недоступно",
       published: false,
       updatedAt: now,

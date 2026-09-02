@@ -45,7 +45,7 @@ export function SupplierDashboard() {
       <section className="panel">
         <div className="toolbar"><div><p className="eyebrow">Ваш каталог</p><h2>Мои предложения</h2></div><Link className="button button-primary" href="/supplier/import">Загрузить цены из Excel</Link></div>
         <div className="table-wrap"><table><thead><tr><th>Предложение</th><th>Формат</th><th>Цена от</th><th>Статус</th><th>Обновлено</th></tr></thead><tbody>{ownServices.map((service) => (
-          <tr key={service.id}><td><strong>{service.title}</strong><br /><span className="muted">{service.city}</span></td><td>{offerKindLabels[service.offerKind]}</td><td>{formatMoney(service.priceFrom)} · {service.priceUnit}</td><td><StatusBadge tone={service.published ? "success" : "warning"}>{service.published ? "Опубликовано" : "Черновик"}</StatusBadge></td><td>{formatDateTime(service.updatedAt)}</td></tr>
+          <tr key={service.id}><td><strong>{service.title}</strong><br /><span className="muted">{service.sku} · {service.city}</span></td><td>{offerKindLabels[service.offerKind]}</td><td>{formatMoney(service.priceFrom)} · {service.priceUnit}</td><td><StatusBadge tone={service.published ? "success" : "warning"}>{service.published ? "Опубликовано" : "Черновик"}</StatusBadge></td><td>{formatDateTime(service.updatedAt)}</td></tr>
         ))}</tbody></table></div>
       </section>
 
