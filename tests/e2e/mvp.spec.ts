@@ -41,6 +41,28 @@ test("главная показывает один явный первый ша�
   await expect(page.getByRole("searchbox", { name: "Что ищете" })).toHaveValue("фото");
 });
 
+test("мобильная главная начинает сценарий с поиска", async ({ page }) => {
+  await page.goto("/mobile_app");
+  await expect(page.getByRole("heading", { name: "Что нужно для события?" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Открыть раздел поставщика" })).toBeVisible();
+  await page.getByRole("searchbox", { name: "Что нужно для события?" }).fill("ведущий");
+  await page.getByRole("button", { name: "Найти", exact: true }).click();
+  await expect.poll(() => decodeURIComponent(new URL(page.url()).searchParams.get("next") ?? "")).toBe("/catalog?q=ведущий");
+});
+
+test("поставщик входит в отдельный мобильный рабочий раздел", async ({ page }) => {
+  await page.goto("/mobile_app/supplier");
+  await expect(page.getByRole("heading", { name: "Получайте обращения и управляйте предложениями" })).toBeVisible();
+  await page.getByRole("link", { name: "Войти как поставщик" }).click();
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await expect(page.getByRole("radio", { name: /Я предоставляю услуги или продаю товары/ })).toBeChecked();
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
+  await expect(page).toHaveURL(/\/mobile_app\/supplier$/);
+  await expect(page.getByRole("heading", { name: "Добрый день!" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Быстрые действия" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Загрузить прайс/ })).toBeVisible();
+});
+
 test("админ-панель не открывается без внутреннего входа", async ({ page }) => {
   await page.goto("/admin");
   await expect(page.getByRole("heading", { name: "Раздел только для сотрудников" })).toBeVisible();

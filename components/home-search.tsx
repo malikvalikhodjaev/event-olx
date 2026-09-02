@@ -4,7 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDemoSession } from "@/components/demo-session";
 
-export function HomeSearch() {
+type HomeSearchProps = {
+  variant?: "hero" | "mobile";
+};
+
+export function HomeSearch({ variant = "hero" }: HomeSearchProps) {
   const router = useRouter();
   const { state } = useDemoSession();
   const [query, setQuery] = useState("");
@@ -19,7 +23,7 @@ export function HomeSearch() {
   }
 
   return (
-    <form className="hero-search" onSubmit={submit} role="search">
+    <form className={variant === "mobile" ? "mobile-start-search" : "hero-search"} onSubmit={submit} role="search">
       <label className="sr-only" htmlFor="home-search">Что нужно для события?</label>
       <input
         id="home-search"
@@ -29,7 +33,7 @@ export function HomeSearch() {
         placeholder="Например, площадка, фотограф или цветы"
       />
       <button className="button" type="submit">Найти</button>
-      <small>Введите услугу, товар или технику — запрос сохранится после входа.</small>
+      <small>{variant === "mobile" ? "Услуга, товар или техника" : "Введите услугу, товар или технику — запрос сохранится после входа."}</small>
     </form>
   );
 }

@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { useDemoSession } from "@/components/demo-session";
 
 const guestItems = [
+  { href: "/mobile_app", icon: "⌂", label: "Главная" },
   { href: "/catalog", icon: "⌕", label: "Каталог" },
-  { href: "/planner", icon: "✓", label: "План" },
+  { href: "/mobile_app/supplier", icon: "↗", label: "Поставщикам" },
   { href: "/login", icon: "●", label: "Войти" },
 ];
 
@@ -18,9 +19,9 @@ export function MobileNavigation() {
   const items = !state.signedIn
     ? guestItems
     : [
-        { href: "/catalog", icon: "⌕", label: "Каталог" },
+        ...(isClient ? [{ href: "/mobile_app", icon: "⌂", label: "Главная" }] : []),
         ...(isClient ? [{ href: "/saved", icon: "♡", label: "Сохранено" }, { href: "/chats", icon: "↗", label: "Чаты" }] : []),
-        ...(isSupplier ? [{ href: "/supplier", icon: "↗", label: "Каталог" }, { href: "/chats", icon: "◌", label: "Чаты" }] : []),
+        ...(isSupplier ? [{ href: "/mobile_app/supplier", icon: "⌂", label: "Главная" }, { href: "/supplier", icon: "▣", label: "Предложения" }, { href: "/chats", icon: "↗", label: "Чаты" }] : []),
         ...(state.role === "admin" ? [{ href: "/admin", icon: "✓", label: "Управление" }] : []),
         { href: "/account", icon: "●", label: "Кабинет" },
       ];
@@ -28,7 +29,9 @@ export function MobileNavigation() {
   return (
     <nav className="mobile-nav" aria-label="Мобильная навигация">
       {items.map((item) => {
-        const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+        const active = item.href === "/mobile_app"
+          ? pathname === item.href
+          : pathname === item.href || pathname.startsWith(`${item.href}/`);
         return (
           <Link className={active ? "active" : ""} href={item.href} key={item.href} aria-current={active ? "page" : undefined}>
             <span aria-hidden="true">{item.icon}</span>
