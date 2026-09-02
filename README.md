@@ -39,7 +39,7 @@ pnpm test:e2e
 
 Проверка здоровья приложения: `GET /api/health`. Excel-шаблон: `GET /api/templates/services`.
 
-Последняя архитектурная запись: [ADR-001 Marosim MVP v0.8](docs/architecture/ADR-001_Marosim_MVP_Architecture_v0.8.docx). Краткое актуальное резюме хранится в [docs/architecture/ADR-001.md](docs/architecture/ADR-001.md).
+Последняя архитектурная запись: [ADR-001 Marosim MVP v0.9](docs/architecture/ADR-001_Marosim_MVP_Architecture_v0.9.docx). Краткое актуальное резюме хранится в [docs/architecture/ADR-001.md](docs/architecture/ADR-001.md).
 
 ## Production data path
 
