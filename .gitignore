@@ -29,5 +29,6 @@ _audio_work/
 
 # deployment state
 deploy/.runtime/
+.local-demo/
 *.log
 *.tsbuildinfo

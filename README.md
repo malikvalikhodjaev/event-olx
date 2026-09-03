@@ -21,6 +21,8 @@ Production-shaped validation MVP маркетплейса услуг для св
 
 Требуется Node.js 20.9+ и pnpm 11.19.0.
 
+Для автономного показа на этом компьютере дважды нажмите `START-MAROSIM-LOCAL.bat`. Скрипт при необходимости обновит production-сборку, запустит её в фоне и выведет локальные ссылки. Интернет для работы уже загруженного каталога и фотографий не нужен. Остановить локальную версию можно через `STOP-MAROSIM-LOCAL.bat`. Краткий ранбук и все адреса: [docs/LOCAL-DEMO.md](docs/LOCAL-DEMO.md).
+
 ```bash
 pnpm install --frozen-lockfile
 pnpm dev
