@@ -20,10 +20,10 @@ export default async function OfferPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ preview?: string }>;
+  searchParams: Promise<{ preview?: string; calculator?: string }>;
 }) {
   const { id } = await params;
-  const { preview } = await searchParams;
+  const { preview, calculator } = await searchParams;
   const service = services.find((item) => item.id === id) ?? null;
-  return <OfferDetail initialService={service} serviceId={id} preview={preview === "1"} />;
+  return <OfferDetail initialService={service} serviceId={id} preview={preview === "1"} calculatorOpen={calculator === "1"} />;
 }

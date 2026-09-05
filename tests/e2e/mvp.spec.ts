@@ -208,6 +208,53 @@ test("клиент пишет автору предложения и получ�
   await expect(page.locator(".chat-message p").filter({ hasText: supplierMessage })).toBeVisible();
 });
 
+test("клиент отправляет расчёт, а автор возвращает новую версию", async ({ page }) => {
+  await page.goto("/login?role=client&next=/offers/service-silk-catering");
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
+  await expect(page).toHaveURL(/\/offers\/service-silk-catering$/);
+
+  await page.getByRole("button", { name: "Рассчитать", exact: true }).click();
+  await page.getByLabel("Дата события").fill("2026-10-18");
+  await page.getByLabel("Количество людей").fill("80");
+  await expect(page.locator(".estimate-editor-footer strong")).toHaveText("19 200 000 сум");
+  await page.getByLabel("Комментарий").fill("Нужно отдельное детское меню на десять гостей.");
+  await page.getByRole("button", { name: "Отправить автору", exact: true }).click();
+
+  await expect(page).toHaveURL(/\/chats\?conversation=/);
+  await expect(page.getByTestId("estimate-version-1")).toBeVisible();
+  await expect(page.getByTestId("estimate-version-1").getByText("Запрос клиента")).toBeVisible();
+  await expect(page.getByTestId("estimate-version-1").locator("tfoot")).toContainText("19 200 000 сум");
+
+  await page.goto("/login?role=supplier&next=/chats");
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
+  await expect(page).toHaveURL(/\/chats$/);
+  await page.getByTestId("estimate-version-1").getByRole("button", { name: "Пересчитать" }).click();
+  await page.getByLabel("Цена 1").fill("300000");
+  await page.getByRole("button", { name: "Отправить новую версию" }).click({ force: true });
+
+  await expect(page.getByTestId("estimate-version-1")).toBeVisible();
+  await expect(page.getByTestId("estimate-version-2")).toBeVisible();
+  await expect(page.getByTestId("estimate-version-2").getByText("Расчёт автора")).toBeVisible();
+  await expect(page.getByTestId("estimate-version-2").locator("tfoot")).toContainText("24 000 000 сум");
+});
+
+test("черновик расчёта сохраняется во время входа", async ({ page }) => {
+  await page.goto("/offers/service-silk-catering");
+  await page.getByRole("button", { name: "Рассчитать", exact: true }).click();
+  await page.getByLabel("Дата события").fill("2026-11-07");
+  await page.getByLabel("Количество людей").fill("65");
+  await page.getByRole("button", { name: "Войти и отправить" }).click();
+
+  await expect(page).toHaveURL(/\/login\?/);
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
+  await expect(page).toHaveURL(/\/offers\/service-silk-catering\?calculator=1$/);
+  await expect(page.getByLabel("Дата события")).toHaveValue("2026-11-07");
+  await expect(page.getByLabel("Количество людей")).toHaveValue("65");
+});
+
 test("администратор фиксирует модерацию и блокировку в аудите", async ({ page }) => {
   await page.goto("/login?role=admin&next=/admin");
   await page.getByRole("button", { name: "Продолжить с Google" }).click();

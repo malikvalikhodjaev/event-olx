@@ -36,7 +36,7 @@ export function SupplierDashboard() {
               <div>
                 <strong>{(() => { const service = getServiceById(conversation.serviceId); return service ? serviceTitle(locale, service) : text("Предложение", "Taklif"); })()}</strong><br />
                 <span className="small muted">{conversation.clientName} · {formatDateTime(conversation.updatedAt, locale)}</span><br />
-                <span className="small">{lastMessage?.text}</span>
+                <span className="small">{lastMessage?.estimate ? `${text("Расчёт", "Hisob-kitob")} v${lastMessage.estimate.version}` : lastMessage?.text}</span>
               </div>
               <div><StatusBadge tone={conversation.firstSupplierResponseAt ? "success" : "warning"}>{conversation.firstSupplierResponseAt ? text("Ответили", "Javob berildi") : text("Ждёт ответа", "Javob kutmoqda")}</StatusBadge></div>
               <Link className="button button-secondary button-small" href={`/chats?conversation=${conversation.id}`}>{text("Открыть чат", "Suhbatni ochish")}</Link>

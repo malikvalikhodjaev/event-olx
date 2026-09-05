@@ -44,7 +44,12 @@ export function roleTitle(role: DemoRole, locale: Locale = "ru") {
 }
 
 export function profileDestination(role: ProfileRole, requestedPath: string) {
-  if (role === "supplier") return requestedPath === "/mobile_app/supplier" ? requestedPath : "/supplier";
+  if (role === "supplier") {
+    if (!requestedPath.startsWith("/") || requestedPath.startsWith("//")) return "/supplier";
+    return requestedPath === "/chats" || requestedPath === "/account" || requestedPath === "/supplier" || requestedPath.startsWith("/supplier/") || requestedPath === "/mobile_app/supplier"
+      ? requestedPath
+      : "/supplier";
+  }
   if (!requestedPath.startsWith("/") || requestedPath.startsWith("//")) return "/catalog";
   if (requestedPath.startsWith("/supplier") || requestedPath.startsWith("/admin")) return "/catalog";
   return requestedPath;

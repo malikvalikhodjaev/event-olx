@@ -1,7 +1,8 @@
 "use client";
 
 import { categories, getServiceById, seededConversations, seededModeration } from "@/lib/demo-data";
-import type { AuditEntry, ChatSender, Conversation, DemoRole, DemoState, ModerationStatus, Service } from "@/lib/types";
+import { createEstimateRevision, validateEstimateDraft } from "@/lib/estimate";
+import type { AuditEntry, ChatSender, Conversation, DemoRole, DemoState, EstimateDraft, ModerationStatus, Service } from "@/lib/types";
 
 const STORAGE_KEY = "eventhub-uz-demo-v1";
 
@@ -192,6 +193,90 @@ export function addChatMessage(conversationId: string, sender: ChatSender, text:
       };
     }),
   });
+}
+
+function nextEstimateVersion(conversation: Conversation | undefined) {
+  return (conversation?.messages.reduce((latest, message) => Math.max(latest, message.estimate?.version ?? 0), 0) ?? 0) + 1;
+}
+
+export function sendEstimateRequest(serviceId: string, clientAccount: string, draft: EstimateDraft) {
+  const validationErrors = validateEstimateDraft(draft);
+  if (validationErrors.length) throw new Error(`Расчёт заполнен не полностью: ${validationErrors.join(", ")}`);
+
+  const state = loadDemoState();
+  const service = getServiceById(serviceId) ?? state.importedServices.find((item) => item.id === serviceId);
+  if (!service) throw new Error("Предложение не найдено");
+  const accountKey = clientAccount.trim().toLocaleLowerCase();
+  const existing = state.conversations.find(
+    (conversation) => conversation.serviceId === serviceId && conversation.clientAccount === accountKey,
+  );
+  const now = new Date().toISOString();
+  const estimate = createEstimateRevision(draft, nextEstimateVersion(existing), "client", now, crypto.randomUUID());
+  const estimateMessage = {
+    id: crypto.randomUUID(),
+    sender: "client" as const,
+    text: `Запрос на расчёт №${estimate.version}`,
+    estimate,
+    createdAt: now,
+    readAt: null,
+  };
+
+  if (existing) {
+    saveDemoState({
+      ...state,
+      conversations: state.conversations.map((conversation) => conversation.id === existing.id
+        ? { ...conversation, updatedAt: now, messages: [...conversation.messages, estimateMessage] }
+        : conversation),
+    });
+    return existing.id;
+  }
+
+  const conversation: Conversation = {
+    id: crypto.randomUUID(),
+    clientAccount: accountKey,
+    clientName: clientAccount.includes("@") ? clientAccount.split("@")[0] : clientAccount,
+    supplierId: service.supplierId,
+    serviceId,
+    createdAt: now,
+    updatedAt: now,
+    firstSupplierResponseAt: null,
+    messages: [estimateMessage],
+  };
+  saveDemoState({ ...state, conversations: [conversation, ...state.conversations] });
+  return conversation.id;
+}
+
+export function sendEstimateRevision(conversationId: string, sender: ChatSender, draft: EstimateDraft) {
+  const validationErrors = validateEstimateDraft(draft);
+  if (validationErrors.length) throw new Error(`Расчёт заполнен не полностью: ${validationErrors.join(", ")}`);
+
+  const state = loadDemoState();
+  const conversation = state.conversations.find((item) => item.id === conversationId);
+  if (!conversation) throw new Error("Диалог не найден");
+  const now = new Date().toISOString();
+  const estimate = createEstimateRevision(draft, nextEstimateVersion(conversation), sender, now, crypto.randomUUID());
+  saveDemoState({
+    ...state,
+    conversations: state.conversations.map((item) => item.id === conversationId
+      ? {
+          ...item,
+          updatedAt: now,
+          firstSupplierResponseAt: sender === "supplier" && !item.firstSupplierResponseAt ? now : item.firstSupplierResponseAt,
+          messages: [
+            ...item.messages,
+            {
+              id: crypto.randomUUID(),
+              sender,
+              text: sender === "supplier" ? `Пересчёт автора №${estimate.version}` : `Уточнение расчёта №${estimate.version}`,
+              estimate,
+              createdAt: now,
+              readAt: null,
+            },
+          ],
+        }
+      : item),
+  });
+  return estimate;
 }
 
 export function addImportedServices(newServices: Service[]) {

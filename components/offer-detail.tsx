@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDemoSession } from "@/components/demo-session";
 import { useLocale } from "@/components/locale-provider";
 import { StatusBadge } from "@/components/status-badge";
+import { OfferEstimateBuilder } from "@/components/offer-estimate-builder";
 import { addToShortlist } from "@/lib/demo-store";
 import { getCategoryById, getSupplierById } from "@/lib/demo-data";
 import { formatDateTime, formatMoney, freshnessState, responseLabel } from "@/lib/format";
@@ -17,12 +18,14 @@ type OfferDetailProps = {
   initialService: Service | null;
   serviceId: string;
   preview: boolean;
+  calculatorOpen: boolean;
 };
 
-export function OfferDetail({ initialService, serviceId, preview }: OfferDetailProps) {
+export function OfferDetail({ initialService, serviceId, preview, calculatorOpen }: OfferDetailProps) {
   const { state, refresh } = useDemoSession();
   const { locale, text } = useLocale();
   const [selectedMediaId, setSelectedMediaId] = useState<string | null>(null);
+  const [showCalculator, setShowCalculator] = useState(calculatorOpen);
   const service = initialService ?? state.importedServices.find((item) => item.id === serviceId) ?? null;
   const supplier = service ? getSupplierById(service.supplierId) : undefined;
   const category = service ? getCategoryById(service.categoryId) : undefined;
@@ -88,6 +91,7 @@ export function OfferDetail({ initialService, serviceId, preview }: OfferDetailP
           <p className="offer-location">⌖ {cityName(locale, service.city)} · {localized(details.serviceArea)}</p>
           <div className="offer-primary-actions">
             <Link className="button button-primary" href={`/chats?service=${encodeURIComponent(service.id)}`}>{text("Написать автору", "Muallifga yozish")}</Link>
+            <button className="button button-secondary" type="button" aria-expanded={showCalculator} aria-controls="offer-estimate-title" onClick={() => setShowCalculator((current) => !current)}>{text("Рассчитать", "Hisoblash")}</button>
             <button
               className="button button-secondary"
               type="button"
@@ -102,6 +106,8 @@ export function OfferDetail({ initialService, serviceId, preview }: OfferDetailP
           </div>
         </div>
       </section>
+
+      {showCalculator ? <OfferEstimateBuilder service={service} onClose={() => setShowCalculator(false)} /> : null}
 
       <div className="offer-layout">
         <div className="offer-content">

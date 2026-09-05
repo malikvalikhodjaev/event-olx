@@ -3,11 +3,15 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useDemoSession } from "@/components/demo-session";
-import { addChatMessage, startConversation } from "@/lib/demo-store";
+import { EstimateCard } from "@/components/estimate-card";
+import { EstimateEditor } from "@/components/estimate-editor";
+import { addChatMessage, sendEstimateRevision, startConversation } from "@/lib/demo-store";
 import { getServiceById, getSupplierById } from "@/lib/demo-data";
 import { formatDateTime } from "@/lib/format";
 import { useLocale } from "@/components/locale-provider";
 import { serviceTitle } from "@/lib/i18n";
+import { estimateRevisionToDraft } from "@/lib/estimate";
+import type { EstimateDraft, EstimateRevision } from "@/lib/types";
 
 const supplierId = "supplier-silk-road";
 export function ChatWorkspace({
@@ -25,6 +29,7 @@ export function ChatWorkspace({
   const [selectedId, setSelectedId] = useState(initialConversationId);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [recalculating, setRecalculating] = useState<EstimateRevision | null>(null);
   const isSupplier = state.role === "supplier" || state.role === "supplier_planner";
   const accountKey = state.accountName.trim().toLocaleLowerCase();
   const visibleConversations = useMemo(
@@ -81,6 +86,18 @@ export function ChatWorkspace({
     refresh();
   }
 
+  function sendRecalculation(draft: EstimateDraft) {
+    if (!activeConversation || !isSupplier) return;
+    try {
+      sendEstimateRevision(activeConversation.id, "supplier", draft);
+      setRecalculating(null);
+      setError("");
+      refresh();
+    } catch (sendError) {
+      setError(sendError instanceof Error ? sendError.message : text("Не удалось отправить пересчёт", "Qayta hisob-kitobni yuborib bo‘lmadi"));
+    }
+  }
+
   return (
     <section className="chat-shell">
       <aside className="chat-sidebar" aria-label={text("Список диалогов", "Suhbatlar ro‘yxati")}>
@@ -105,7 +122,7 @@ export function ChatWorkspace({
                 <span>
                   <strong>{isSupplier ? conversation.clientName : supplier?.name}</strong>
                   <small>{service ? serviceTitle(locale, service) : ""}</small>
-                  <small>{lastMessage?.text}</small>
+                  <small>{lastMessage?.estimate ? `${text("Расчёт", "Hisob-kitob")} v${lastMessage.estimate.version}` : lastMessage?.text}</small>
                 </span>
                 <time>{formatDateTime(conversation.updatedAt, locale)}</time>
               </button>
@@ -131,9 +148,11 @@ export function ChatWorkspace({
               {activeConversation?.messages.map((item) => {
                 const ownMessage = isSupplier ? item.sender === "supplier" : item.sender === "client";
                 return (
-                  <div className={`chat-message ${ownMessage ? "own" : ""}`} key={item.id}>
-                    <p>{item.text}</p>
-                    <time>{formatDateTime(item.createdAt, locale)}</time>
+                  <div className={`chat-message ${ownMessage ? "own" : ""} ${item.estimate ? "estimate-message" : ""}`} key={item.id}>
+                    {item.estimate ? (
+                      <EstimateCard revision={item.estimate} canRecalculate={isSupplier} onRecalculate={() => setRecalculating(item.estimate ?? null)} />
+                    ) : <p>{item.text}</p>}
+                    {!item.estimate ? <time>{formatDateTime(item.createdAt, locale)}</time> : null}
                   </div>
                 );
               })}
@@ -145,6 +164,13 @@ export function ChatWorkspace({
                 </div>
               ) : null}
             </div>
+
+            {recalculating && isSupplier ? (
+              <section className="chat-estimate-editor" aria-labelledby="chat-recalculation-title">
+                <div className="toolbar"><div><p className="eyebrow">{text("Ответ клиенту", "Mijozga javob")}</p><h3 id="chat-recalculation-title">{text("Пересчитать", "Qayta hisoblash")} v{recalculating.version}</h3></div></div>
+                <EstimateEditor key={recalculating.id} initialDraft={estimateRevisionToDraft(recalculating)} submitLabel={text("Отправить новую версию", "Yangi versiyani yuborish")} onSubmit={sendRecalculation} onCancel={() => setRecalculating(null)} />
+              </section>
+            ) : null}
 
             {!isSupplier && (!activeConversation || activeConversation.messages.length < 2) ? (
               <div className="quick-messages" aria-label={text("Быстрые вопросы", "Tezkor savollar")}>

@@ -11,5 +11,6 @@ describe("profile roles", () => {
     expect(profileDestination("client", "/supplier")).toBe("/catalog");
     expect(profileDestination("supplier", "/catalog?q=%D1%84%D0%BE%D1%82%D0%BE")).toBe("/supplier");
     expect(profileDestination("supplier", "/mobile_app/supplier")).toBe("/mobile_app/supplier");
+    expect(profileDestination("supplier", "/chats")).toBe("/chats");
   });
 });

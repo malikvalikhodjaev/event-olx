@@ -996,9 +996,116 @@ h3 {
 
 .offer-primary-actions {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   gap: 9px;
   margin-top: 24px;
+}
+
+.offer-estimate-builder {
+  margin-bottom: 24px;
+  border: 2px solid var(--ink);
+  border-radius: 26px;
+  padding: clamp(20px, 4vw, 34px);
+  background: #fffdf0;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.07);
+}
+
+.offer-estimate-builder h2,
+.offer-estimate-builder p {
+  margin-top: 0;
+}
+
+.estimate-editor {
+  display: grid;
+  gap: 16px;
+}
+
+.estimate-event-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.estimate-table-wrap {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.estimate-table {
+  min-width: 760px;
+}
+
+.estimate-table th,
+.estimate-table td,
+.estimate-card-table th,
+.estimate-card-table td {
+  padding: 10px;
+  vertical-align: middle;
+}
+
+.estimate-table input,
+.estimate-table select {
+  width: 100%;
+  min-width: 82px;
+  border: 1px solid #d5d5d5;
+  border-radius: 10px;
+  padding: 9px 10px;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.estimate-table td:first-child input {
+  min-width: 210px;
+}
+
+.estimate-remove {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: #eeeeec;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.estimate-remove:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.estimate-note-field textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #cfcfcf;
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.estimate-editor-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.estimate-editor-footer > div:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.estimate-editor-footer span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.estimate-editor-footer strong {
+  font-size: 24px;
 }
 
 .offer-layout {
@@ -1562,6 +1669,111 @@ h3 {
   align-self: flex-end;
   border-radius: 18px 18px 5px 18px;
   background: var(--yellow-soft);
+}
+
+.chat-message.estimate-message {
+  width: min(92%, 760px);
+  max-width: 760px;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.estimate-card {
+  overflow: hidden;
+  border: 1px solid #d8d8d4;
+  border-radius: 18px;
+  padding: 18px;
+  background: #ffffff;
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.06);
+}
+
+.chat-message.own .estimate-card {
+  border-color: #e4d46c;
+  background: var(--yellow-soft);
+}
+
+.estimate-card header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.estimate-card header h3,
+.estimate-card header p {
+  margin: 0;
+}
+
+.estimate-card header time {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.estimate-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.estimate-summary div {
+  display: grid;
+  gap: 2px;
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.045);
+}
+
+.estimate-summary dt {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.estimate-summary dd {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.estimate-card-table {
+  min-width: 540px;
+  background: #ffffff;
+}
+
+.estimate-card-table small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.estimate-card-table tfoot {
+  font-weight: 850;
+}
+
+.estimate-card-note {
+  margin-top: 12px !important;
+  font-size: 12px;
+}
+
+.estimate-disclaimer {
+  margin: 12px 0 !important;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.chat-estimate-editor {
+  max-height: min(72vh, 680px);
+  overflow-y: auto;
+  border-top: 1px solid var(--line);
+  padding: 18px;
+  background: #fffdf0;
+}
+
+.chat-estimate-editor h3,
+.chat-estimate-editor p {
+  margin-top: 0;
 }
 
 .chat-message p {
@@ -3260,6 +3472,48 @@ body:has(.mobile-app-home) .main > .shell {
 
   .chat-message {
     max-width: 88%;
+  }
+
+  .offer-primary-actions,
+  .estimate-event-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .offer-primary-actions .button {
+    width: 100%;
+  }
+
+  .offer-estimate-builder {
+    border-radius: 20px;
+    padding: 18px 14px;
+  }
+
+  .estimate-editor-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .estimate-editor-footer .actions,
+  .estimate-editor-footer .button {
+    width: 100%;
+  }
+
+  .chat-message.estimate-message {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .estimate-card {
+    padding: 14px;
+  }
+
+  .estimate-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-estimate-editor {
+    max-height: none;
+    padding: 14px 12px;
   }
 
   .quick-messages {

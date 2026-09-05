@@ -113,10 +113,35 @@ export type OfferDetails = {
 
 export type ChatSender = "client" | "supplier";
 
+export type EstimateLine = {
+  id: string;
+  title: string;
+  quantity: number;
+  unit: string;
+  unitPrice: number;
+};
+
+export type EstimateDraft = {
+  eventDate: string;
+  city: string;
+  guestCount: number;
+  note: string;
+  lines: EstimateLine[];
+};
+
+export type EstimateRevision = EstimateDraft & {
+  id: string;
+  version: number;
+  sender: ChatSender;
+  total: number;
+  createdAt: string;
+};
+
 export type ChatMessage = {
   id: string;
   sender: ChatSender;
   text: string;
+  estimate?: EstimateRevision;
   createdAt: string;
   readAt: string | null;
 };

@@ -84,7 +84,7 @@ export function MobileSupplierHome() {
                 return (
                   <Link href={`/chats?conversation=${conversation.id}`} key={conversation.id}>
                     <span className="chat-avatar" aria-hidden="true">{conversation.clientName.slice(0, 1)}</span>
-                    <span><strong>{conversation.clientName}</strong><small>{service ? serviceTitle(locale, service) : ""}</small><em>{lastMessage?.text}</em></span>
+                    <span><strong>{conversation.clientName}</strong><small>{service ? serviceTitle(locale, service) : ""}</small><em>{lastMessage?.estimate ? `${text("Расчёт", "Hisob-kitob")} v${lastMessage.estimate.version}` : lastMessage?.text}</em></span>
                     {!conversation.firstSupplierResponseAt ? <b>{text("Новый", "Yangi")}</b> : <span aria-hidden="true">›</span>}
                   </Link>
                 );
