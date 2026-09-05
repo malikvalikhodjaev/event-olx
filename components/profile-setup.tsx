@@ -2,19 +2,22 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useDemoSession } from "@/components/demo-session";
 import { isProfileRole, profileDestination, profileRoleOptions, type ProfileRole } from "@/lib/roles";
 import { useLocale } from "@/components/locale-provider";
 
 export function ProfileSetup({ initialIntent = "client", initialNext = "/catalog" }: { initialIntent?: string; initialNext?: string }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const resolvedInitialIntent = searchParams.get("intent") ?? initialIntent;
+  const resolvedInitialNext = searchParams.get("next") ?? initialNext;
   const { state, setRole } = useDemoSession();
   const { locale, text } = useLocale();
-  const [role, chooseRole] = useState<ProfileRole>(isProfileRole(initialIntent) ? initialIntent : "client");
+  const [role, chooseRole] = useState<ProfileRole>(isProfileRole(resolvedInitialIntent) ? resolvedInitialIntent : "client");
 
   if (!state.signedIn) {
-    const loginHref = `/login?role=${role}&next=${encodeURIComponent(initialNext)}`;
+    const loginHref = `/login?role=${role}&next=${encodeURIComponent(resolvedInitialNext)}`;
     return (
       <section className="panel account-summary">
         <p className="eyebrow">{text("Профиль", "Profil")}</p>
@@ -28,7 +31,7 @@ export function ProfileSetup({ initialIntent = "client", initialNext = "/catalog
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setRole(role);
-    router.replace(profileDestination(role, initialNext));
+    router.replace(profileDestination(role, resolvedInitialNext));
   }
 
   return (

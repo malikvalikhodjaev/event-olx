@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { LoginForm } from "@/components/login-form";
 
 export const metadata: Metadata = { title: "Вход в Маросим" };
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ role?: string; next?: string }> }) {
-  const params = await searchParams;
-  return <LoginForm initialRole={params.role} initialNext={params.next} />;
+export default function LoginPage() {
+  return <Suspense fallback={<div className="panel" aria-busy="true">Открываем вход…</div>}><LoginForm /></Suspense>;
 }

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useDemoSession } from "@/components/demo-session";
 import { EstimateCard } from "@/components/estimate-card";
 import { EstimateEditor } from "@/components/estimate-editor";
@@ -15,18 +16,21 @@ import type { EstimateDraft, EstimateRevision } from "@/lib/types";
 
 const supplierId = "supplier-silk-road";
 export function ChatWorkspace({
-  initialServiceId = "",
-  initialConversationId = "",
+  initialServiceId,
+  initialConversationId,
 }: {
   initialServiceId?: string;
   initialConversationId?: string;
 }) {
+  const searchParams = useSearchParams();
+  const resolvedServiceId = initialServiceId ?? searchParams.get("service") ?? "";
+  const resolvedConversationId = initialConversationId ?? searchParams.get("conversation") ?? "";
   const { state, refresh } = useDemoSession();
   const { locale, text } = useLocale();
   const quickMessages = locale === "uz"
     ? ["Kerakli sana bo‘shmi?", "Narxga nimalar kiradi?", "Yakuniy narxni ayting"]
     : ["Свободна ли нужная дата?", "Что входит в стоимость?", "Подскажите итоговую цену"];
-  const [selectedId, setSelectedId] = useState(initialConversationId);
+  const [selectedId, setSelectedId] = useState(resolvedConversationId);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [recalculating, setRecalculating] = useState<EstimateRevision | null>(null);
@@ -43,18 +47,18 @@ export function ChatWorkspace({
   const routeConversation = selectedId
     ? visibleConversations.find((conversation) => conversation.id === selectedId)
     : undefined;
-  const serviceConversation = initialServiceId
-    ? visibleConversations.find((conversation) => conversation.serviceId === initialServiceId)
+  const serviceConversation = resolvedServiceId
+    ? visibleConversations.find((conversation) => conversation.serviceId === resolvedServiceId)
     : undefined;
   const activeConversation = routeConversation
     ?? serviceConversation
-    ?? (!initialServiceId ? visibleConversations[0] : undefined);
-  const draftService = !activeConversation && initialServiceId ? getServiceById(initialServiceId) : undefined;
+    ?? (!resolvedServiceId ? visibleConversations[0] : undefined);
+  const draftService = !activeConversation && resolvedServiceId ? getServiceById(resolvedServiceId) : undefined;
   const activeService = activeConversation ? getServiceById(activeConversation.serviceId) : draftService;
   const activeSupplier = activeService ? getSupplierById(activeService.supplierId) : undefined;
 
   if (!state.signedIn) {
-    const destination = `/chats${initialServiceId ? `?service=${encodeURIComponent(initialServiceId)}` : ""}`;
+    const destination = `/chats${resolvedServiceId ? `?service=${encodeURIComponent(resolvedServiceId)}` : ""}`;
     return (
       <section className="panel empty-state chat-sign-in">
         <h2>{text("Войдите, чтобы написать автору предложения", "E’lon muallifiga yozish uchun kiring")}</h2>

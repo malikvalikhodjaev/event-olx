@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import { RequestChatRedirect } from "@/components/request-chat-redirect";
 
-export default async function NewRequestPage({ searchParams }: { searchParams: Promise<{ service?: string }> }) {
-  const params = await searchParams;
-  redirect(`/chats${params.service ? `?service=${encodeURIComponent(params.service)}` : ""}`);
+export default function NewRequestPage() {
+  return <Suspense fallback={<div className="panel" aria-busy="true">Открываем сообщения…</div>}><RequestChatRedirect /></Suspense>;
 }

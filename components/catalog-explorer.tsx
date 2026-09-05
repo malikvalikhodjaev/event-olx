@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { ServiceCard } from "@/components/service-card";
 import { catalogSections, categories, offerKindLabels, services } from "@/lib/demo-data";
 import type { CatalogSection, OfferKind } from "@/lib/types";
@@ -16,19 +17,25 @@ type CatalogExplorerProps = {
   initialEvent?: string;
 };
 
-export function CatalogExplorer({ initialQuery = "", initialCategory = "", initialSection = "", initialKind = "", initialEvent = "" }: CatalogExplorerProps) {
+export function CatalogExplorer({ initialQuery, initialCategory, initialSection, initialKind, initialEvent }: CatalogExplorerProps) {
+  const searchParams = useSearchParams();
+  const resolvedInitialQuery = initialQuery ?? searchParams.get("q") ?? "";
+  const resolvedInitialCategory = initialCategory ?? searchParams.get("category") ?? "";
+  const resolvedInitialSection = initialSection ?? searchParams.get("section") ?? "";
+  const resolvedInitialKind = initialKind ?? searchParams.get("kind") ?? "";
+  const resolvedInitialEvent = initialEvent ?? searchParams.get("event") ?? "";
   const { locale, text } = useLocale();
-  const initialCategoryDefinition = categories.find((item) => item.id === initialCategory);
-  const normalizedInitialSection = catalogSections.some((item) => item.id === initialSection)
-    ? initialSection as CatalogSection
+  const initialCategoryDefinition = categories.find((item) => item.id === resolvedInitialCategory);
+  const normalizedInitialSection = catalogSections.some((item) => item.id === resolvedInitialSection)
+    ? resolvedInitialSection as CatalogSection
     : initialCategoryDefinition?.section ?? "";
-  const normalizedInitialKind = Object.hasOwn(offerKindLabels, initialKind) ? initialKind as OfferKind : "";
-  const [query, setQuery] = useState(initialQuery);
-  const [category, setCategory] = useState(initialCategory);
+  const normalizedInitialKind = Object.hasOwn(offerKindLabels, resolvedInitialKind) ? resolvedInitialKind as OfferKind : "";
+  const [query, setQuery] = useState(resolvedInitialQuery);
+  const [category, setCategory] = useState(resolvedInitialCategory);
   const [section, setSection] = useState<CatalogSection | "">(normalizedInitialSection);
   const [kind, setKind] = useState<OfferKind | "">(normalizedInitialKind);
   const [city, setCity] = useState("");
-  const [eventType, setEventType] = useState(eventTypeOptions.some((item) => item.ru === initialEvent) ? initialEvent : "");
+  const [eventType, setEventType] = useState(eventTypeOptions.some((item) => item.ru === resolvedInitialEvent) ? resolvedInitialEvent : "");
 
   const availableCategories = useMemo(
     () => categories.filter((item) => !section || item.section === section),

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geologica } from "next/font/google";
-import { cookies } from "next/headers";
 import "./globals.css";
 import { DemoSessionProvider } from "@/components/demo-session";
 import { LocaleProvider } from "@/components/locale-provider";
@@ -8,7 +7,6 @@ import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { SiteHeader } from "@/components/site-header";
 import { MobileNavigation } from "@/components/mobile-navigation";
 import { SiteFooter } from "@/components/site-footer";
-import { localeCookieName, normalizeLocale } from "@/lib/i18n";
 
 const geologica = Geologica({
   subsets: ["cyrillic", "latin"],
@@ -30,13 +28,11 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const locale = normalizeLocale((await cookies()).get(localeCookieName)?.value);
-
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang={locale} data-scroll-behavior="smooth">
+    <html lang="ru" data-scroll-behavior="smooth">
       <body className={geologica.variable}>
-        <LocaleProvider initialLocale={locale}>
+        <LocaleProvider initialLocale="ru">
           <DemoSessionProvider>
             <ServiceWorkerRegister />
             <SiteHeader />

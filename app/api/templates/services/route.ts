@@ -4,6 +4,7 @@ import { catalogSections, categories, offerKindLabels } from "@/lib/demo-data";
 import type { OfferKind, PriceUnit } from "@/lib/types";
 
 export const runtime = "nodejs";
+export const dynamic = "force-static";
 
 export async function GET() {
   const workbook = new ExcelJS.Workbook();

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useDemoSession } from "@/components/demo-session";
 import { completeQueuedShortlist } from "@/lib/demo-store";
 import { roleDestination } from "@/lib/roles";
@@ -19,25 +19,28 @@ function safeNext(initialNext: string, fallback: string) {
 
 export function LoginForm({ initialRole = "client", initialNext = "" }: { initialRole?: string; initialNext?: string }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const resolvedInitialRole = searchParams.get("role") ?? initialRole;
+  const resolvedInitialNext = searchParams.get("next") ?? initialNext;
   const { signIn } = useDemoSession();
   const { text } = useLocale();
   const [phone, setPhone] = useState("");
   const [code, setCode] = useState("");
   const [codeRequested, setCodeRequested] = useState(false);
   const [error, setError] = useState("");
-  const isAdminLogin = initialRole === "admin";
-  const initialIntent = initialRole === "supplier" || initialRole === "supplier_planner" ? "supplier" : "client";
+  const isAdminLogin = resolvedInitialRole === "admin";
+  const initialIntent = resolvedInitialRole === "supplier" || resolvedInitialRole === "supplier_planner" ? "supplier" : "client";
 
   function finish(account: string) {
     if (isAdminLogin) {
       signIn("admin", account);
-      router.replace(safeNext(initialNext, roleDestination("admin")));
+      router.replace(safeNext(resolvedInitialNext, roleDestination("admin")));
       return;
     }
 
     signIn("client", account);
     completeQueuedShortlist();
-    const next = safeNext(initialNext, roleDestination("client"));
+    const next = safeNext(resolvedInitialNext, roleDestination("client"));
     router.replace(`/onboarding?intent=${initialIntent}&next=${encodeURIComponent(next)}`);
   }
 

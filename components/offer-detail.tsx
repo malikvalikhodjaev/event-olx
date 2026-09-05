@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDemoSession } from "@/components/demo-session";
 import { useLocale } from "@/components/locale-provider";
@@ -24,10 +24,13 @@ type OfferDetailProps = {
 
 export function OfferDetail({ initialService, serviceId, preview, calculatorOpen }: OfferDetailProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const previewMode = preview || searchParams.get("preview") === "1";
+  const initialCalculatorOpen = calculatorOpen || searchParams.get("calculator") === "1";
   const { state, refresh } = useDemoSession();
   const { locale, text } = useLocale();
   const [selectedMediaId, setSelectedMediaId] = useState<string | null>(null);
-  const [showCalculator, setShowCalculator] = useState(calculatorOpen);
+  const [showCalculator, setShowCalculator] = useState(initialCalculatorOpen);
   const service = initialService ?? state.importedServices.find((item) => item.id === serviceId) ?? null;
   const supplier = service ? getSupplierById(service.supplierId) : undefined;
   const category = service ? getCategoryById(service.categoryId) : undefined;
@@ -61,7 +64,7 @@ export function OfferDetail({ initialService, serviceId, preview, calculatorOpen
 
   return (
     <article className="offer-detail-page">
-      {preview && !service.published ? (
+      {previewMode && !service.published ? (
         <div className="offer-preview-bar" role="status">
           <span><strong>{text("Предпросмотр", "Ko‘rib chiqish")}</strong> · {text("эту страницу пока видите только вы", "bu sahifani hozircha faqat siz ko‘rasiz")}</span>
           <StatusBadge tone="warning">{text("Черновик", "Qoralama")}</StatusBadge>

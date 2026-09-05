@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { localeCookieName, type Locale } from "@/lib/i18n";
+import { createContext, useCallback, useContext, useEffect, useMemo, useSyncExternalStore } from "react";
+import { localeCookieName, normalizeLocale, type Locale } from "@/lib/i18n";
 
 type LocaleContextValue = {
   locale: Locale;
@@ -11,8 +11,21 @@ type LocaleContextValue = {
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
+function getLocaleSnapshot() {
+  const storedLocale = document.cookie
+    .split("; ")
+    .find((item) => item.startsWith(`${localeCookieName}=`))
+    ?.split("=")[1];
+  return normalizeLocale(storedLocale);
+}
+
+function subscribeLocale(onStoreChange: () => void) {
+  window.addEventListener("marosim-locale-change", onStoreChange);
+  return () => window.removeEventListener("marosim-locale-change", onStoreChange);
+}
+
 export function LocaleProvider({ initialLocale, children }: { initialLocale: Locale; children: React.ReactNode }) {
-  const [locale, updateLocale] = useState(initialLocale);
+  const locale = useSyncExternalStore(subscribeLocale, getLocaleSnapshot, () => initialLocale);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -21,7 +34,7 @@ export function LocaleProvider({ initialLocale, children }: { initialLocale: Loc
   const setLocale = useCallback((nextLocale: Locale) => {
     document.cookie = `${localeCookieName}=${nextLocale}; Max-Age=31536000; Path=/; SameSite=Lax`;
     document.documentElement.lang = nextLocale;
-    updateLocale(nextLocale);
+    window.dispatchEvent(new Event("marosim-locale-change"));
   }, []);
 
   const text = useCallback((ru: string, uz: string) => locale === "uz" ? uz : ru, [locale]);

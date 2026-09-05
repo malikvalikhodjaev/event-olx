@@ -325,7 +325,7 @@ test("автор предложения загружает Excel и создае
   await expect(page.getByText("Черновик", { exact: true }).last()).toBeVisible();
   const previewLink = page.getByRole("link", { name: "Предпросмотр" });
   const previewHref = await previewLink.getAttribute("href");
-  expect(previewHref).toMatch(/^\/offers\/import-.+\?preview=1$/);
+  expect(previewHref).toMatch(/^\/offers\/preview\?id=import-.+$/);
   await page.goto(previewHref!);
   await expect(page.getByRole("heading", { name: "Новый банкетный пакет" })).toBeVisible();
   await expect(page.getByRole("status").filter({ hasText: "эту страницу пока видите только вы" })).toBeVisible();
