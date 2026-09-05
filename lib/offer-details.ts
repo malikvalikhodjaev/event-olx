@@ -1,15 +1,43 @@
 import { catalogSeedServices } from "@/lib/catalog-seed";
+import { serviceDescription, serviceTitle } from "@/lib/i18n";
 import type { LocalizedCopy, OfferDetails, OfferFact, OfferPackage, Service } from "@/lib/types";
 
 const copy = (ru: string, uz: string): LocalizedCopy => ({ ru, uz });
 
+const EVENT = {
+  wedding: copy("Свадьба", "To‘y"),
+  nikah: copy("Никах / религиозный обряд", "Nikoh / diniy marosim"),
+  birthday: copy("Юбилей / день рождения", "Yubiley / tug‘ilgan kun"),
+  children: copy("Детский праздник", "Bolalar bayrami"),
+  corporate: copy("Корпоратив / конференция", "Korporativ / konferensiya"),
+  teamBuilding: copy("Тимбилдинг", "Timbilding"),
+  horeca: copy("Событие HoReCa", "HoReCa tadbiri"),
+  family: copy("Другое семейное торжество", "Boshqa oilaviy bayram"),
+  proposal: copy("Предложение руки и сердца", "Nikoh taklifi"),
+};
+
+export const eventTypeOptions = [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.children, EVENT.corporate, EVENT.teamBuilding, EVENT.horeca, EVENT.family];
+
 const eventTypesByCategory: Record<string, LocalizedCopy[]> = {
-  "cat-venue": [copy("Свадьба", "To‘y"), copy("Никах", "Nikoh"), copy("День рождения", "Tug‘ilgan kun"), copy("Корпоратив", "Korporativ")],
-  "cat-catering": [copy("Свадьба", "To‘y"), copy("Семейное торжество", "Oilaviy bayram"), copy("Корпоратив", "Korporativ")],
-  "cat-photo": [copy("Свадьба", "To‘y"), copy("Никах", "Nikoh"), copy("Love story", "Love story"), copy("Деловое событие", "Biznes tadbir")],
-  "cat-host": [copy("Свадьба", "To‘y"), copy("Никах", "Nikoh"), copy("День рождения", "Tug‘ilgan kun"), copy("Корпоратив", "Korporativ")],
-  "cat-training": [copy("Тимбилдинг", "Timbilding"), copy("Тренинг", "Trening"), copy("Конференция", "Konferensiya")],
-  "cat-marry-me": [copy("Предложение руки и сердца", "Nikoh taklifi"), copy("Помолвка", "Fotiha"), copy("Love story", "Love story")],
+  "cat-venue": [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.corporate, EVENT.horeca, EVENT.family],
+  "cat-catering": [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.corporate, EVENT.horeca, EVENT.family],
+  "cat-photo": [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.corporate, EVENT.family],
+  "cat-decor": [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.children, EVENT.corporate, EVENT.horeca, EVENT.family],
+  "cat-host": [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.children, EVENT.corporate, EVENT.horeca, EVENT.family],
+  "cat-music": [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.corporate, EVENT.horeca, EVENT.family],
+  "cat-transport": [EVENT.wedding, EVENT.corporate, EVENT.family],
+  "cat-training": [EVENT.corporate, EVENT.teamBuilding],
+  "cat-planning": [EVENT.wedding, EVENT.corporate, EVENT.teamBuilding, EVENT.horeca, EVENT.family],
+  "cat-flowers": [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.family],
+  "cat-event-details": [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.children, EVENT.family],
+  "cat-gifts-print": [EVENT.wedding, EVENT.birthday, EVENT.corporate, EVENT.family],
+  "cat-cakes": [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.children, EVENT.family],
+  "cat-tableware": [EVENT.wedding, EVENT.birthday, EVENT.corporate, EVENT.horeca, EVENT.family],
+  "cat-sound-light": [EVENT.wedding, EVENT.birthday, EVENT.corporate, EVENT.teamBuilding, EVENT.horeca],
+  "cat-screens-stage": [EVENT.wedding, EVENT.corporate, EVENT.teamBuilding, EVENT.horeca],
+  "cat-event-rental": [EVENT.wedding, EVENT.birthday, EVENT.corporate, EVENT.teamBuilding, EVENT.horeca, EVENT.family],
+  "cat-power-effects": [EVENT.wedding, EVENT.birthday, EVENT.corporate, EVENT.teamBuilding, EVENT.horeca],
+  "cat-marry-me": [EVENT.proposal, EVENT.wedding, EVENT.family],
 };
 
 const categoryFacts: Record<string, OfferFact[]> = {
@@ -117,7 +145,7 @@ function fullDescription(service: Service): LocalizedCopy {
 
   return copy(
     `${service.description} Перед заказом автор уточнит дату, место, нужный объём и дополнительные пожелания. Итоговый состав и цена фиксируются в переписке после уточнения деталей.`,
-    `${service.description} Buyurtmadan oldin muallif sana, joy, kerakli hajm va qo‘shimcha istaklarni aniqlaydi. Yakuniy tarkib va narx tafsilotlar aniqlangach suhbatda qayd etiladi.`,
+    `${serviceDescription("uz", service)} Buyurtmadan oldin muallif sana, joy, kerakli hajm va qo‘shimcha istaklarni aniqlaydi. Yakuniy tarkib va narx tafsilotlar aniqlangach suhbatda qayd etiladi.`,
   );
 }
 
@@ -129,17 +157,17 @@ export function getOfferDetails(service: Service): OfferDetails {
     .map((item, index) => ({
       id: `${service.id}-media-${index + 1}`,
       type: "image" as const,
-      title: copy(item.title, item.title),
+      title: copy(item.title, serviceTitle("uz", item)),
       url: item.imageUrl,
     }));
 
   const media = relatedMedia.some((item) => item.url === service.imageUrl)
     ? relatedMedia
-    : [{ id: `${service.id}-media-cover`, type: "image" as const, title: copy(service.title, service.title), url: service.imageUrl }, ...relatedMedia].slice(0, 5);
+    : [{ id: `${service.id}-media-cover`, type: "image" as const, title: copy(service.title, serviceTitle("uz", service)), url: service.imageUrl }, ...relatedMedia].slice(0, 5);
 
   return {
     fullDescription: fullDescription(service),
-    eventTypes: eventTypesByCategory[service.categoryId] ?? [copy("Свадьба", "To‘y"), copy("Семейное торжество", "Oilaviy bayram")],
+    eventTypes: eventTypesByCategory[service.categoryId] ?? [EVENT.wedding, EVENT.family],
     serviceArea: copy(`${service.city} и ближайшие районы`, `${service.city} va yaqin hududlar`),
     travelTerms: copy("Выезд за пределы города рассчитывается отдельно", "Shahar tashqarisiga chiqish alohida hisoblanadi"),
     availabilityNote: copy("Свободную дату или наличие автор подтверждает в чате", "Bo‘sh sana yoki mavjudlikni muallif suhbatda tasdiqlaydi"),

@@ -9,7 +9,7 @@ import { getCategoryById, getSupplierById } from "@/lib/demo-data";
 import { formatMoney, freshnessState, responseLabel } from "@/lib/format";
 import type { Service } from "@/lib/types";
 import { useLocale } from "@/components/locale-provider";
-import { categoryName, cityName, offerKindLabelsByLocale, priceUnit } from "@/lib/i18n";
+import { categoryName, cityName, offerKindLabelsByLocale, priceUnit, serviceDescription, serviceTitle } from "@/lib/i18n";
 
 export function ServiceCard({ service, priority = false }: { service: Service; priority?: boolean }) {
   const { state, refresh } = useDemoSession();
@@ -19,6 +19,8 @@ export function ServiceCard({ service, priority = false }: { service: Service; p
   const freshness = freshnessState(service.updatedAt, undefined, locale);
   const shortlisted = state.shortlist.includes(service.id);
   const chatDestination = `/chats?service=${encodeURIComponent(service.id)}`;
+  const localizedTitle = serviceTitle(locale, service);
+  const localizedDescription = serviceDescription(locale, service);
 
   if (!supplier || !category) return null;
 
@@ -27,7 +29,7 @@ export function ServiceCard({ service, priority = false }: { service: Service; p
       <div className="service-card-media">
         <Image
           src={service.imageUrl}
-          alt={`${text("Фото предложения", "Taklif surati")} «${service.title}»`}
+          alt={`${text("Фото предложения", "Taklif surati")} «${localizedTitle}»`}
           fill
           unoptimized
           priority={priority}
@@ -51,8 +53,8 @@ export function ServiceCard({ service, priority = false }: { service: Service; p
       </div>
       <div className="service-card-body">
         <p className="service-card-category">{categoryName(locale, category)}</p>
-        <h3><Link href={`/offers/${service.id}`}>{service.title}</Link></h3>
-        <p className="service-card-description">{service.description}</p>
+        <h3><Link href={`/offers/${service.id}`}>{localizedTitle}</Link></h3>
+        <p className="service-card-description">{localizedDescription}</p>
         <p className="service-price">{text("от", "dan")} {formatMoney(service.priceFrom, locale)} <span>{priceUnit(locale, service.priceUnit)}</span></p>
         <p className="service-card-meta">{cityName(locale, service.city)} · {supplier.name}</p>
         <div className="service-card-signals">

@@ -6,7 +6,7 @@ import { categories, getCategoryById, services } from "@/lib/demo-data";
 import { loadDemoState, saveDemoState } from "@/lib/demo-store";
 import { formatMoney } from "@/lib/format";
 import { useLocale } from "@/components/locale-provider";
-import { categoryName } from "@/lib/i18n";
+import { categoryName, serviceTitle } from "@/lib/i18n";
 
 export function WeddingPlanner() {
   const { state, refresh } = useDemoSession();
@@ -62,7 +62,7 @@ export function WeddingPlanner() {
                     onChange={(event) => patchItem(item.categoryId, { selectedServiceId: event.target.value || null, done: Boolean(event.target.value) })}
                   >
                     <option value="">{text("Пока не выбрана", "Hali tanlanmagan")}</option>
-                    {(serviceOptions[category.id] ?? []).map((service) => <option key={service.id} value={service.id}>{service.title}</option>)}
+                    {(serviceOptions[category.id] ?? []).map((service) => <option key={service.id} value={service.id}>{serviceTitle(locale, service)}</option>)}
                   </select>
                 </div>
                 <div className="field">

@@ -9,7 +9,7 @@ import { StatusBadge } from "@/components/status-badge";
 import { addToShortlist } from "@/lib/demo-store";
 import { getCategoryById, getSupplierById } from "@/lib/demo-data";
 import { formatDateTime, formatMoney, freshnessState, responseLabel } from "@/lib/format";
-import { categoryName, cityName, offerKindLabelsByLocale, priceUnit } from "@/lib/i18n";
+import { categoryName, cityName, offerKindLabelsByLocale, priceUnit, serviceDescription, serviceTitle } from "@/lib/i18n";
 import { getOfferDetails } from "@/lib/offer-details";
 import type { LocalizedCopy, Service } from "@/lib/types";
 
@@ -51,6 +51,8 @@ export function OfferDetail({ initialService, serviceId, preview }: OfferDetailP
   const freshness = freshnessState(service.updatedAt, undefined, locale);
   const shortlisted = state.shortlist.includes(service.id);
   const localized = (value: LocalizedCopy) => value[locale];
+  const localizedTitle = serviceTitle(locale, service);
+  const localizedDescription = serviceDescription(locale, service);
 
   return (
     <article className="offer-detail-page">
@@ -69,7 +71,7 @@ export function OfferDetail({ initialService, serviceId, preview }: OfferDetailP
 
       <section className="offer-hero">
         <button className="offer-cover" type="button" onClick={() => setSelectedMediaId(details.media[0]?.id ?? null)} aria-label={text("Увеличить главную фотографию", "Asosiy suratni kattalashtirish")}>
-          <Image src={service.imageUrl} alt={`${text("Главная фотография", "Asosiy surat")} — ${service.title}`} fill unoptimized priority sizes="(max-width: 900px) 100vw, 58vw" />
+          <Image src={service.imageUrl} alt={`${text("Главная фотография", "Asosiy surat")} — ${localizedTitle}`} fill unoptimized priority sizes="(max-width: 900px) 100vw, 58vw" />
           <span className="offer-cover-hint">↗ {text("Увеличить", "Kattalashtirish")}</span>
         </button>
 
@@ -80,8 +82,8 @@ export function OfferDetail({ initialService, serviceId, preview }: OfferDetailP
             {supplier.verified ? <StatusBadge tone="success">✓ {text("Автор проверен", "Muallif tekshirilgan")}</StatusBadge> : null}
           </div>
           <p className="eyebrow">{categoryName(locale, category)}</p>
-          <h1>{service.title}</h1>
-          <p className="offer-summary">{service.description}</p>
+          <h1>{localizedTitle}</h1>
+          <p className="offer-summary">{localizedDescription}</p>
           <p className="offer-price">{text("от", "dan")} {formatMoney(service.priceFrom, locale)} <span>{priceUnit(locale, service.priceUnit)}</span></p>
           <p className="offer-location">⌖ {cityName(locale, service.city)} · {localized(details.serviceArea)}</p>
           <div className="offer-primary-actions">

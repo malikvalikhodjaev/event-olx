@@ -49,7 +49,9 @@ export type Service = {
   supplierId: string;
   categoryId: string;
   title: string;
+  titleUz?: string;
   description: string;
+  descriptionUz?: string;
   city: string;
   priceFrom: number;
   priceUnit: PriceUnit;
@@ -186,9 +188,11 @@ export type ImportServiceRow = {
   rowNumber: number;
   externalId: string;
   title: string;
+  titleUz: string;
   category: string;
   city: string;
   description: string;
+  descriptionUz: string;
   priceFrom: number | null;
   priceUnit: string;
   offerKind: string;

@@ -6,15 +6,17 @@ import { catalogSections, categories, offerKindLabels, services } from "@/lib/de
 import type { CatalogSection, OfferKind } from "@/lib/types";
 import { useLocale } from "@/components/locale-provider";
 import { catalogSectionsUz, categoryName, categorySearchText, cityName, offerKindLabelsByLocale } from "@/lib/i18n";
+import { eventTypeOptions, getOfferDetails } from "@/lib/offer-details";
 
 type CatalogExplorerProps = {
   initialQuery?: string;
   initialCategory?: string;
   initialSection?: string;
   initialKind?: string;
+  initialEvent?: string;
 };
 
-export function CatalogExplorer({ initialQuery = "", initialCategory = "", initialSection = "", initialKind = "" }: CatalogExplorerProps) {
+export function CatalogExplorer({ initialQuery = "", initialCategory = "", initialSection = "", initialKind = "", initialEvent = "" }: CatalogExplorerProps) {
   const { locale, text } = useLocale();
   const initialCategoryDefinition = categories.find((item) => item.id === initialCategory);
   const normalizedInitialSection = catalogSections.some((item) => item.id === initialSection)
@@ -26,6 +28,7 @@ export function CatalogExplorer({ initialQuery = "", initialCategory = "", initi
   const [section, setSection] = useState<CatalogSection | "">(normalizedInitialSection);
   const [kind, setKind] = useState<OfferKind | "">(normalizedInitialKind);
   const [city, setCity] = useState("");
+  const [eventType, setEventType] = useState(eventTypeOptions.some((item) => item.ru === initialEvent) ? initialEvent : "");
 
   const availableCategories = useMemo(
     () => categories.filter((item) => !section || item.section === section),
@@ -37,14 +40,15 @@ export function CatalogExplorer({ initialQuery = "", initialCategory = "", initi
     return services.filter((service) => {
       const serviceCategory = categories.find((item) => item.id === service.categoryId);
       const localizedCategory = serviceCategory ? categoryName(locale, serviceCategory) : "";
-      const matchesQuery = !normalized || `${service.title} ${service.description} ${localizedCategory} ${categorySearchText(locale, service.categoryId)}`.toLocaleLowerCase(locale === "uz" ? "uz" : "ru").includes(normalized);
+      const matchesQuery = !normalized || `${service.title} ${service.titleUz ?? ""} ${service.description} ${service.descriptionUz ?? ""} ${localizedCategory} ${categorySearchText(locale, service.categoryId)}`.toLocaleLowerCase(locale === "uz" ? "uz" : "ru").includes(normalized);
       const matchesSection = !section || serviceCategory?.section === section;
       const matchesCategory = !category || service.categoryId === category;
       const matchesKind = !kind || service.offerKind === kind;
       const matchesCity = !city || service.city === city;
-      return service.published && matchesQuery && matchesSection && matchesCategory && matchesKind && matchesCity;
+      const matchesEventType = !eventType || getOfferDetails(service).eventTypes.some((item) => item.ru === eventType);
+      return service.published && matchesQuery && matchesSection && matchesCategory && matchesKind && matchesCity && matchesEventType;
     });
-  }, [query, section, category, kind, city, locale]);
+  }, [query, section, category, kind, city, eventType, locale]);
 
   const cities = Array.from(new Set(services.map((service) => service.city))).sort();
 
@@ -83,6 +87,13 @@ export function CatalogExplorer({ initialQuery = "", initialCategory = "", initi
             onChange={(event) => setQuery(event.target.value)}
             placeholder={text("Например, свадебная съёмка", "Masalan, to‘y fotosurati")}
           />
+        </div>
+        <div className="field">
+          <label htmlFor="catalog-event-type">{text("Тип события", "Tadbir turi")}</label>
+          <select id="catalog-event-type" value={eventType} onChange={(event) => setEventType(event.target.value)}>
+            <option value="">{text("Любое событие", "Har qanday tadbir")}</option>
+            {eventTypeOptions.map((item) => <option key={item.ru} value={item.ru}>{item[locale]}</option>)}
+          </select>
         </div>
         <div className="field">
           <label htmlFor="catalog-category">{text("Категория", "Toifa")}</label>

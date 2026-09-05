@@ -6,7 +6,7 @@ import { useDemoSession } from "@/components/demo-session";
 import { catalogSections, categories, getCategoryById, services } from "@/lib/demo-data";
 import { formatMoney } from "@/lib/format";
 import { useLocale } from "@/components/locale-provider";
-import { catalogSectionsUz, categoryName } from "@/lib/i18n";
+import { catalogSectionsUz, categoryName, serviceTitle } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
 const quickCategories = categories.filter((category) =>
@@ -81,11 +81,11 @@ export function MobileAppHome() {
           {featuredServices.map((service) => {
             const category = getCategoryById(service.categoryId);
             return (
-              <Link className="mobile-offer-card" href={`/catalog?q=${encodeURIComponent(service.title)}`} key={service.id}>
+              <Link className="mobile-offer-card" href={`/catalog?q=${encodeURIComponent(serviceTitle(locale, service))}`} key={service.id}>
                 <span className="mobile-offer-art" aria-hidden="true">{category?.icon ?? "✦"}</span>
                 <span className="mobile-offer-copy">
                   <small>{category ? categoryName(locale, category) : ""}</small>
-                  <strong>{service.title}</strong>
+                  <strong>{serviceTitle(locale, service)}</strong>
                   <b>{text("от", "dan")} {formatMoney(service.priceFrom, locale)}</b>
                 </span>
               </Link>

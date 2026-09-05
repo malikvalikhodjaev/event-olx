@@ -174,6 +174,7 @@ a {
 .hero-image {
   object-fit: cover;
   object-position: center;
+  pointer-events: none;
 }
 
 .hero-copy {
@@ -764,7 +765,7 @@ h3 {
 
 .filters {
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(145px, 0.35fr));
+  grid-template-columns: minmax(220px, 1.1fr) repeat(4, minmax(130px, 0.35fr));
   gap: 10px;
   margin: 20px 0 24px;
 }

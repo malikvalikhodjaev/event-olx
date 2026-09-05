@@ -124,6 +124,13 @@ test("клиент открывает Маркет и видит товары о
   await expect(page.getByText("Свадебный букет из сезонных цветов")).toBeHidden();
 });
 
+test("клиент фильтрует каталог по типу события независимо от категории", async ({ page }) => {
+  await page.goto("/catalog?event=Тимбилдинг");
+  await expect(page.getByLabel("Тип события")).toHaveValue("Тимбилдинг");
+  await expect(page.getByText("Практикум для руководителей")).toBeVisible();
+  await expect(page.getByText("Ведущий на свадьбу", { exact: true })).toBeHidden();
+});
+
 test("клиент открывает полную страницу предложения и увеличивает портфолио", async ({ page }) => {
   await page.goto("/offers/service-orzu-host");
   await expect(page.getByRole("heading", { name: "Ведущий на свадьбу", exact: true })).toBeVisible();
@@ -235,14 +242,14 @@ test("автор предложения загружает Excel и создае
   const templateBuffer = Buffer.from(templateBytes) as unknown as Parameters<typeof templateWorkbook.xlsx.load>[0];
   await templateWorkbook.xlsx.load(templateBuffer);
   const templateSheet = templateWorkbook.getWorksheet("Предложения");
-  expect(templateSheet?.getCell("D1").value).toBe("offer_kind");
-  expect(templateSheet?.getCell("D3").value).toBe("sale");
+  expect(templateSheet?.getCell("E1").value).toBe("offer_kind");
+  expect(templateSheet?.getCell("E3").value).toBe("sale");
   expect(templateWorkbook.getWorksheet("Справочники")?.getColumn(1).values).toContain("flowers");
 
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet("Предложения");
-  sheet.addRow(["external_id", "title", "category", "offer_kind", "city", "description", "price_from", "price_unit", "availability"]);
-  sheet.addRow(["TEST-001", "Новый банкетный пакет", "catering", "service", "Ташкент", "Меню, обслуживание и базовая сервировка для гостей.", 300000, "за гостя", "доступно"]);
+  sheet.addRow(["external_id", "title_ru", "title_uz", "category", "offer_kind", "city", "description_ru", "description_uz", "price_from", "price_unit", "availability"]);
+  sheet.addRow(["TEST-001", "Новый банкетный пакет", "Yangi banket paketi", "catering", "service", "Ташкент", "Меню, обслуживание и базовая сервировка для гостей.", "Mehmonlar uchun menyu, xizmat va asosiy dasturxon bezagi.", 300000, "за гостя", "доступно"]);
   const buffer = await workbook.xlsx.writeBuffer();
   await page.goto("/supplier/import");
   await page.locator("#price-file").setInputFiles({ name: "services.xlsx", mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", buffer: Buffer.from(buffer) });

@@ -5,12 +5,13 @@ import { useDemoSession } from "@/components/demo-session";
 import { getServiceById, services } from "@/lib/demo-data";
 import { useLocale } from "@/components/locale-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { serviceTitle } from "@/lib/i18n";
 
 const supplierId = "supplier-silk-road";
 
 export function MobileSupplierHome() {
   const { state } = useDemoSession();
-  const { text } = useLocale();
+  const { locale, text } = useLocale();
   const isSupplier = state.role === "supplier" || state.role === "supplier_planner";
   const ownServices = services.filter((service) => service.supplierId === supplierId);
   const conversations = state.conversations.filter((conversation) => conversation.supplierId === supplierId);
@@ -83,7 +84,7 @@ export function MobileSupplierHome() {
                 return (
                   <Link href={`/chats?conversation=${conversation.id}`} key={conversation.id}>
                     <span className="chat-avatar" aria-hidden="true">{conversation.clientName.slice(0, 1)}</span>
-                    <span><strong>{conversation.clientName}</strong><small>{service?.title}</small><em>{lastMessage?.text}</em></span>
+                    <span><strong>{conversation.clientName}</strong><small>{service ? serviceTitle(locale, service) : ""}</small><em>{lastMessage?.text}</em></span>
                     {!conversation.firstSupplierResponseAt ? <b>{text("Новый", "Yangi")}</b> : <span aria-hidden="true">›</span>}
                   </Link>
                 );

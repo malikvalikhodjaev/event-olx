@@ -12,38 +12,44 @@ export async function GET() {
   const sheet = workbook.addWorksheet("Предложения", { views: [{ state: "frozen", ySplit: 1 }] });
   sheet.columns = [
     { header: "external_id", key: "external_id", width: 18 },
-    { header: "title", key: "title", width: 34 },
+    { header: "title_ru", key: "title_ru", width: 34 },
+    { header: "title_uz", key: "title_uz", width: 34 },
     { header: "category", key: "category", width: 20 },
     { header: "offer_kind", key: "offer_kind", width: 18 },
     { header: "city", key: "city", width: 18 },
-    { header: "description", key: "description", width: 54 },
+    { header: "description_ru", key: "description_ru", width: 54 },
+    { header: "description_uz", key: "description_uz", width: 54 },
     { header: "price_from", key: "price_from", width: 18 },
     { header: "price_unit", key: "price_unit", width: 18 },
     { header: "availability", key: "availability", width: 18 },
   ];
   sheet.addRows([
-    { external_id: "SR-001", title: "Банкетный зал на 120 гостей", category: "venue", offer_kind: "service", city: "Ташкент", description: "Зал, мебель, сцена и парковка на один день.", price_from: 18000000, price_unit: "за день", availability: "по запросу" },
-    { external_id: "GM-001", title: "Свадебный букет", category: "flowers", offer_kind: "sale", city: "Ташкент", description: "Букет в выбранной гамме, лента и упаковка.", price_from: 650000, price_unit: "за штуку", availability: "доступно" },
-    { external_id: "OT-001", title: "Комплект звука и света", category: "sound-light", offer_kind: "rental", city: "Ташкент", description: "Оборудование, доставка и настройка перед событием.", price_from: 4500000, price_unit: "за день", availability: "по запросу" },
+    { external_id: "SR-001", title_ru: "Банкетный зал на 120 гостей", title_uz: "120 mehmon uchun banket zali", category: "venue", offer_kind: "service", city: "Ташкент", description_ru: "Зал, мебель, сцена и парковка на один день.", description_uz: "Zal, mebel, sahna va bir kunlik avtoturargoh.", price_from: 18000000, price_unit: "за день", availability: "по запросу" },
+    { external_id: "GM-001", title_ru: "Свадебный букет", title_uz: "To‘y guldastasi", category: "flowers", offer_kind: "sale", city: "Ташкент", description_ru: "Букет в выбранной гамме, лента и упаковка.", description_uz: "Tanlangan ranglardagi guldasta, lenta va o‘ram.", price_from: 650000, price_unit: "за штуку", availability: "доступно" },
+    { external_id: "OT-001", title_ru: "Комплект звука и света", title_uz: "Ovoz va yorug‘lik to‘plami", category: "sound-light", offer_kind: "rental", city: "Ташкент", description_ru: "Оборудование, доставка и настройка перед событием.", description_uz: "Uskuna, yetkazib berish va tadbir oldidan sozlash.", price_from: 4500000, price_unit: "за день", availability: "по запросу" },
   ]);
   sheet.getRow(1).font = { bold: true, color: { argb: "FFFFFFFF" } };
   sheet.getRow(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF12604A" } };
-  sheet.autoFilter = { from: "A1", to: "I4" };
+  sheet.autoFilter = { from: "A1", to: "K4" };
   sheet.getColumn("price_from").numFmt = "#,##0";
 
   const lastCategoryRow = categories.length + 1;
   for (let row = 2; row <= 500; row += 1) {
-    sheet.getCell(`C${row}`).dataValidation = { type: "list", allowBlank: false, formulae: [`Справочники!$A$2:$A$${lastCategoryRow}`] };
-    sheet.getCell(`D${row}`).dataValidation = { type: "list", allowBlank: false, formulae: ['"service,sale,rental"'] };
-    sheet.getCell(`H${row}`).dataValidation = { type: "list", allowBlank: false, formulae: ['"за услугу,за час,за гостя,за день,за штуку,за набор,за комплект,за килограмм"'] };
-    sheet.getCell(`I${row}`).dataValidation = { type: "list", allowBlank: false, formulae: ['"доступно,по запросу,недоступно"'] };
+    sheet.getCell(`D${row}`).dataValidation = { type: "list", allowBlank: false, formulae: [`Справочники!$A$2:$A$${lastCategoryRow}`] };
+    sheet.getCell(`E${row}`).dataValidation = { type: "list", allowBlank: false, formulae: ['"service,sale,rental"'] };
+    sheet.getCell(`J${row}`).dataValidation = { type: "list", allowBlank: false, formulae: ['"за услугу,за час,за гостя,за день,за штуку,за набор,за комплект,за килограмм"'] };
+    sheet.getCell(`K${row}`).dataValidation = { type: "list", allowBlank: false, formulae: ['"доступно,по запросу,недоступно"'] };
   }
 
   const headerNotes: Record<string, string> = {
     A1: "Ваш постоянный уникальный код предложения.",
-    C1: "Выберите код категории из листа «Справочники».",
-    D1: "service — услуга, sale — покупка, rental — аренда.",
-    G1: "Цена только числом, без пробелов и обозначения валюты.",
+    B1: "Название на русском языке. Обязательное поле, до 80 символов.",
+    C1: "Название на узбекском языке. Обязательное поле, до 80 символов.",
+    D1: "Выберите код категории из листа «Справочники».",
+    E1: "service — услуга, sale — покупка, rental — аренда.",
+    G1: "Короткое описание на русском: от 10 до 120 символов.",
+    H1: "Короткое описание на узбекском: от 10 до 120 символов.",
+    I1: "Цена только числом, без пробелов и обозначения валюты.",
   };
   Object.entries(headerNotes).forEach(([cell, note]) => { sheet.getCell(cell).note = note; });
 

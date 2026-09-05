@@ -9,7 +9,9 @@ type CurrentSeedOffer = Pick<
   | "supplierId"
   | "categoryId"
   | "title"
+  | "titleUz"
   | "description"
+  | "descriptionUz"
   | "city"
   | "priceFrom"
   | "priceUnit"
@@ -323,7 +325,9 @@ export const catalogSeedServices: Service[] = [
     supplierId: "supplier-orzu",
     categoryId: "cat-host",
     title: "Ведущий на свадьбу",
+    titleUz: "To‘y boshlovchisi",
     description: "Знакомство с парой, сценарный план, интерактивы без неловких конкурсов и ведение вечера.",
+    descriptionUz: "Juftlik bilan tanishuv, ssenariy rejasi, noqulay tanlovlarsiz interaktivlar va kechani olib borish.",
     city: "Ташкент",
     priceFrom: 5_000_000,
     priceUnit: "за услугу",
@@ -941,7 +945,9 @@ export const catalogSeedServices: Service[] = [
     supplierId: "supplier-nur-photo",
     categoryId: "cat-marry-me",
     title: "Предложение руки и сердца + Love story",
+    titleUz: "Nikoh taklifi va Love story",
     description: "Личный сценарий, подбор локации, координация сюрприза и 40 обработанных фотографий.",
+    descriptionUz: "Shaxsiy ssenariy, joy tanlash, syurprizni muvofiqlashtirish va ishlov berilgan 40 ta surat.",
     city: "Ташкент",
     priceFrom: 2_200_000,
     priceUnit: "за услугу",

@@ -1,3 +1,5 @@
+import type { Service } from "@/lib/types";
+
 export const supportedLocales = ["ru", "uz"] as const;
 
 export type Locale = (typeof supportedLocales)[number];
@@ -111,4 +113,12 @@ export function cityName(locale: Locale, city: string) {
 
 export function priceUnit(locale: Locale, unit: string) {
   return locale === "uz" ? priceUnitsUz[unit] ?? unit : unit;
+}
+
+export function serviceTitle(locale: Locale, service: Pick<Service, "title" | "titleUz">) {
+  return locale === "uz" ? service.titleUz?.trim() || service.title : service.title;
+}
+
+export function serviceDescription(locale: Locale, service: Pick<Service, "description" | "descriptionUz">) {
+  return locale === "uz" ? service.descriptionUz?.trim() || service.description : service.description;
 }

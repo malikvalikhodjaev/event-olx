@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { categories, services } from "@/lib/demo-data";
-import { getOfferDetails } from "@/lib/offer-details";
+import { eventTypeOptions, getOfferDetails } from "@/lib/offer-details";
 
 describe("страница предложения", () => {
   it("даёт каждому SKU описание, пакеты, характеристики и портфолио", () => {
@@ -26,5 +26,18 @@ describe("страница предложения", () => {
     expect(categories.some((category) => category.id === "cat-marry-me")).toBe(true);
     expect(categories.some((category) => category.id === "cat-gifts-print")).toBe(true);
     expect(services.some((service) => service.categoryId === "cat-marry-me")).toBe(true);
+  });
+
+  it("задаёт восемь независимых типов события из ТЗ 1.1", () => {
+    expect(eventTypeOptions.map((item) => item.ru)).toEqual([
+      "Свадьба",
+      "Никах / религиозный обряд",
+      "Юбилей / день рождения",
+      "Детский праздник",
+      "Корпоратив / конференция",
+      "Тимбилдинг",
+      "Событие HoReCa",
+      "Другое семейное торжество",
+    ]);
   });
 });

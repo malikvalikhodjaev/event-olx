@@ -7,6 +7,7 @@ import { addChatMessage, startConversation } from "@/lib/demo-store";
 import { getServiceById, getSupplierById } from "@/lib/demo-data";
 import { formatDateTime } from "@/lib/format";
 import { useLocale } from "@/components/locale-provider";
+import { serviceTitle } from "@/lib/i18n";
 
 const supplierId = "supplier-silk-road";
 export function ChatWorkspace({
@@ -103,7 +104,7 @@ export function ChatWorkspace({
                 <span className="chat-avatar" aria-hidden="true">{isSupplier ? conversation.clientName.slice(0, 1).toUpperCase() : supplier?.name.slice(0, 1)}</span>
                 <span>
                   <strong>{isSupplier ? conversation.clientName : supplier?.name}</strong>
-                  <small>{service?.title}</small>
+                  <small>{service ? serviceTitle(locale, service) : ""}</small>
                   <small>{lastMessage?.text}</small>
                 </span>
                 <time>{formatDateTime(conversation.updatedAt, locale)}</time>
@@ -121,7 +122,7 @@ export function ChatWorkspace({
               <div className="chat-avatar" aria-hidden="true">{isSupplier && activeConversation ? activeConversation.clientName.slice(0, 1).toUpperCase() : activeSupplier.name.slice(0, 1)}</div>
               <div>
                 <strong>{isSupplier && activeConversation ? activeConversation.clientName : activeSupplier.name}</strong>
-                <span>{activeService.title}</span>
+                <span>{serviceTitle(locale, activeService)}</span>
               </div>
               <Link className="button button-secondary button-small" href={`/suppliers/${activeSupplier.slug}`}>{text("Карточка", "Karta")}</Link>
             </header>

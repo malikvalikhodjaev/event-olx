@@ -6,7 +6,7 @@ import { StatusBadge } from "@/components/status-badge";
 import { services, getServiceById } from "@/lib/demo-data";
 import { formatDateTime, formatMoney } from "@/lib/format";
 import { useLocale } from "@/components/locale-provider";
-import { cityName, offerKindLabelsByLocale, priceUnit } from "@/lib/i18n";
+import { cityName, offerKindLabelsByLocale, priceUnit, serviceTitle } from "@/lib/i18n";
 
 const supplierId = "supplier-silk-road";
 
@@ -34,7 +34,7 @@ export function SupplierDashboard() {
           return (
             <article className="conversation-row" key={conversation.id}>
               <div>
-                <strong>{getServiceById(conversation.serviceId)?.title ?? text("Предложение", "Taklif")}</strong><br />
+                <strong>{(() => { const service = getServiceById(conversation.serviceId); return service ? serviceTitle(locale, service) : text("Предложение", "Taklif"); })()}</strong><br />
                 <span className="small muted">{conversation.clientName} · {formatDateTime(conversation.updatedAt, locale)}</span><br />
                 <span className="small">{lastMessage?.text}</span>
               </div>
@@ -48,7 +48,7 @@ export function SupplierDashboard() {
       <section className="panel">
         <div className="toolbar"><div><p className="eyebrow">{text("Ваш каталог", "Katalogingiz")}</p><h2>{text("Мои предложения", "Mening takliflarim")}</h2></div><Link className="button button-primary" href="/supplier/import">{text("Загрузить цены из Excel", "Narxlarni Excel’dan yuklash")}</Link></div>
         <div className="table-wrap"><table><thead><tr><th>{text("Предложение", "Taklif")}</th><th>{text("Формат", "Shakl")}</th><th>{text("Цена от", "Boshlang‘ich narx")}</th><th>{text("Статус", "Holat")}</th><th>{text("Обновлено", "Yangilangan")}</th><th>{text("Страница", "Sahifa")}</th></tr></thead><tbody>{ownServices.map((service) => (
-          <tr key={service.id}><td><strong>{service.title}</strong><br /><span className="muted">{service.sku} · {cityName(locale, service.city)}</span></td><td>{offerKindLabelsByLocale[locale][service.offerKind]}</td><td>{formatMoney(service.priceFrom, locale)} · {priceUnit(locale, service.priceUnit)}</td><td><StatusBadge tone={service.published ? "success" : "warning"}>{service.published ? text("Опубликовано", "E’lon qilingan") : text("Черновик", "Qoralama")}</StatusBadge></td><td>{formatDateTime(service.updatedAt, locale)}</td><td><Link className="button button-secondary button-small" href={`/offers/${service.id}${service.published ? "" : "?preview=1"}`} target="_blank" rel="noreferrer">{service.published ? text("Посмотреть как клиент", "Mijoz sifatida ko‘rish") : text("Предпросмотр", "Ko‘rib chiqish")}</Link></td></tr>
+          <tr key={service.id}><td><strong>{serviceTitle(locale, service)}</strong><br /><span className="muted">{service.sku} · {cityName(locale, service.city)}</span></td><td>{offerKindLabelsByLocale[locale][service.offerKind]}</td><td>{formatMoney(service.priceFrom, locale)} · {priceUnit(locale, service.priceUnit)}</td><td><StatusBadge tone={service.published ? "success" : "warning"}>{service.published ? text("Опубликовано", "E’lon qilingan") : text("Черновик", "Qoralama")}</StatusBadge></td><td>{formatDateTime(service.updatedAt, locale)}</td><td><Link className="button button-secondary button-small" href={`/offers/${service.id}${service.published ? "" : "?preview=1"}`} target="_blank" rel="noreferrer">{service.published ? text("Посмотреть как клиент", "Mijoz sifatida ko‘rish") : text("Предпросмотр", "Ko‘rib chiqish")}</Link></td></tr>
         ))}</tbody></table></div>
       </section>
 
