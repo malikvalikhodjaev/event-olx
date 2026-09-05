@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useDemoSession } from "@/components/demo-session";
 import { StatusBadge } from "@/components/status-badge";
-import { addToShortlist } from "@/lib/demo-store";
+import { addToShortlist, queueShortlistAfterSignIn } from "@/lib/demo-store";
 import { getCategoryById, getSupplierById } from "@/lib/demo-data";
 import { formatMoney, freshnessState, responseLabel } from "@/lib/format";
 import type { Service } from "@/lib/types";
@@ -12,12 +13,13 @@ import { useLocale } from "@/components/locale-provider";
 import { categoryName, cityName, offerKindLabelsByLocale, priceUnit, serviceDescription, serviceTitle } from "@/lib/i18n";
 
 export function ServiceCard({ service, priority = false }: { service: Service; priority?: boolean }) {
+  const router = useRouter();
   const { state, refresh } = useDemoSession();
   const { locale, text } = useLocale();
   const supplier = getSupplierById(service.supplierId);
   const category = getCategoryById(service.categoryId);
   const freshness = freshnessState(service.updatedAt, undefined, locale);
-  const shortlisted = state.shortlist.includes(service.id);
+  const shortlisted = state.signedIn && state.shortlist.includes(service.id);
   const chatDestination = `/chats?service=${encodeURIComponent(service.id)}`;
   const localizedTitle = serviceTitle(locale, service);
   const localizedDescription = serviceDescription(locale, service);
@@ -44,6 +46,12 @@ export function ServiceCard({ service, priority = false }: { service: Service; p
           aria-label={shortlisted ? text("Убрать из сохранённых", "Saqlanganlardan olib tashlash") : text("Сохранить", "Saqlash")}
           aria-pressed={shortlisted}
           onClick={() => {
+            if (!state.signedIn) {
+              queueShortlistAfterSignIn(service.id);
+              const next = `${window.location.pathname}${window.location.search}`;
+              router.push(`/login?role=client&next=${encodeURIComponent(next)}`);
+              return;
+            }
             addToShortlist(service.id);
             refresh();
           }}

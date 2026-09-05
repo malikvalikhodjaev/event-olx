@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDemoSession } from "@/components/demo-session";
+import { completeQueuedShortlist } from "@/lib/demo-store";
 import { roleDestination } from "@/lib/roles";
 import { useLocale } from "@/components/locale-provider";
 
@@ -35,6 +36,7 @@ export function LoginForm({ initialRole = "client", initialNext = "" }: { initia
     }
 
     signIn("client", account);
+    completeQueuedShortlist();
     const next = safeNext(initialNext, roleDestination("client"));
     router.replace(`/onboarding?intent=${initialIntent}&next=${encodeURIComponent(next)}`);
   }

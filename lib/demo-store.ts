@@ -5,6 +5,7 @@ import { createEstimateRevision, validateEstimateDraft } from "@/lib/estimate";
 import type { AuditEntry, ChatSender, Conversation, DemoRole, DemoState, EstimateDraft, ModerationStatus, Service } from "@/lib/types";
 
 const STORAGE_KEY = "eventhub-uz-demo-v1";
+const PENDING_SHORTLIST_KEY = "marosim-pending-shortlist";
 
 export function createInitialDemoState(): DemoState {
   return {
@@ -138,11 +139,29 @@ export function touchActiveDemoSession() {
 
 export function addToShortlist(serviceId: string) {
   const state = loadDemoState();
+  if (!state.signedIn) return state.shortlist;
   const shortlist = state.shortlist.includes(serviceId)
     ? state.shortlist.filter((id) => id !== serviceId)
     : [...state.shortlist, serviceId];
   saveDemoState({ ...state, shortlist });
   return shortlist;
+}
+
+export function queueShortlistAfterSignIn(serviceId: string) {
+  if (typeof window === "undefined") return;
+  window.sessionStorage.setItem(PENDING_SHORTLIST_KEY, serviceId);
+}
+
+export function completeQueuedShortlist() {
+  if (typeof window === "undefined") return null;
+  const serviceId = window.sessionStorage.getItem(PENDING_SHORTLIST_KEY);
+  window.sessionStorage.removeItem(PENDING_SHORTLIST_KEY);
+  if (!serviceId) return null;
+
+  const state = loadDemoState();
+  if (!state.signedIn || state.shortlist.includes(serviceId)) return serviceId;
+  saveDemoState({ ...state, shortlist: [...state.shortlist, serviceId] });
+  return serviceId;
 }
 
 export function startConversation(serviceId: string, clientAccount: string, text: string) {

@@ -110,6 +110,21 @@ test("клиент сохраняет предложение и открывае
   await expect(page.getByText("Фото + видео полного свадебного дня")).toBeVisible();
 });
 
+test("анонимное сохранение просит вход и завершается после авторизации", async ({ page }) => {
+  await page.goto("/offers/service-orzu-host");
+  await page.getByRole("button", { name: /Сохранить/ }).click();
+
+  await expect(page).toHaveURL(/\/login\?/);
+  await expect.poll(() => decodeURIComponent(new URL(page.url()).searchParams.get("next") ?? "")).toBe("/offers/service-orzu-host");
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
+
+  await expect(page).toHaveURL(/\/offers\/service-orzu-host$/);
+  await expect(page.getByRole("button", { name: /Сохранено/ })).toHaveAttribute("aria-pressed", "true");
+  await page.goto("/saved");
+  await expect(page.getByText("Ведущий на свадьбу", { exact: true })).toBeVisible();
+});
+
 test("клиент открывает Маркет и видит товары отдельно от услуг", async ({ page }) => {
   await page.goto("/catalog");
   await expect(page.getByText("Найдено: 100")).toBeVisible();

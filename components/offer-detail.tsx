@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDemoSession } from "@/components/demo-session";
 import { useLocale } from "@/components/locale-provider";
 import { StatusBadge } from "@/components/status-badge";
 import { OfferEstimateBuilder } from "@/components/offer-estimate-builder";
-import { addToShortlist } from "@/lib/demo-store";
+import { addToShortlist, queueShortlistAfterSignIn } from "@/lib/demo-store";
 import { getCategoryById, getSupplierById } from "@/lib/demo-data";
 import { formatDateTime, formatMoney, freshnessState, responseLabel } from "@/lib/format";
 import { categoryName, cityName, offerKindLabelsByLocale, priceUnit, serviceDescription, serviceTitle } from "@/lib/i18n";
@@ -22,6 +23,7 @@ type OfferDetailProps = {
 };
 
 export function OfferDetail({ initialService, serviceId, preview, calculatorOpen }: OfferDetailProps) {
+  const router = useRouter();
   const { state, refresh } = useDemoSession();
   const { locale, text } = useLocale();
   const [selectedMediaId, setSelectedMediaId] = useState<string | null>(null);
@@ -52,7 +54,7 @@ export function OfferDetail({ initialService, serviceId, preview, calculatorOpen
   }
 
   const freshness = freshnessState(service.updatedAt, undefined, locale);
-  const shortlisted = state.shortlist.includes(service.id);
+  const shortlisted = state.signedIn && state.shortlist.includes(service.id);
   const localized = (value: LocalizedCopy) => value[locale];
   const localizedTitle = serviceTitle(locale, service);
   const localizedDescription = serviceDescription(locale, service);
@@ -97,6 +99,12 @@ export function OfferDetail({ initialService, serviceId, preview, calculatorOpen
               type="button"
               aria-pressed={shortlisted}
               onClick={() => {
+                if (!state.signedIn) {
+                  queueShortlistAfterSignIn(service.id);
+                  const next = `${window.location.pathname}${window.location.search}`;
+                  router.push(`/login?role=client&next=${encodeURIComponent(next)}`);
+                  return;
+                }
                 addToShortlist(service.id);
                 refresh();
               }}
