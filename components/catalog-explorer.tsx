@@ -36,7 +36,8 @@ export function CatalogExplorer({ initialQuery = "", initialCategory = "", initi
     const normalized = query.trim().toLocaleLowerCase("ru");
     return services.filter((service) => {
       const serviceCategory = categories.find((item) => item.id === service.categoryId);
-      const matchesQuery = !normalized || `${service.title} ${service.description} ${categorySearchText(locale, service.categoryId)}`.toLocaleLowerCase(locale === "uz" ? "uz" : "ru").includes(normalized);
+      const localizedCategory = serviceCategory ? categoryName(locale, serviceCategory) : "";
+      const matchesQuery = !normalized || `${service.title} ${service.description} ${localizedCategory} ${categorySearchText(locale, service.categoryId)}`.toLocaleLowerCase(locale === "uz" ? "uz" : "ru").includes(normalized);
       const matchesSection = !section || serviceCategory?.section === section;
       const matchesCategory = !category || service.categoryId === category;
       const matchesKind = !kind || service.offerKind === kind;

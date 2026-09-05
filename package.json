@@ -1,6 +1,6 @@
 {
   "name": "marosim",
-  "version": "0.1.0-alpha.16",
+  "version": "0.1.0-alpha.17",
   "private": true,
   "type": "module",
   "description": "Mobile-first Marosim catalog and direct chat platform for event services, goods, and equipment.",

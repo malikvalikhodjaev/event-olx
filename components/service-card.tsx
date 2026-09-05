@@ -51,7 +51,7 @@ export function ServiceCard({ service, priority = false }: { service: Service; p
       </div>
       <div className="service-card-body">
         <p className="service-card-category">{categoryName(locale, category)}</p>
-        <h3><Link href={`/suppliers/${supplier.slug}`}>{service.title}</Link></h3>
+        <h3><Link href={`/offers/${service.id}`}>{service.title}</Link></h3>
         <p className="service-card-description">{service.description}</p>
         <p className="service-price">{text("от", "dan")} {formatMoney(service.priceFrom, locale)} <span>{priceUnit(locale, service.priceUnit)}</span></p>
         <p className="service-card-meta">{cityName(locale, service.city)} · {supplier.name}</p>
@@ -61,7 +61,7 @@ export function ServiceCard({ service, priority = false }: { service: Service; p
         </div>
         <div className="service-card-footer">
           <span>{responseLabel(supplier.responseMedianMinutes, supplier.responseSampleSize, locale)}</span>
-          <Link className="service-details-link" href={`/suppliers/${supplier.slug}`}>{text("Подробнее", "Batafsil")} →</Link>
+          <Link className="service-details-link" href={`/offers/${service.id}`}>{text("Подробнее", "Batafsil")} →</Link>
         </div>
         <div className="service-card-actions">
           <Link className="button button-primary button-small" href={chatDestination}>{text("Написать автору", "Muallifga yozish")}</Link>

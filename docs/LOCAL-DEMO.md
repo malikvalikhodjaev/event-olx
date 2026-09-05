@@ -8,6 +8,7 @@
 
 - Главная: [http://localhost:3000](http://localhost:3000)
 - Каталог: [http://localhost:3000/catalog](http://localhost:3000/catalog)
+- Полная карточка-пример: [http://localhost:3000/offers/service-orzu-host](http://localhost:3000/offers/service-orzu-host)
 - Вход автора предложения: [http://localhost:3000/login?role=supplier&next=/supplier](http://localhost:3000/login?role=supplier&next=/supplier)
 - Мобильное приложение: [http://localhost:3000/mobile_app](http://localhost:3000/mobile_app)
 - Мобильный раздел автора: [http://localhost:3000/mobile_app/supplier](http://localhost:3000/mobile_app/supplier)

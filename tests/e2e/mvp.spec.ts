@@ -124,6 +124,42 @@ test("клиент открывает Маркет и видит товары о
   await expect(page.getByText("Свадебный букет из сезонных цветов")).toBeHidden();
 });
 
+test("клиент открывает полную страницу предложения и увеличивает портфолио", async ({ page }) => {
+  await page.goto("/offers/service-orzu-host");
+  await expect(page.getByRole("heading", { name: "Ведущий на свадьбу", exact: true })).toBeVisible();
+  await expect(page.getByText("Азиз Рахимов")).toBeVisible();
+  await expect(page.getByText("Мужчина", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Пакеты и состав" })).toBeVisible();
+  await expect(page.getByTestId("offer-portfolio")).toBeVisible();
+  await page.getByRole("button", { name: /Увеличить: Ведущий на свадьбу/ }).click();
+  await expect(page.getByRole("dialog", { name: "Увеличенная фотография" })).toBeVisible();
+  await page.getByRole("button", { name: "Закрыть" }).click();
+  await expect(page.getByRole("dialog", { name: "Увеличенная фотография" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Написать автору" }).first()).toHaveAttribute("href", "/chats?service=service-orzu-host");
+});
+
+test("поиск понимает разговорное название категории мери ми", async ({ page }) => {
+  await page.goto("/catalog");
+  await page.getByRole("searchbox", { name: "Что ищете" }).fill("мери ми");
+  await expect(page.getByText("Предложение руки и сердца + Love story")).toBeVisible();
+  await expect(page.getByTestId("service-card")).toHaveCount(1);
+});
+
+test("автор открывает опубликованное предложение глазами клиента", async ({ page }) => {
+  await page.goto("/login?role=supplier&next=/supplier");
+  await page.getByRole("button", { name: "Продолжить с Google" }).click();
+  await expect(page).toHaveURL(/\/onboarding\?/);
+  await expect(page.getByRole("radio", { name: /Я предлагаю услуги или товары/ })).toBeChecked();
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
+  await expect(page).toHaveURL(/\/supplier$/);
+  const customerView = page.getByRole("link", { name: "Посмотреть как клиент" }).first();
+  await expect(customerView).toHaveAttribute("target", "_blank");
+  const href = await customerView.getAttribute("href");
+  expect(href).toMatch(/^\/offers\//);
+  await page.goto(href!);
+  await expect(page.getByRole("heading", { name: /Банкетный зал Silk Hall/ })).toBeVisible();
+});
+
 test("планировщик закрывает категорию и видит прогресс", async ({ page }) => {
   await page.goto("/planner");
   await page.locator("#service-cat-venue").selectOption("service-silk-hall");
@@ -218,4 +254,10 @@ test("автор предложения загружает Excel и создае
   await page.goto("/supplier");
   await expect(page.getByText("Новый банкетный пакет")).toBeVisible();
   await expect(page.getByText("Черновик", { exact: true }).last()).toBeVisible();
+  const previewLink = page.getByRole("link", { name: "Предпросмотр" });
+  const previewHref = await previewLink.getAttribute("href");
+  expect(previewHref).toMatch(/^\/offers\/import-.+\?preview=1$/);
+  await page.goto(previewHref!);
+  await expect(page.getByRole("heading", { name: "Новый банкетный пакет" })).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: "эту страницу пока видите только вы" })).toBeVisible();
 });

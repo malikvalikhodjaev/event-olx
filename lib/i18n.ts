@@ -22,6 +22,7 @@ const categoryNamesUz: Record<string, string> = {
   "cat-transport": "Transport",
   "cat-training": "Treninglar va timbilding",
   "cat-planning": "Tashkil etish va xodimlar",
+  "cat-marry-me": "Nikoh taklifi",
   "cat-flowers": "Gullar va guldastalar",
   "cat-event-details": "Dekor va bayram uchun mayda buyumlar",
   "cat-gifts-print": "Sovg‘alar va bosma mahsulotlar",
@@ -43,6 +44,7 @@ const categorySearchTermsUz: Record<string, string> = {
   "cat-transport": "transport avtomobil mashina transfer",
   "cat-training": "trening timbilding jamoa o‘yin",
   "cat-planning": "tashkilotchi koordinator xodim menejer ro‘yxatga olish",
+  "cat-marry-me": "nikoh taklifi fotiha unashtirish marry me sevgi syurpriz",
   "cat-flowers": "gul guldasta butonerka yaproq",
   "cat-event-details": "dekor bezak taklifnoma sham to‘qimachilik",
   "cat-gifts-print": "sovg‘a quti bosma poligrafiya taklifnoma",
@@ -52,6 +54,11 @@ const categorySearchTermsUz: Record<string, string> = {
   "cat-screens-stage": "ekran sahna proyektor televizor led",
   "cat-event-rental": "mebel stol stul chodir ijara",
   "cat-power-effects": "generator elektr tutun maxsus effekt",
+};
+
+const categorySearchTermsRu: Record<string, string> = {
+  "cat-marry-me": "мери ми marry me предложение руки и сердца помолвка обручение романтический сюрприз",
+  "cat-gifts-print": "подарки сувениры полиграфия приглашения коробки гостям",
 };
 
 const cityNamesUz: Record<string, string> = {
@@ -95,7 +102,7 @@ export function categoryName(locale: Locale, category: { id: string; name: strin
 }
 
 export function categorySearchText(locale: Locale, categoryId: string) {
-  return locale === "uz" ? categorySearchTermsUz[categoryId] ?? "" : "";
+  return locale === "uz" ? categorySearchTermsUz[categoryId] ?? "" : categorySearchTermsRu[categoryId] ?? "";
 }
 
 export function cityName(locale: Locale, city: string) {

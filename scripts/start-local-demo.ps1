@@ -22,6 +22,7 @@ function Show-LocalLinks {
   Write-Host "Marosim работает локально:" -ForegroundColor Green
   Write-Host "Главная:            http://localhost:3000"
   Write-Host "Каталог:            http://localhost:3000/catalog"
+  Write-Host "Карточка примера:    http://localhost:3000/offers/service-orzu-host"
   Write-Host "Вход автора:        http://localhost:3000/login?role=supplier&next=/supplier"
   Write-Host "Мобильная версия:   http://localhost:3000/mobile_app"
   Write-Host "Мобильная автора:   http://localhost:3000/mobile_app/supplier"

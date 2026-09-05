@@ -61,6 +61,54 @@ export type Service = {
   availabilityConfirmedAt: string | null;
 };
 
+export type LocalizedCopy = {
+  ru: string;
+  uz: string;
+};
+
+export type OfferPackage = {
+  name: LocalizedCopy;
+  summary: LocalizedCopy;
+  priceFrom: number;
+  includes: LocalizedCopy[];
+  highlighted?: boolean;
+};
+
+export type OfferMedia = {
+  id: string;
+  type: "image" | "youtube";
+  title: LocalizedCopy;
+  url: string;
+  thumbnailUrl?: string;
+};
+
+export type OfferFact = {
+  label: LocalizedCopy;
+  value: LocalizedCopy;
+};
+
+export type OfferPersonProfile = {
+  name: string;
+  role: LocalizedCopy;
+  photoUrl: string;
+  gender: LocalizedCopy;
+  age: number;
+  experienceYears: number;
+  languages: LocalizedCopy;
+};
+
+export type OfferDetails = {
+  fullDescription: LocalizedCopy;
+  eventTypes: LocalizedCopy[];
+  serviceArea: LocalizedCopy;
+  travelTerms: LocalizedCopy;
+  availabilityNote: LocalizedCopy;
+  packages: OfferPackage[];
+  media: OfferMedia[];
+  facts: OfferFact[];
+  person?: OfferPersonProfile;
+};
+
 export type ChatSender = "client" | "supplier";
 
 export type ChatMessage = {
