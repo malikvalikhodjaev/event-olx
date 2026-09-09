@@ -26,6 +26,7 @@ Thumbs.db
 # local working artifacts from ADR and transcription sessions
 _adr_work/
 _audio_work/
+.tmp/
 
 # deployment state
 deploy/.runtime/
