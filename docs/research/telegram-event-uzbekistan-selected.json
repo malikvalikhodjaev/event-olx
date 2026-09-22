@@ -188,5 +188,55 @@
     "categoryId": "cat-venue",
     "offerKind": "service",
     "imageUrl": "/catalog/telegram/tg-1385.jpg"
+  },
+  {
+    "sourceId": "701",
+    "authorName": "Театр +",
+    "authorUrl": "https://t.me/EventUzbekistan/701",
+    "title": "Площадка на 600 мест — Театр +",
+    "description": "Театральная площадка в Ташкенте на 600 мест со сценой, светом, звуком и холлом. В публикации предложена для конференций, корпоративов, презентаций, премий и выставок; адрес и условия аренды уточняйте у площадки.",
+    "categoryId": "cat-venue",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-701.jpg"
+  },
+  {
+    "sourceId": "890",
+    "authorName": "MANANA Restaurant",
+    "authorUrl": "https://manana.uz/",
+    "title": "Ресторан для банкета — MANANA",
+    "description": "Ресторан на проспекте Амира Темура, 22/5 в Ташкенте: 165 мест в зале и 70 на летней террасе. Для банкетов, корпоративов и частных событий; меню и сопровождение согласуются с площадкой.",
+    "categoryId": "cat-venue",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-890.jpg"
+  },
+  {
+    "sourceId": "1039",
+    "authorName": "Ресторан BAHOR",
+    "authorUrl": "https://www.instagram.com/bahor_restaurant_uz",
+    "title": "Банкетный зал на 200–250 гостей — BAHOR",
+    "description": "Ресторан на улице Исакбол, 8 в Ташкенте с банкетным залом на 200–250 человек. В публикации указаны свадьбы, корпоративы, конференции и фуршеты; минимальный заказ — от 60–70 гостей, условия уточняйте у площадки.",
+    "categoryId": "cat-venue",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-1039.jpg"
+  },
+  {
+    "sourceId": "1260",
+    "authorName": "HUMO ARENA",
+    "authorUrl": "https://humoarena.com/",
+    "title": "Арена для крупных мероприятий — HUMO ARENA",
+    "description": "Многофункциональная арена на улице Бешагач, 28Б в Ташкенте. В публикации указаны форматы от 100 до 12 500 гостей: концерты, форумы, корпоративные и спортивные события; состав площадки и условия уточняйте у автора.",
+    "categoryId": "cat-venue",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-1260.jpg"
+  },
+  {
+    "sourceId": "1377",
+    "authorName": "U-ENTER",
+    "authorUrl": "https://www.u-enter.uz/ru",
+    "title": "Пространство для деловых событий — U-ENTER",
+    "description": "Площадка на улице Шахрисабз, 25 в Ташкенте вместимостью до 200 человек. Подходит для презентаций, семинаров, тренингов, конференций и корпоративных встреч; условия уточняйте у площадки.",
+    "categoryId": "cat-venue",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-1377.jpg"
   }
 ]

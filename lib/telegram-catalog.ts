@@ -46,6 +46,6 @@ export const telegramCatalogSuppliers: Supplier[] = sourceManifest.map((item) =>
   responseSampleSize: 0,
   portfolio: [],
   createdAt: observedAtWithTime,
-  externalLinks: [externalLink(item.authorUrl), externalLink(`https://t.me/EventUzbekistan/${item.sourceId}`)],
+  externalLinks: [...new Set([item.authorUrl, `https://t.me/EventUzbekistan/${item.sourceId}`])].map(externalLink),
   profileStatus: "unclaimed",
 }));
