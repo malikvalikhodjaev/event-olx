@@ -47,17 +47,6 @@ function responseTime(minutes: number | null) {
   return remainder ? `${hours} ч ${remainder} мин` : `${hours} ч`;
 }
 
-function supplierRegistrationNote(count: number) {
-  const lastTwo = count % 100;
-  const last = count % 10;
-  const verb = last === 1 && lastTwo !== 11
-    ? "зарегистрирован"
-    : last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)
-      ? "зарегистрированы"
-      : "зарегистрировано";
-  return `+${count} ${verb} за период`;
-}
-
 function MetricCard({
   label,
   value,
@@ -138,7 +127,7 @@ export function AdminDashboard() {
           <div>
             <p className="eyebrow">Коротко о главном</p>
             <h2 id="admin-overview-title">Состояние платформы</h2>
-            <p className="small muted">{analytics.periodLabel}. Онлайн — активность за последние 15 минут.</p>
+            <p className="small muted">{analytics.periodLabel}. Посетители и диалоги учитываются только в этом браузере; онлайн — активность за последние 15 минут.</p>
           </div>
           <div className="period-switch" role="group" aria-label="Период отчёта">
             {periodOptions.map((option) => (
@@ -160,7 +149,7 @@ export function AdminDashboard() {
 
         <div className="admin-metric-grid">
           <MetricCard label="SKU в каталоге" value={analytics.totalSku} note={`${analytics.publishedServices} опубликовано`} accent="green" />
-          <MetricCard label="Авторы предложений" value={analytics.suppliersTotal} note={supplierRegistrationNote(analytics.suppliersNew)} accent="yellow" />
+          <MetricCard label="Авторы в каталоге" value={analytics.suppliersTotal} note={`${suppliers.filter((supplier) => supplier.profileStatus === "unclaimed").length} профилей не подтверждены`} accent="yellow" />
           <MetricCard label="Активные пользователи" value={analytics.activeUsers} note={comparisonText(analytics.activeUsers, analytics.previous.activeUsers)} />
           <MetricCard label="Сейчас онлайн" value={analytics.onlineUsers} note="уникальные аккаунты за 15 минут" accent="green" />
           <MetricCard label="Новые диалоги" value={analytics.conversations} note={comparisonText(analytics.conversations, analytics.previous.conversations)} />

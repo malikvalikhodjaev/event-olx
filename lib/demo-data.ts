@@ -1,4 +1,4 @@
-import { catalogSeedServices } from "@/lib/catalog-seed";
+import { realCatalogServices, realCatalogSuppliers } from "@/lib/real-catalog";
 import type {
   CatalogSection,
   Conversation,
@@ -47,7 +47,7 @@ export const categories: ServiceCategory[] = [
   { id: "cat-power-effects", slug: "power-effects", name: "Питание и спецэффекты", icon: "ϟ", section: "equipment", requiredForWedding: false },
 ];
 
-export const suppliers: Supplier[] = [
+const legacySuppliers: Supplier[] = [
   {
     id: "supplier-silk-road",
     slug: "silk-road-events",
@@ -246,7 +246,8 @@ export const suppliers: Supplier[] = [
   },
 ];
 
-export const services = catalogSeedServices;
+export const suppliers: Supplier[] = realCatalogSuppliers;
+export const services = realCatalogServices;
 
 export const seededConversations: Conversation[] = [
   {
@@ -308,7 +309,7 @@ export const seededModeration: ModerationItem[] = [
 ];
 
 export function getSupplierById(id: string) {
-  return suppliers.find((supplier) => supplier.id === id);
+  return suppliers.find((supplier) => supplier.id === id) ?? legacySuppliers.find((supplier) => supplier.id === id);
 }
 
 export function getServiceById(id: string) {

@@ -150,6 +150,24 @@ function fullDescription(service: Service): LocalizedCopy {
 }
 
 export function getOfferDetails(service: Service): OfferDetails {
+  if (service.sourceUrl) {
+    const videoLinks = [...service.description.matchAll(/https:\/\/(?:www\.)?(?:youtube\.com\/watch\?[^\s]+|youtu\.be\/[^\s]+)/g)]
+      .map((match, index) => ({ id: `${service.id}-youtube-${index + 1}`, type: "youtube" as const, title: copy("Видео автора", "Muallif videosi"), url: match[0] }));
+    return {
+      fullDescription: copy(service.description, service.descriptionUz ?? service.description),
+      eventTypes: eventTypesByCategory[service.categoryId] ?? [EVENT.family],
+      serviceArea: copy(service.city, service.city),
+      travelTerms: copy("Уточните у автора", "Muallifdan aniqlang"),
+      availabilityNote: copy("Наличие и свободную дату уточните у автора", "Mavjudligi va bo‘sh sanani muallifdan aniqlang"),
+      packages: [],
+      media: [{ id: `${service.id}-source-image`, type: "image" as const, title: copy(service.title, service.titleUz ?? service.title), url: service.imageUrl }, ...videoLinks],
+      facts: [
+        { label: copy("Источник", "Manba"), value: service.sourcePlatform === "olx" ? copy("Публичное объявление OLX.uz", "OLX.uz dagi ochiq e’lon") : copy("Официальный сайт автора", "Muallifning rasmiy sayti") },
+        { label: copy("Условия", "Shartlar"), value: copy("Уточняются у автора", "Muallifdan aniqlanadi") },
+      ],
+    };
+  }
+
   const relatedMedia = catalogSeedServices
     .filter((item) => item.supplierId === service.supplierId)
     .filter((item, index, items) => items.findIndex((candidate) => candidate.imageUrl === item.imageUrl) === index)

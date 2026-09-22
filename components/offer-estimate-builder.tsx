@@ -36,6 +36,8 @@ export function OfferEstimateBuilder({ service, onClose }: { service: Service; o
   const { locale, text } = useLocale();
   const storageKey = `marosim-estimate-draft:${service.id}`;
   const [error, setError] = useState("");
+  const [preparedRequest, setPreparedRequest] = useState("");
+  const [copied, setCopied] = useState(false);
   const storedDraft = useSyncExternalStore(
     subscribeToNothing,
     () => window.sessionStorage.getItem(storageKey) ?? "",
@@ -43,7 +45,28 @@ export function OfferEstimateBuilder({ service, onClose }: { service: Service; o
   );
   const initialDraft = useMemo(() => restoreDraft(service, locale, storedDraft), [locale, service, storedDraft]);
 
-  function send(draft: EstimateDraft) {
+  async function send(draft: EstimateDraft) {
+    if (service.sourceUrl) {
+      const message = [
+        text("Здравствуйте! Хочу уточнить предложение:", "Assalomu alaykum! Taklifni aniqlashtirmoqchiman:"),
+        serviceTitle(locale, service),
+        `${text("Дата", "Sana")}: ${draft.eventDate}`,
+        `${text("Город", "Shahar")}: ${draft.city}`,
+        `${text("Людей", "Odamlar")}: ${draft.guestCount}`,
+        ...draft.lines.map((line) => `${line.title} — ${line.quantity} ${line.unit}${line.unitPrice > 0 ? ` × ${line.unitPrice}` : ""}`),
+        draft.note ? `${text("Комментарий", "Izoh")}: ${draft.note}` : "",
+        `${text("Источник", "Manba")}: ${service.sourceUrl}`,
+      ].filter(Boolean).join("\n");
+      setPreparedRequest(message);
+      try {
+        await navigator.clipboard.writeText(message);
+        setCopied(true);
+      } catch {
+        setCopied(false);
+      }
+      return;
+    }
+
     if (!state.signedIn) {
       window.sessionStorage.setItem(storageKey, JSON.stringify(draft));
       const destination = `/offers/${service.id}?calculator=1`;
@@ -70,10 +93,11 @@ export function OfferEstimateBuilder({ service, onClose }: { service: Service; o
         <div>
           <p className="eyebrow">{text("Запрос автору предложения", "E’lon muallifiga so‘rov")}</p>
           <h2 id="offer-estimate-title">{text("Предварительный расчёт", "Dastlabki hisob-kitob")}</h2>
-          <p className="muted">{text("Укажите параметры события, проверьте таблицу и отправьте её автору. Он сможет вернуть новую версию со своими ценами и комментариями.", "Tadbir ma’lumotlarini kiriting, jadvalni tekshiring va muallifga yuboring. U o‘z narxlari va izohlari bilan yangi versiyani qaytarishi mumkin.")}</p>
+          <p className="muted">{service.sourceUrl ? text("Укажите детали и подготовьте текст запроса. Скопируйте его и отправьте автору через исходное объявление; цена в таблице — только ваша оценка.", "Tafsilotlarni kiriting va so‘rov matnini tayyorlang. Uni nusxalab, asl e’lon orqali muallifga yuboring; jadvaldagi narx faqat sizning taxminingiz.") : text("Укажите параметры события, проверьте таблицу и отправьте её автору. Он сможет вернуть новую версию со своими ценами и комментариями.", "Tadbir ma’lumotlarini kiriting, jadvalni tekshiring va muallifga yuboring. U o‘z narxlari va izohlari bilan yangi versiyani qaytarishi mumkin.")}</p>
         </div>
       </div>
-      <EstimateEditor key={`${service.id}-${locale}-${storedDraft ? "stored" : "new"}`} initialDraft={initialDraft} submitLabel={state.signedIn ? text("Отправить автору", "Muallifga yuborish") : text("Войти и отправить", "Kirish va yuborish")} onSubmit={send} onCancel={onClose} />
+      <EstimateEditor key={`${service.id}-${locale}-${storedDraft ? "stored" : "new"}`} initialDraft={initialDraft} submitLabel={service.sourceUrl ? text("Подготовить запрос", "So‘rovni tayyorlash") : state.signedIn ? text("Отправить автору", "Muallifga yuborish") : text("Войти и отправить", "Kirish va yuborish")} onSubmit={send} onCancel={onClose} />
+      {preparedRequest ? <div className="panel" role="status"><strong>{copied ? text("Текст скопирован", "Matn nusxalandi") : text("Текст готов — скопируйте его", "Matn tayyor — nusxalang")}</strong><textarea className="field" aria-label={text("Текст запроса", "So‘rov matni")} readOnly rows={8} value={preparedRequest} style={{ width: "100%", marginTop: 12 }} /><a className="button button-primary" href={service.sourceUrl} target="_blank" rel="noopener noreferrer">{text("Открыть объявление и отправить", "E’lonni ochib yuborish")} ↗</a></div> : null}
       {error ? <p className="error-text" role="alert">{error}</p> : null}
     </section>
   );

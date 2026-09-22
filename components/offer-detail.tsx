@@ -8,6 +8,7 @@ import { useDemoSession } from "@/components/demo-session";
 import { useLocale } from "@/components/locale-provider";
 import { StatusBadge } from "@/components/status-badge";
 import { OfferEstimateBuilder } from "@/components/offer-estimate-builder";
+import { ClaimProfileLink, ExternalLinks } from "@/components/external-links";
 import { addToShortlist, queueShortlistAfterSignIn } from "@/lib/demo-store";
 import { getCategoryById, getSupplierById } from "@/lib/demo-data";
 import { formatDateTime, formatMoney, freshnessState, responseLabel } from "@/lib/format";
@@ -61,6 +62,7 @@ export function OfferDetail({ initialService, serviceId, preview, calculatorOpen
   const localized = (value: LocalizedCopy) => value[locale];
   const localizedTitle = serviceTitle(locale, service);
   const localizedDescription = serviceDescription(locale, service);
+  const sourced = Boolean(service.sourceUrl);
 
   return (
     <article className="offer-detail-page">
@@ -79,23 +81,23 @@ export function OfferDetail({ initialService, serviceId, preview, calculatorOpen
 
       <section className="offer-hero">
         <button className="offer-cover" type="button" onClick={() => setSelectedMediaId(details.media[0]?.id ?? null)} aria-label={text("Увеличить главную фотографию", "Asosiy suratni kattalashtirish")}>
-          <Image src={service.imageUrl} alt={`${text("Главная фотография", "Asosiy surat")} — ${localizedTitle}`} fill unoptimized priority sizes="(max-width: 900px) 100vw, 58vw" />
+          <Image src={service.imageUrl} alt={`${text("Главная фотография", "Asosiy surat")} — ${localizedTitle}`} fill unoptimized loading="eager" fetchPriority="high" sizes="(max-width: 900px) 100vw, 58vw" />
           <span className="offer-cover-hint">↗ {text("Увеличить", "Kattalashtirish")}</span>
         </button>
 
         <div className="offer-hero-copy">
           <div className="badge-row">
             <StatusBadge tone={service.offerKind === "sale" ? "success" : service.offerKind === "rental" ? "warning" : "neutral"}>{offerKindLabelsByLocale[locale][service.offerKind]}</StatusBadge>
-            <StatusBadge tone={freshness.tone}>{freshness.label}</StatusBadge>
+            {sourced ? <StatusBadge tone="neutral">{text("Из открытого источника", "Ochiq manbadan")}</StatusBadge> : <StatusBadge tone={freshness.tone}>{freshness.label}</StatusBadge>}
             {supplier.verified ? <StatusBadge tone="success">✓ {text("Автор проверен", "Muallif tekshirilgan")}</StatusBadge> : null}
           </div>
           <p className="eyebrow">{categoryName(locale, category)}</p>
           <h1>{localizedTitle}</h1>
           <p className="offer-summary">{localizedDescription}</p>
-          <p className="offer-price">{text("от", "dan")} {formatMoney(service.priceFrom, locale)} <span>{priceUnit(locale, service.priceUnit)}</span></p>
+          <p className="offer-price">{sourced ? text("Цена по запросу", "Narx so‘rov bo‘yicha") : <>{text("от", "dan")} {formatMoney(service.priceFrom, locale)} <span>{priceUnit(locale, service.priceUnit)}</span></>}</p>
           <p className="offer-location">⌖ {cityName(locale, service.city)} · {localized(details.serviceArea)}</p>
           <div className="offer-primary-actions">
-            <Link className="button button-primary" href={`/chats?service=${encodeURIComponent(service.id)}`}>{text("Написать автору", "Muallifga yozish")}</Link>
+            {sourced ? <a className="button button-primary" href={service.sourceUrl} target="_blank" rel="noopener noreferrer">{text("Связаться с автором", "Muallif bilan bog‘lanish")} ↗</a> : <Link className="button button-primary" href={`/chats?service=${encodeURIComponent(service.id)}`}>{text("Написать автору", "Muallifga yozish")}</Link>}
             <button className="button button-secondary" type="button" aria-expanded={showCalculator} aria-controls="offer-estimate-title" onClick={() => setShowCalculator((current) => !current)}>{text("Рассчитать", "Hisoblash")}</button>
             <button
               className="button button-secondary"
@@ -149,7 +151,7 @@ export function OfferDetail({ initialService, serviceId, preview, calculatorOpen
             </section>
           ) : null}
 
-          <section className="offer-section">
+          {details.packages.length ? <section className="offer-section">
             <p className="eyebrow">{text("Варианты", "Variantlar")}</p>
             <h2>{text("Пакеты и состав", "Paketlar va tarkibi")}</h2>
             <div className="offer-packages">
@@ -163,11 +165,11 @@ export function OfferDetail({ initialService, serviceId, preview, calculatorOpen
                 </article>
               ))}
             </div>
-          </section>
+          </section> : null}
 
           <section className="offer-section" data-testid="offer-portfolio">
-            <p className="eyebrow">{text("Портфолио", "Portfolio")}</p>
-            <h2>{text("Примеры работ", "Ish namunalari")}</h2>
+            <p className="eyebrow">{sourced ? text("Фото объявления", "E’lon surati") : text("Портфолио", "Portfolio")}</p>
+            <h2>{sourced ? text("Фотография из источника", "Manbadagi surat") : text("Примеры работ", "Ish namunalari")}</h2>
             <p className="muted">{text("Нажмите на фотографию, чтобы рассмотреть её крупнее.", "Suratni kattaroq ko‘rish uchun ustiga bosing.")}</p>
             <div className="offer-gallery">
               {details.media.map((media, index) => media.type === "image" ? (
@@ -195,20 +197,21 @@ export function OfferDetail({ initialService, serviceId, preview, calculatorOpen
         <aside className="offer-sidebar">
           <section className="panel sticky-panel offer-contact-card">
             <p className="eyebrow">{text("Автор предложения", "E’lon muallifi")}</p>
-            <h2><Link href={`/suppliers/${supplier.slug}`}>{supplier.name}</Link></h2>
+            <div className="profile-title-row"><h2><Link href={`/suppliers/${supplier.slug}`}>{supplier.name}</Link></h2>{supplier.profileStatus === "unclaimed" ? <ClaimProfileLink /> : null}</div>
             <p>{supplier.description}</p>
+            {supplier.externalLinks?.length ? <ExternalLinks links={supplier.externalLinks} /> : null}
             <div className="metric-list">
               <div className="metric"><span>{text("Город", "Shahar")}</span><strong>{cityName(locale, supplier.city)}</strong></div>
-              <div className="metric"><span>{text("Скорость ответа", "Javob tezligi")}</span><strong>{responseLabel(supplier.responseMedianMinutes, supplier.responseSampleSize, locale)}</strong></div>
-              <div className="metric"><span>{text("Предложение обновлено", "Taklif yangilangan")}</span><strong>{formatDateTime(service.updatedAt, locale)}</strong></div>
+              {!sourced ? <div className="metric"><span>{text("Скорость ответа", "Javob tezligi")}</span><strong>{responseLabel(supplier.responseMedianMinutes, supplier.responseSampleSize, locale)}</strong></div> : null}
+              <div className="metric"><span>{sourced ? text("Объявление найдено", "E’lon topilgan") : text("Предложение обновлено", "Taklif yangilangan")}</span><strong>{sourced ? service.sourceObservedAt : formatDateTime(service.updatedAt, locale)}</strong></div>
               <div className="metric"><span>{text("Дата или наличие", "Sana yoki mavjudlik")}</span><strong>{localized(details.availabilityNote)}</strong></div>
             </div>
-            <Link className="button button-primary" href={`/chats?service=${encodeURIComponent(service.id)}`}>{text("Написать автору", "Muallifga yozish")}</Link>
+            {sourced ? <a className="button button-primary" href={service.sourceUrl} target="_blank" rel="noopener noreferrer">{text("Открыть объявление", "E’lonni ochish")} ↗</a> : <Link className="button button-primary" href={`/chats?service=${encodeURIComponent(service.id)}`}>{text("Написать автору", "Muallifga yozish")}</Link>}
             <Link className="button button-secondary" href={`/suppliers/${supplier.slug}`}>{text("Все предложения автора", "Muallifning barcha takliflari")}</Link>
           </section>
           <div className="callout callout-warning offer-guardrail">
             <strong>{text("Важно до оплаты", "To‘lovdan oldin muhim")}</strong>
-            <p>{text("Цена «от» и свободная дата ориентировочные. Сообщение в чате не является бронью или оплатой — подтвердите итоговые условия отдельно.", "Boshlang‘ich narx va bo‘sh sana taxminiy. Suhbatdagi xabar bron yoki to‘lov hisoblanmaydi — yakuniy shartlarni alohida tasdiqlang.")}</p>
+            <p>{sourced ? text("Это предложение найдено в открытом источнике. Автор ещё не подтвердил профиль в Marosim. Цена, наличие и условия требуют проверки у автора; переход на исходное объявление не означает бронь или оплату.", "Bu taklif ochiq manbadan topilgan. Muallif Marosimdagi profilini hali tasdiqlamagan. Narx, mavjudlik va shartlarni muallifdan tekshiring; asl e’longa o‘tish bron yoki to‘lov emas.") : text("Цена «от» и свободная дата ориентировочные. Сообщение в чате не является бронью или оплатой — подтвердите итоговые условия отдельно.", "Boshlang‘ich narx va bo‘sh sana taxminiy. Suhbatdagi xabar bron yoki to‘lov hisoblanmaydi — yakuniy shartlarni alohida tasdiqlang.")}</p>
           </div>
         </aside>
       </div>

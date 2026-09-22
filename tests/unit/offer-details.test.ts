@@ -3,23 +3,29 @@ import { categories, services } from "@/lib/demo-data";
 import { eventTypeOptions, getOfferDetails } from "@/lib/offer-details";
 
 describe("страница предложения", () => {
-  it("даёт каждому SKU описание, пакеты, характеристики и портфолио", () => {
+  it("даёт каждому SKU исходное описание и фото без выдуманных пакетов и профиля исполнителя", () => {
     for (const service of services) {
       const details = getOfferDetails(service);
-      expect(details.fullDescription.ru.length).toBeGreaterThan(service.description.length);
-      expect(details.packages.length).toBeGreaterThanOrEqual(2);
-      expect(details.facts.length).toBeGreaterThanOrEqual(3);
+      expect(details.fullDescription.ru).toBe(service.description);
+      expect(details.packages).toEqual([]);
+      expect(details.person).toBeUndefined();
       expect(details.media.length).toBeGreaterThanOrEqual(1);
+      expect(details.media[0].url).toBe(service.imageUrl);
       expect(details.eventTypes.length).toBeGreaterThanOrEqual(2);
     }
   });
 
-  it("показывает профиль исполнителя в примере ведущего", () => {
-    const service = services.find((item) => item.id === "service-orzu-host");
-    expect(service).toBeDefined();
-    const details = getOfferDetails(service!);
-    expect(details.person).toMatchObject({ name: "Азиз Рахимов", age: 32, experienceYears: 8 });
-    expect(details.media.length).toBeGreaterThanOrEqual(4);
+  it("не присваивает внешнему автору неподтверждённый возраст и опыт", () => {
+    const service = services.find((item) => item.categoryId === "cat-host")!;
+    const details = getOfferDetails(service);
+    expect(details.person).toBeUndefined();
+    expect(details.facts.some((fact) => fact.label.ru === "Источник")).toBe(true);
+  });
+
+  it("показывает ссылку на опубликованное видео только у предложения, где она есть в источнике", () => {
+    const service = services.find((item) => item.id === "offer-ID14KGI")!;
+    const media = getOfferDetails(service).media;
+    expect(media.some((item) => item.type === "youtube" && item.url.startsWith("https://www.youtube.com/watch"))).toBe(true);
   });
 
   it("добавляет отдельную категорию для предложения руки и сердца и сохраняет подарки", () => {

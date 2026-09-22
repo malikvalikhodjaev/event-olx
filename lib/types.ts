@@ -28,6 +28,11 @@ export type ServiceCategory = {
   requiredForWedding: boolean;
 };
 
+export type ExternalLink = {
+  platform: "instagram" | "telegram" | "youtube" | "web";
+  url: string;
+};
+
 export type Supplier = {
   id: string;
   slug: string;
@@ -41,6 +46,8 @@ export type Supplier = {
   responseSampleSize: number;
   portfolio: string[];
   createdAt: string;
+  externalLinks?: ExternalLink[];
+  profileStatus?: "unclaimed" | "claimed";
 };
 
 export type Service = {
@@ -61,6 +68,9 @@ export type Service = {
   published: boolean;
   updatedAt: string;
   availabilityConfirmedAt: string | null;
+  sourceUrl?: string;
+  sourceObservedAt?: string;
+  sourcePlatform?: "olx" | "instagram" | "telegram" | "youtube" | "web";
 };
 
 export type LocalizedCopy = {

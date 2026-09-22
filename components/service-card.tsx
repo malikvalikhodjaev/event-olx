@@ -34,7 +34,8 @@ export function ServiceCard({ service, priority = false }: { service: Service; p
           alt={`${text("Фото предложения", "Taklif surati")} «${localizedTitle}»`}
           fill
           unoptimized
-          priority={priority}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
           sizes="(max-width: 620px) 100vw, (max-width: 900px) 50vw, 25vw"
         />
         <div className="service-card-kind">
@@ -63,18 +64,18 @@ export function ServiceCard({ service, priority = false }: { service: Service; p
         <p className="service-card-category">{categoryName(locale, category)}</p>
         <h3><Link href={`/offers/${service.id}`}>{localizedTitle}</Link></h3>
         <p className="service-card-description">{localizedDescription}</p>
-        <p className="service-price">{text("от", "dan")} {formatMoney(service.priceFrom, locale)} <span>{priceUnit(locale, service.priceUnit)}</span></p>
+        <p className="service-price">{service.sourceUrl ? text("Цена по запросу", "Narx so‘rov bo‘yicha") : <>{text("от", "dan")} {formatMoney(service.priceFrom, locale)} <span>{priceUnit(locale, service.priceUnit)}</span></>}</p>
         <p className="service-card-meta">{cityName(locale, service.city)} · {supplier.name}</p>
         <div className="service-card-signals">
-          <span className={freshness.tone === "danger" ? "signal-warning" : ""}>{freshness.label}</span>
+          <span className={!service.sourceUrl && freshness.tone === "danger" ? "signal-warning" : ""}>{service.sourceUrl ? text("Из открытого источника", "Ochiq manbadan") : freshness.label}</span>
           {supplier.verified ? <span className="signal-positive">✓ {text("Автор предложения проверен", "E’lon muallifi tekshirilgan")}</span> : null}
         </div>
         <div className="service-card-footer">
-          <span>{responseLabel(supplier.responseMedianMinutes, supplier.responseSampleSize, locale)}</span>
+          <span>{service.sourceUrl ? text("Условия уточняйте у автора", "Shartlarni muallifdan aniqlang") : responseLabel(supplier.responseMedianMinutes, supplier.responseSampleSize, locale)}</span>
           <Link className="service-details-link" href={`/offers/${service.id}`}>{text("Подробнее", "Batafsil")} →</Link>
         </div>
         <div className="service-card-actions">
-          <Link className="button button-primary button-small" href={chatDestination}>{text("Написать автору", "Muallifga yozish")}</Link>
+          {service.sourceUrl ? <a className="button button-primary button-small" href={service.sourceUrl} target="_blank" rel="noopener noreferrer">{text("Связаться с автором", "Muallif bilan bog‘lanish")} ↗</a> : <Link className="button button-primary button-small" href={chatDestination}>{text("Написать автору", "Muallifga yozish")}</Link>}
         </div>
       </div>
     </article>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useDemoSession } from "@/components/demo-session";
-import { getServiceById, services } from "@/lib/demo-data";
+import { getServiceById } from "@/lib/demo-data";
 import { useLocale } from "@/components/locale-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { serviceTitle } from "@/lib/i18n";
@@ -13,7 +13,7 @@ export function MobileSupplierHome() {
   const { state } = useDemoSession();
   const { locale, text } = useLocale();
   const isSupplier = state.role === "supplier" || state.role === "supplier_planner";
-  const ownServices = services.filter((service) => service.supplierId === supplierId);
+  const ownServices = state.importedServices.filter((service) => service.supplierId === supplierId);
   const conversations = state.conversations.filter((conversation) => conversation.supplierId === supplierId);
   const unanswered = conversations.filter((conversation) => !conversation.firstSupplierResponseAt).length;
 

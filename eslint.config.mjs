@@ -13,6 +13,7 @@ export default defineConfig([
     "test-results/**",
     "_adr_work/**",
     "_audio_work/**",
+    ".tmp/**",
     "next-env.d.ts",
   ]),
 ]);

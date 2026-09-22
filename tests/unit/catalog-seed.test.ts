@@ -9,20 +9,30 @@ describe("стартовый каталог", () => {
     expect(new Set(services.map((service) => service.id)).size).toBe(100);
     expect(new Set(services.map((service) => service.sku)).size).toBe(100);
     expect(services.every((service) => service.active && service.published)).toBe(true);
+    expect(services.filter((service) => service.sourcePlatform === "olx")).toHaveLength(95);
+    expect(services.filter((service) => service.sourcePlatform === "web")).toHaveLength(5);
+    expect(suppliers).toHaveLength(87);
   });
 
-  it("покрывает все разделы каталога и не повторяет одну фотографию слишком часто", () => {
-    expect(services.filter((service) => service.sku.startsWith("MR-SVC-")).length).toBe(54);
-    expect(services.filter((service) => service.sku.startsWith("MR-MKT-")).length).toBe(23);
-    expect(services.filter((service) => service.sku.startsWith("MR-EQP-")).length).toBe(23);
-    expect(new Set(services.map((service) => service.imageUrl)).size).toBe(59);
+  it("покрывает основные разделы и показывает уникальные фотографии объявлений", () => {
+    for (const section of ["services", "market", "equipment"]) {
+      expect(services.some((service) => categories.some((category) => category.id === service.categoryId && category.section === section))).toBe(true);
+    }
+    expect(new Set(services.map((service) => service.imageUrl)).size).toBe(100);
   });
 
-  it("связывает каждый SKU с категорией, автором предложения и локальной фотографией", () => {
+  it("связывает каждый SKU с источником, автором и локальной фотографией без выдуманной проверки", () => {
     for (const service of services) {
       expect(categories.some((category) => category.id === service.categoryId)).toBe(true);
-      expect(suppliers.some((supplier) => supplier.id === service.supplierId)).toBe(true);
-      expect(service.imageUrl.startsWith("/catalog/photos/")).toBe(true);
+      const supplier = suppliers.find((item) => item.id === service.supplierId);
+      expect(supplier).toBeDefined();
+      expect(supplier?.profileStatus).toBe("unclaimed");
+      expect(supplier?.verified).toBe(false);
+      expect(service.sourceUrl).toMatch(/^https:\/\//);
+      expect(service.sourceObservedAt).toBeTruthy();
+      expect(service.availabilityConfirmedAt).toBeNull();
+      expect(service.priceFrom).toBe(0);
+      expect(service.imageUrl.startsWith("/catalog/real/")).toBe(true);
       expect(existsSync(join(process.cwd(), "public", service.imageUrl))).toBe(true);
     }
   });

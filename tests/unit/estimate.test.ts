@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { services } from "@/lib/demo-data";
+import { catalogSeedServices } from "@/lib/catalog-seed";
 import { createEstimateDraft, createEstimateRevision, estimateLineTotal, estimateTotal, validateEstimateDraft } from "@/lib/estimate";
 
 describe("расчёт мероприятия", () => {
   it("подставляет количество гостей в предложение с ценой за гостя", () => {
-    const catering = services.find((service) => service.id === "service-silk-catering");
+    const catering = catalogSeedServices.find((service) => service.id === "service-silk-catering");
     expect(catering).toBeDefined();
     const draft = createEstimateDraft(catering!);
     expect(draft.guestCount).toBe(50);
@@ -13,7 +13,7 @@ describe("расчёт мероприятия", () => {
   });
 
   it("считает строки и создаёт неизменяемый снимок новой версии", () => {
-    const catering = services.find((service) => service.id === "service-silk-catering")!;
+    const catering = catalogSeedServices.find((service) => service.id === "service-silk-catering")!;
     const draft = {
       ...createEstimateDraft(catering),
       eventDate: "2026-10-18",
@@ -32,7 +32,7 @@ describe("расчёт мероприятия", () => {
   });
 
   it("не принимает расчёт без даты и корректных строк", () => {
-    const hall = services.find((service) => service.id === "service-silk-hall")!;
+    const hall = catalogSeedServices.find((service) => service.id === "service-silk-hall")!;
     const draft = createEstimateDraft(hall);
     draft.city = "";
     draft.guestCount = 0;

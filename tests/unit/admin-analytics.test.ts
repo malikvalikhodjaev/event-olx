@@ -46,8 +46,8 @@ describe("admin analytics", () => {
       userSessions: sessions,
     });
 
-    expect(result.suppliersTotal).toBe(14);
-    expect(result.suppliersNew).toBe(12);
+    expect(result.suppliersTotal).toBe(87);
+    expect(result.suppliersNew).toBe(0);
     expect(result.activeUsers).toBe(2);
     expect(result.onlineUsers).toBe(1);
     expect(result.conversations).toBe(1);

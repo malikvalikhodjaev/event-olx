@@ -1,10 +1,10 @@
 "use client";
 
-import { categories, getServiceById, seededConversations, seededModeration } from "@/lib/demo-data";
+import { categories, getServiceById } from "@/lib/demo-data";
 import { createEstimateRevision, validateEstimateDraft } from "@/lib/estimate";
 import type { AuditEntry, ChatSender, Conversation, DemoRole, DemoState, EstimateDraft, ModerationStatus, Service } from "@/lib/types";
 
-const STORAGE_KEY = "eventhub-uz-demo-v1";
+const STORAGE_KEY = "marosim-local-v2";
 const PENDING_SHORTLIST_KEY = "marosim-pending-shortlist";
 
 export function createInitialDemoState(): DemoState {
@@ -16,9 +16,9 @@ export function createInitialDemoState(): DemoState {
     plannerItems: categories
       .filter((category) => category.requiredForWedding)
       .map((category) => ({ categoryId: category.id, selectedServiceId: null, budget: 0, done: false })),
-    conversations: seededConversations,
+    conversations: [],
     importedServices: [],
-    moderation: seededModeration,
+    moderation: [],
     audit: [],
     bannedSupplierIds: [],
     userSessions: [],
