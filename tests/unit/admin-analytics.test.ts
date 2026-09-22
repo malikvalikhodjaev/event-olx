@@ -46,15 +46,15 @@ describe("admin analytics", () => {
       userSessions: sessions,
     });
 
-    expect(result.suppliersTotal).toBe(87);
+    expect(result.suppliersTotal).toBe(106);
     expect(result.suppliersNew).toBe(0);
     expect(result.activeUsers).toBe(2);
     expect(result.onlineUsers).toBe(1);
     expect(result.conversations).toBe(1);
     expect(result.responseRate).toBe(100);
     expect(result.medianResponseMinutes).toBe(60);
-    expect(result.totalSku).toBe(100);
-    expect(result.publishedServices).toBe(100);
+    expect(result.totalSku).toBe(119);
+    expect(result.publishedServices).toBe(119);
     expect(result.pendingModeration).toBe(1);
     expect(result.activity.reduce((sum, bucket) => sum + bucket.conversations, 0)).toBe(1);
   });

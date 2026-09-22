@@ -1,4 +1,5 @@
 import { realCatalogServices, realCatalogSuppliers } from "@/lib/real-catalog";
+import { telegramCatalogServices, telegramCatalogSuppliers } from "@/lib/telegram-catalog";
 import type {
   CatalogSection,
   Conversation,
@@ -246,8 +247,8 @@ const legacySuppliers: Supplier[] = [
   },
 ];
 
-export const suppliers: Supplier[] = realCatalogSuppliers;
-export const services = realCatalogServices;
+export const suppliers: Supplier[] = [...realCatalogSuppliers, ...telegramCatalogSuppliers];
+export const services = [...realCatalogServices, ...telegramCatalogServices];
 
 export const seededConversations: Conversation[] = [
   {

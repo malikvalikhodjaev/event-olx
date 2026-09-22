@@ -1,0 +1,192 @@
+[
+  {
+    "sourceId": "171",
+    "authorName": "АрендократиЯ",
+    "authorUrl": "https://www.arendokratia.com/",
+    "title": "Аренда мебели, посуды и шатров — АрендократиЯ",
+    "description": "Мебель, посуда, декор и быстро собирающиеся шатры для мероприятий в Ташкенте. Состав, доставку и монтаж уточняйте у автора.",
+    "categoryId": "cat-event-rental",
+    "offerKind": "rental",
+    "imageUrl": "/catalog/telegram/tg-171.jpg"
+  },
+  {
+    "sourceId": "256",
+    "authorName": "Light Media Invest",
+    "authorUrl": "https://t.me/publiclmi",
+    "title": "Свет, звук, LED-экраны и сцена — Light Media Invest",
+    "description": "Техническое обеспечение частных и крупных событий: свет, звук, LED-экраны, сценические конструкции, 3D-визуализация и сопровождение.",
+    "categoryId": "cat-sound-light",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-256.jpg"
+  },
+  {
+    "sourceId": "306",
+    "authorName": "Muskat Catering",
+    "authorUrl": "https://www.instagram.com/muskat.catering_uz",
+    "title": "Кейтеринг и выездной бар — Muskat Catering",
+    "description": "Банкеты, фуршеты, кофе-брейки и корпоративное питание. Также заявлены выездной бар, персонал и мебель; работа по Узбекистану.",
+    "categoryId": "cat-catering",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-306.jpg"
+  },
+  {
+    "sourceId": "323",
+    "authorName": "DJ Geo",
+    "authorUrl": "https://www.instagram.com/djgeofficial",
+    "title": "DJ для свадьбы и вечеринки — DJ Geo",
+    "description": "Музыка и танцевальная программа для частных вечеринок, банкетов, свадеб и деловых событий в Ташкенте. Технический состав уточняйте у автора.",
+    "categoryId": "cat-music",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-323.jpg"
+  },
+  {
+    "sourceId": "431",
+    "authorName": "Ян Ведущий",
+    "authorUrl": "https://www.instagram.com/yan.tsh",
+    "title": "Ведущий свадьбы или корпоратива — Ян",
+    "description": "Ведение семейных торжеств, корпоративов, дней рождения и открытий. Сценарий, тайминг и формат программы согласуются под событие.",
+    "categoryId": "cat-host",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-431.jpg"
+  },
+  {
+    "sourceId": "450",
+    "authorName": "Анна Шишкина",
+    "authorUrl": "https://www.instagram.com/anna_shishkina_foto",
+    "title": "Фотосъёмка события — Анна Шишкина",
+    "description": "Репортажная съёмка концертов, мастер-классов, выставок и камерных свадеб; также портретные и семейные фотосессии в Ташкенте.",
+    "categoryId": "cat-photo",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-450.jpg"
+  },
+  {
+    "sourceId": "509",
+    "authorName": "GRACE AGENCY MODELS",
+    "authorUrl": "https://gracemodels.uz/",
+    "title": "Хостес и персонал для события — GRACE AGENCY MODELS",
+    "description": "Подбор хостес, моделей, промоутеров и персонала регистрации для выставок, презентаций, свадеб и корпоративов.",
+    "categoryId": "cat-planning",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-509.jpg"
+  },
+  {
+    "sourceId": "515",
+    "authorName": "Tentery",
+    "authorUrl": "https://tentery.uz/",
+    "title": "Аренда шатров и тентов — Tentery",
+    "description": "Тентовые конструкции разных размеров для свадеб, выставок, фестивалей и корпоративов. В публикации указаны установка, демонтаж и дополнительное оборудование.",
+    "categoryId": "cat-event-rental",
+    "offerKind": "rental",
+    "imageUrl": "/catalog/telegram/tg-515.jpg"
+  },
+  {
+    "sourceId": "573",
+    "authorName": "WOOOLF",
+    "authorUrl": "https://www.instagram.com/wooolf.official",
+    "title": "Лазерное и LED-шоу — WOOOLF",
+    "description": "Неоновые, лазерные и LED-выступления, в том числе со светящимися костюмами, для концертов и праздников в Центральной Азии.",
+    "categoryId": "cat-power-effects",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-573.jpg"
+  },
+  {
+    "sourceId": "579",
+    "authorName": "Business Congress Management",
+    "authorUrl": "https://www.bcmc.uz/",
+    "title": "Организация делового события — BCM",
+    "description": "Агентство полного цикла для выставок, пресс-конференций, презентаций и круглых столов: от концепции и оформления до технической поддержки.",
+    "categoryId": "cat-planning",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-579.jpg"
+  },
+  {
+    "sourceId": "637",
+    "authorName": "DJ MiKo",
+    "authorUrl": "https://www.instagram.com/djmiko.fest",
+    "title": "DJ на свадьбу и праздник — DJ MiKo",
+    "description": "Музыкальное сопровождение свадеб, дней рождения, корпоративов и вечеринок в Ташкенте. Репертуар и оборудование уточняйте у автора.",
+    "categoryId": "cat-music",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-637.jpg"
+  },
+  {
+    "sourceId": "670",
+    "authorName": "NICECAKE",
+    "authorUrl": "https://t.me/nicecakeuz",
+    "title": "Торты и кенди-бар — NICECAKE",
+    "description": "Торты, праздничная выпечка, сладкие подарки и кенди-бар с декором и посудой для мероприятий в Ташкенте и области.",
+    "categoryId": "cat-cakes",
+    "offerKind": "sale",
+    "imageUrl": "/catalog/telegram/tg-670.jpg"
+  },
+  {
+    "sourceId": "724",
+    "authorName": "SOFEXPO",
+    "authorUrl": "https://sofexpo.uz/",
+    "title": "Аренда выставочных стендов — SOFEXPO",
+    "description": "Стенды Octanorm, витрины, стойки регистрации и мебель для выставок. В публикации заявлены доставка и монтаж по Узбекистану.",
+    "categoryId": "cat-screens-stage",
+    "offerKind": "rental",
+    "imageUrl": "/catalog/telegram/tg-724.jpg"
+  },
+  {
+    "sourceId": "728",
+    "authorName": "ART THERAPY",
+    "authorUrl": "https://www.instagram.com/art.therapy.uz",
+    "title": "Творческий мастер-класс — ART THERAPY",
+    "description": "Арт-встречи, роспись на мольбертах, арт-бранчи и программы для девичника или небольшого события в Ташкенте.",
+    "categoryId": "cat-training",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-728.jpg"
+  },
+  {
+    "sourceId": "875",
+    "authorName": "KIDS AVENUE",
+    "authorUrl": "https://www.instagram.com/kids_avenue.uz",
+    "title": "Детский праздник под ключ — KIDS AVENUE",
+    "description": "Программа, анимация, оформление и меню для выпускных и других детских мероприятий. Площадка указана в Чиланзаре, Ташкент.",
+    "categoryId": "cat-host",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-875.jpg"
+  },
+  {
+    "sourceId": "1033",
+    "authorName": "Shaxboz Vaxidov",
+    "authorUrl": "https://www.instagram.com/vaxidovshaxboz",
+    "title": "Ведущий на узбекском языке — Shaxboz Vaxidov",
+    "description": "Ведение свадеб, корпоративов, открытий и праздников на узбекском языке; в публикации указан выезд по Узбекистану.",
+    "categoryId": "cat-host",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-1033.jpg"
+  },
+  {
+    "sourceId": "1295",
+    "authorName": "AIR SUN UZ",
+    "authorUrl": "https://t.me/air_sun_uz",
+    "title": "Фотозоны и праздничный декор — AIR SUN UZ",
+    "description": "Оформление фотозон для свадеб, дней рождения, детских праздников, выпускных и корпоративов в Ташкенте.",
+    "categoryId": "cat-decor",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-1295.jpg"
+  },
+  {
+    "sourceId": "182",
+    "authorName": "Human House Gallery",
+    "authorUrl": "https://t.me/hhuzevent",
+    "title": "Камерная площадка — Human House Gallery",
+    "description": "Творческое пространство на Кичик Миробод, 43 в Ташкенте. В публикации указаны зоны на 20–60 человек для мастер-классов, лекций и ужинов.",
+    "categoryId": "cat-venue",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-182.jpg"
+  },
+  {
+    "sourceId": "1385",
+    "authorName": "EYWA",
+    "authorUrl": "https://t.me/eywa_space",
+    "title": "Камерное пространство — EYWA",
+    "description": "Пространство на Кушбеги, 10Б в Ташкенте для встреч, тренингов и небольших мероприятий. В публикации указана вместимость до 20 человек.",
+    "categoryId": "cat-venue",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-1385.jpg"
+  }
+]

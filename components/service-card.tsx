@@ -75,7 +75,7 @@ export function ServiceCard({ service, priority = false }: { service: Service; p
           <Link className="service-details-link" href={`/offers/${service.id}`}>{text("Подробнее", "Batafsil")} →</Link>
         </div>
         <div className="service-card-actions">
-          {service.sourceUrl ? <a className="button button-primary button-small" href={service.sourceUrl} target="_blank" rel="noopener noreferrer">{text("Связаться с автором", "Muallif bilan bog‘lanish")} ↗</a> : <Link className="button button-primary button-small" href={chatDestination}>{text("Написать автору", "Muallifga yozish")}</Link>}
+          {service.sourceUrl ? <a className="button button-primary button-small" href={service.sourceUrl} target="_blank" rel="noopener noreferrer">{service.sourcePlatform === "telegram" ? text("Открыть публикацию", "E’lonni ochish") : text("Связаться с автором", "Muallif bilan bog‘lanish")} ↗</a> : <Link className="button button-primary button-small" href={chatDestination}>{text("Написать автору", "Muallifga yozish")}</Link>}
         </div>
       </div>
     </article>

@@ -4,21 +4,22 @@ import { describe, expect, it } from "vitest";
 import { categories, services, suppliers } from "@/lib/demo-data";
 
 describe("стартовый каталог", () => {
-  it("содержит 100 опубликованных SKU с уникальными кодами", () => {
-    expect(services).toHaveLength(100);
-    expect(new Set(services.map((service) => service.id)).size).toBe(100);
-    expect(new Set(services.map((service) => service.sku)).size).toBe(100);
+  it("содержит 119 опубликованных SKU с уникальными кодами", () => {
+    expect(services).toHaveLength(119);
+    expect(new Set(services.map((service) => service.id)).size).toBe(119);
+    expect(new Set(services.map((service) => service.sku)).size).toBe(119);
     expect(services.every((service) => service.active && service.published)).toBe(true);
     expect(services.filter((service) => service.sourcePlatform === "olx")).toHaveLength(95);
     expect(services.filter((service) => service.sourcePlatform === "web")).toHaveLength(5);
-    expect(suppliers).toHaveLength(87);
+    expect(services.filter((service) => service.sourcePlatform === "telegram")).toHaveLength(19);
+    expect(suppliers).toHaveLength(106);
   });
 
   it("покрывает основные разделы и показывает уникальные фотографии объявлений", () => {
     for (const section of ["services", "market", "equipment"]) {
       expect(services.some((service) => categories.some((category) => category.id === service.categoryId && category.section === section))).toBe(true);
     }
-    expect(new Set(services.map((service) => service.imageUrl)).size).toBe(100);
+    expect(new Set(services.map((service) => service.imageUrl)).size).toBe(119);
   });
 
   it("связывает каждый SKU с источником, автором и локальной фотографией без выдуманной проверки", () => {
@@ -32,8 +33,8 @@ describe("стартовый каталог", () => {
       expect(service.sourceObservedAt).toBeTruthy();
       expect(service.availabilityConfirmedAt).toBeNull();
       expect(service.priceFrom).toBe(0);
-      expect(service.imageUrl.startsWith("/catalog/real/")).toBe(true);
-      expect(existsSync(join(process.cwd(), "public", service.imageUrl))).toBe(true);
+      expect(service.imageUrl.startsWith("/catalog/real/") || service.imageUrl.startsWith("/catalog/telegram/")).toBe(true);
+      expect(existsSync(join(process.cwd(), "public", service.imageUrl.slice(1)))).toBe(true);
     }
   });
 });

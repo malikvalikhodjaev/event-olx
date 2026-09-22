@@ -97,7 +97,7 @@ export function OfferDetail({ initialService, serviceId, preview, calculatorOpen
           <p className="offer-price">{sourced ? text("Цена по запросу", "Narx so‘rov bo‘yicha") : <>{text("от", "dan")} {formatMoney(service.priceFrom, locale)} <span>{priceUnit(locale, service.priceUnit)}</span></>}</p>
           <p className="offer-location">⌖ {cityName(locale, service.city)} · {localized(details.serviceArea)}</p>
           <div className="offer-primary-actions">
-            {sourced ? <a className="button button-primary" href={service.sourceUrl} target="_blank" rel="noopener noreferrer">{text("Связаться с автором", "Muallif bilan bog‘lanish")} ↗</a> : <Link className="button button-primary" href={`/chats?service=${encodeURIComponent(service.id)}`}>{text("Написать автору", "Muallifga yozish")}</Link>}
+            {sourced ? <a className="button button-primary" href={service.sourceUrl} target="_blank" rel="noopener noreferrer">{service.sourcePlatform === "telegram" ? text("Открыть публикацию", "E’lonni ochish") : text("Связаться с автором", "Muallif bilan bog‘lanish")} ↗</a> : <Link className="button button-primary" href={`/chats?service=${encodeURIComponent(service.id)}`}>{text("Написать автору", "Muallifga yozish")}</Link>}
             <button className="button button-secondary" type="button" aria-expanded={showCalculator} aria-controls="offer-estimate-title" onClick={() => setShowCalculator((current) => !current)}>{text("Рассчитать", "Hisoblash")}</button>
             <button
               className="button button-secondary"

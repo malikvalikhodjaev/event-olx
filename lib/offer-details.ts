@@ -162,7 +162,7 @@ export function getOfferDetails(service: Service): OfferDetails {
       packages: [],
       media: [{ id: `${service.id}-source-image`, type: "image" as const, title: copy(service.title, service.titleUz ?? service.title), url: service.imageUrl }, ...videoLinks],
       facts: [
-        { label: copy("Источник", "Manba"), value: service.sourcePlatform === "olx" ? copy("Публичное объявление OLX.uz", "OLX.uz dagi ochiq e’lon") : copy("Официальный сайт автора", "Muallifning rasmiy sayti") },
+        { label: copy("Источник", "Manba"), value: service.sourcePlatform === "olx" ? copy("Публичное объявление OLX.uz", "OLX.uz dagi ochiq e’lon") : service.sourcePlatform === "telegram" ? copy("Публикация в группе Event Uzbekistan", "Event Uzbekistan guruhidagi e’lon") : copy("Официальный сайт автора", "Muallifning rasmiy sayti") },
         { label: copy("Условия", "Shartlar"), value: copy("Уточняются у автора", "Muallifdan aniqlanadi") },
       ],
     };
