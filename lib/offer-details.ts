@@ -28,6 +28,7 @@ const eventTypesByCategory: Record<string, LocalizedCopy[]> = {
   "cat-transport": [EVENT.wedding, EVENT.corporate, EVENT.family],
   "cat-training": [EVENT.corporate, EVENT.teamBuilding],
   "cat-planning": [EVENT.wedding, EVENT.corporate, EVENT.teamBuilding, EVENT.horeca, EVENT.family],
+  "cat-costumes": [EVENT.wedding, EVENT.birthday, EVENT.children, EVENT.corporate, EVENT.family],
   "cat-flowers": [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.family],
   "cat-event-details": [EVENT.wedding, EVENT.nikah, EVENT.birthday, EVENT.children, EVENT.family],
   "cat-gifts-print": [EVENT.wedding, EVENT.birthday, EVENT.corporate, EVENT.family],

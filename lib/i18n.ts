@@ -24,6 +24,7 @@ const categoryNamesUz: Record<string, string> = {
   "cat-transport": "Transport",
   "cat-training": "Treninglar va timbilding",
   "cat-planning": "Tashkil etish va xodimlar",
+  "cat-costumes": "Liboslar va rekvizit",
   "cat-marry-me": "Nikoh taklifi",
   "cat-flowers": "Gullar va guldastalar",
   "cat-event-details": "Dekor va bayram uchun mayda buyumlar",
@@ -46,6 +47,7 @@ const categorySearchTermsUz: Record<string, string> = {
   "cat-transport": "transport avtomobil mashina transfer",
   "cat-training": "trening timbilding jamoa o‘yin",
   "cat-planning": "tashkilotchi koordinator xodim menejer ro‘yxatga olish",
+  "cat-costumes": "libos kostyum sahna kiyimi rekvizit ijara",
   "cat-marry-me": "nikoh taklifi fotiha unashtirish marry me sevgi syurpriz",
   "cat-flowers": "gul guldasta butonerka yaproq",
   "cat-event-details": "dekor bezak taklifnoma sham to‘qimachilik",
@@ -59,6 +61,7 @@ const categorySearchTermsUz: Record<string, string> = {
 };
 
 const categorySearchTermsRu: Record<string, string> = {
+  "cat-costumes": "костюм платье образ реквизит прокат аренда",
   "cat-marry-me": "мери ми marry me предложение руки и сердца помолвка обручение романтический сюрприз",
   "cat-gifts-print": "подарки сувениры полиграфия приглашения коробки гостям",
 };

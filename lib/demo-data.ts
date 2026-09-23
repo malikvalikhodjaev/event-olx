@@ -36,6 +36,7 @@ export const categories: ServiceCategory[] = [
   { id: "cat-transport", slug: "transport", name: "Транспорт", icon: "◇", section: "services", requiredForWedding: false },
   { id: "cat-training", slug: "training", name: "Тренинги и тимбилдинг", icon: "△", section: "services", requiredForWedding: false },
   { id: "cat-planning", slug: "planning", name: "Организация и персонал", icon: "◎", section: "services", requiredForWedding: false },
+  { id: "cat-costumes", slug: "costumes", name: "Костюмы и реквизит", icon: "✧", section: "services", requiredForWedding: false },
   { id: "cat-marry-me", slug: "marry-me", name: "Предложение руки и сердца", icon: "♡", section: "services", requiredForWedding: false },
   { id: "cat-flowers", slug: "flowers", name: "Цветы и букеты", icon: "❀", section: "market", requiredForWedding: false },
   { id: "cat-event-details", slug: "event-details", name: "Декор и праздничные мелочи", icon: "♡", section: "market", requiredForWedding: false },
