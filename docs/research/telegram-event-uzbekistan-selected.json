@@ -238,5 +238,85 @@
     "categoryId": "cat-venue",
     "offerKind": "service",
     "imageUrl": "/catalog/telegram/tg-1377.jpg"
+  },
+  {
+    "sourceId": "225",
+    "authorName": "Виктор Нефёдов",
+    "authorUrl": "https://t.me/EventUzbekistan/225",
+    "title": "Ведущий и певец для мероприятия — Виктор Нефёдов",
+    "description": "Виктор предлагает вести мероприятия и выступать как певец и шоумен. Формат программы, состав выступления и свободную дату уточняйте напрямую по телефону из исходной публикации.",
+    "categoryId": "cat-host",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-225.jpg"
+  },
+  {
+    "sourceId": "288",
+    "authorName": "Уткир / Rost Kukly",
+    "authorUrl": "https://t.me/rost_kukly",
+    "title": "Ростовые куклы и персонажи для праздника — Rost Kukly",
+    "description": "Изготовление ростовых кукол, национальных и мультперсонажей для фестивалей, гастрономических и тематических праздников. Срок изготовления и условия уточняйте у автора.",
+    "categoryId": "cat-host",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-288.jpg"
+  },
+  {
+    "sourceId": "484",
+    "authorName": "Студия Светлана С",
+    "authorUrl": "https://www.instagram.com/studiya_svetlana_s",
+    "title": "Прокат костюмов и вечерних платьев — Студия Светлана С",
+    "description": "Прокат карнавальных и сценических костюмов, вечерних платьев и тематических образов для фотосессий, шоу и праздников в Ташкенте. Размеры, наличие и срок аренды уточняйте у студии.",
+    "categoryId": "cat-event-rental",
+    "offerKind": "rental",
+    "imageUrl": "/catalog/telegram/tg-484.jpg"
+  },
+  {
+    "sourceId": "1364",
+    "authorName": "TDB Catering",
+    "authorUrl": "https://t.me/EventUzbekistan/1364",
+    "title": "Фуршет и коктейльный бар — TDB Catering",
+    "description": "Фуршет с закусками, выпечкой, фруктами и горячими блюдами; в публикации также представлен коктейльный бар. Меню, количество гостей и стоимость согласуются напрямую с командой.",
+    "categoryId": "cat-catering",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-1364.jpg"
+  },
+  {
+    "sourceId": "1773",
+    "authorName": "Livestream.uz",
+    "authorUrl": "https://www.livestream.uz/",
+    "title": "Трансляция и видеосъёмка события — Livestream.uz",
+    "description": "Многокамерные онлайн-трансляции, гибридные мероприятия, подключение удалённых спикеров, фото- и видеосъёмка. Команда сообщает о работе по Узбекистану; технический состав уточняйте под задачу.",
+    "categoryId": "cat-photo",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-1773.jpg"
+  },
+  {
+    "sourceId": "1793",
+    "authorName": "Crystals Model",
+    "authorUrl": "https://www.instagram.com/crystals.model",
+    "title": "Модели и хостес для события — Crystals Model",
+    "description": "Команда предлагает моделей для встречи гостей, фотозон, презентаций и награждений. Портфолио и костюмы опубликованы в каналах автора; состав, формат и доступность уточняйте напрямую.",
+    "categoryId": "cat-planning",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-1793.jpg"
+  },
+  {
+    "sourceId": "1987",
+    "authorName": "TRIO VIRTUOSO",
+    "authorUrl": "https://t.me/Triovirtuoso",
+    "title": "Живая акустическая музыка — TRIO VIRTUOSO",
+    "description": "Трио с аккордеоном, скрипкой, кларнетом и оперным вокалом; заявлены классика, джаз, поп, рок и фолк. Возможен квартет со второй скрипкой; программу и длительность согласуйте с музыкантами.",
+    "categoryId": "cat-music",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-1987.jpg"
+  },
+  {
+    "sourceId": "2042",
+    "authorName": "Tash Flair",
+    "authorUrl": "https://www.instagram.com/tashflair",
+    "title": "Выездной бар и бармен-шоу — Tash Flair",
+    "description": "Барное сопровождение свадеб, корпоративов и частных праздников: классические и авторские коктейли, работа барменов и шоу с элементами флейринга. Состав бара и условия уточняйте у команды.",
+    "categoryId": "cat-catering",
+    "offerKind": "service",
+    "imageUrl": "/catalog/telegram/tg-2042.jpg"
   }
 ]
