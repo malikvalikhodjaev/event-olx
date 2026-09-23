@@ -12,6 +12,7 @@ describe("страница предложения", () => {
       expect(details.media.length).toBeGreaterThanOrEqual(1);
       expect(details.media[0].url).toBe(service.imageUrl);
       expect(details.eventTypes.length).toBeGreaterThanOrEqual(2);
+      expect(details.facts.find((fact) => fact.label.ru === "Источник")?.href).toBe(service.sourceUrl);
     }
   });
 
@@ -20,6 +21,12 @@ describe("страница предложения", () => {
     const details = getOfferDetails(service);
     expect(details.person).toBeUndefined();
     expect(details.facts.some((fact) => fact.label.ru === "Источник")).toBe(true);
+  });
+
+  it("ссылается на конкретную публикацию ресторана MANANA", () => {
+    const service = services.find((item) => item.id === "offer-tg-890")!;
+    expect(getOfferDetails(service).facts.find((fact) => fact.label.ru === "Источник")?.href)
+      .toBe("https://t.me/EventUzbekistan/890");
   });
 
   it("показывает ссылку на опубликованное видео только у предложения, где она есть в источнике", () => {

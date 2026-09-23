@@ -1297,6 +1297,16 @@ h3 {
   font-weight: 750;
 }
 
+.offer-fact-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.offer-fact-link:hover {
+  color: var(--green-dark);
+}
+
 .offer-packages {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

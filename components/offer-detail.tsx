@@ -187,7 +187,7 @@ export function OfferDetail({ initialService, serviceId, preview, calculatorOpen
             <p className="eyebrow">{text("Характеристики", "Xususiyatlar")}</p>
             <h2>{text("Важные детали", "Muhim tafsilotlar")}</h2>
             <dl className="offer-facts">
-              {details.facts.map((fact) => <div key={fact.label.ru}><dt>{localized(fact.label)}</dt><dd>{localized(fact.value)}</dd></div>)}
+              {details.facts.map((fact) => <div key={fact.label.ru}><dt>{localized(fact.label)}</dt><dd>{fact.href ? <a className="offer-fact-link" href={fact.href} target="_blank" rel="noopener noreferrer">{localized(fact.value)} ↗</a> : localized(fact.value)}</dd></div>)}
               <div><dt>{text("Территория", "Hudud")}</dt><dd>{localized(details.serviceArea)}</dd></div>
               <div><dt>{text("Выезд", "Safar")}</dt><dd>{localized(details.travelTerms)}</dd></div>
             </dl>

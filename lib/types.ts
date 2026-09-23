@@ -97,6 +97,7 @@ export type OfferMedia = {
 export type OfferFact = {
   label: LocalizedCopy;
   value: LocalizedCopy;
+  href?: string;
 };
 
 export type OfferPersonProfile = {
